@@ -175,9 +175,14 @@ int main(){
 
           }
         }else{
-          buffer=*start;
+          buffer=(*start);
         }
-        //*start=sin_clip_sigmoidal(buffer,sin_clip_c1,32760);
+        #ifdef FINAL_CLIP 
+          buffer=sin_clip_sigmoidal(buffer*FINAL_AMP,sin_clip_c1,32760);
+        #else
+          buffer=buffer*FINAL_AMP;
+        #endif 
+
         *start=buffer;
         count=~count;
       }

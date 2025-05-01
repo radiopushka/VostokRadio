@@ -14,6 +14,9 @@ int bypass[]={0,0,0,0,0};
 float post_amp[]={1,1,1,1,1};
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};
 
+#define FINAL_AMP 1.2
+#define FINAL_CLIP
+
 
 #define RECORDING_IFACE "default"
 #define PLAYBACK_IFACE "default"
