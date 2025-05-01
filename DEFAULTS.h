@@ -14,7 +14,7 @@ int bypass[]={0,0,0,0,0};
 float post_amp[]={1,1,1,1,1};
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};
 
-#define FINAL_AMP 1.2
+#define FINAL_AMP 1
 #define FINAL_CLIP
 
 
@@ -24,7 +24,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};
 
 // 0 is false 1 is true
 #define STEREO 1
-#define STEREO_GAIN 1.4
+#define STEREO_GAIN 1.6
 
 #define AGC_TARG 4000
 
