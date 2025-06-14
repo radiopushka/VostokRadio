@@ -9,14 +9,27 @@
 //we can also emulate the sigmoidal function
 //this is the clip limit, emulating the sigmoidal function
 #define PIHALF 1.570796327
+#define SIN_THRESHOLD (PIHALF/2.0)
 
 float sin_clip(float input,float coeff,float max){
-  return sin(input/coeff)*max;
+  float val = input/coeff;
+  if(fabs(val) > PIHALF){
+    val = PIHALF;
+    if(val<0)
+      val = -PIHALF;
+  }
+  
+  float ret=sin(val);
+
+  if(fabs(ret) < 0.5){
+    return input;
+  }
+  return ret*max;
 }
 float get_sin_clip_coeff(float max_expected_audio_level){
   return max_expected_audio_level/PIHALF;
 }
-
+//auto AGC type clipper
 float sin_clip_sigmoidal(float input,float coeff,float max){
   float ccdiv=input/coeff;
 
@@ -30,5 +43,6 @@ float sin_clip_sigmoidal(float input,float coeff,float max){
 
 
   return sin(ccdiv)*max;
+  
 }
 

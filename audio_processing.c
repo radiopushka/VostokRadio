@@ -25,6 +25,13 @@ void set_compressor_defaults(Multiband mbt){
 }
 
 
+void gained(fmux muxf){
+  for(int i=0; i<fdef_size;i++){
+   float val = power_at(muxf,i);
+   set_power_at(muxf,i,val*pre_amp[i]);
+  }
+}
+
 int main(){
   int ch1=2;
   int ch2=2;
@@ -132,13 +139,14 @@ int main(){
             }
 
             //this value is the maximum value the clipper can reach
-            buffer=sin_clip(buffer,sin_clip_c1,32760);
+            buffer=sin_clip_sigmoidal(buffer,sin_clip_c1,32760);
           }else{
             buffer=0;
           }
           if(count==0){
             //hidari
             mux(lmux,buffer);
+            gained(lmux);
 
             run_compressors(lmbt);
             //printf("%f\n",get_amplitude_at(lmbt,0));
@@ -158,6 +166,7 @@ int main(){
           }else{
             //migi
             mux(rmux,buffer);
+            gained(rmux);
             
             run_compressors(rmbt);
 
