@@ -30,30 +30,24 @@ float run_comp(Compressor comp,float release, float attack, float target, float 
     //if peak
     if(center>slope && center>slope2){
       if(center>target){
-        comp->gain=comp->gain-attack*(center - target);
+        comp->gain=comp->gain*(1-attack);
         //comp->gain=comp->gain-attack;
-        if(comp->gain<0.01){
-          comp->gain=0.01;
-        }
       }
       if(target>center){
 
-        comp->gain=comp->gain+release*(target - center);
+        comp->gain=comp->gain*(1+release);
         //comp->gain=comp->gain+release;
       }
     }
   }else{
     comp->avg=(comp->avg+fabs(input)*comp->gain)/2;
     if(comp->avg<target){
-        comp->gain=comp->gain+release*(target - comp->avg);
+        comp->gain=comp->gain*(1+release);
         //comp->gain=comp->gain+release;
     }
    if(comp->avg>target){
-        comp->gain=comp->gain-attack*(comp->avg - target);
+        comp->gain=comp->gain*(1-attack);
         //comp->gain=comp->gain-attack;
-        if(comp->gain<0.01){
-          comp->gain=0.01;
-        }
 
     }
 

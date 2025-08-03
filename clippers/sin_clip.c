@@ -1,4 +1,5 @@
 #include <math.h>
+#include<stdio.h>
 
 //sinusoidal clipper
 //when the value exceeds the set it will dent the wave form down
@@ -9,20 +10,53 @@
 //we can also emulate the sigmoidal function
 //this is the clip limit, emulating the sigmoidal function
 #define PIHALF 1.570796327
-#define SIN_THRESHOLD (PIHALF/2.0)
+#define SIN_THRESHOLD (PIHALF*0.5)
+#define DEF_COEFF (32767/PIHALF)
+#define DYN_RANGE 30000
+#define COOL_DOWN 0.00005
 
-float sin_clip(float input,float coeff,float max){
-  float val = input/coeff;
-  if(fabs(val) > PIHALF){
-    val = PIHALF;
-    if(val<0)
-      val = -PIHALF;
-  }
+
+
+/*float dynamic_compressor(float input, int strength){
+  if(strength < 1)
+    return input;
+
+  float compressval = input/DEF_COEFF;
+  float vv = sin(compressval)*32767;
   
+  if(input > 32767){
+    vv = 32767;
+  }else if(input < -32767){
+    vv = -32767;
+  }
+    
+
+  return dynamic_compressor(vv,strength - 1);
+}*/
+float clpval = 1.4;
+float sin_clip(float input,float coeff,float max, float* max_audio){
+  if(fabs(input) > *max_audio){
+    *max_audio = fabs(input);
+  }else if(fabs(input) > DYN_RANGE){
+
+    float attarashi = fabs(input) + (32767 - DYN_RANGE);
+    if(attarashi > *max_audio)
+      *max_audio=attarashi;
+  }
+  float val = input/(*max_audio/PIHALF);
+  if(*max_audio > 32767  && fabs(input) < DYN_RANGE){
+    *max_audio = *max_audio - (*max_audio - 32767)*COOL_DOWN;
+  }
   float ret=sin(val);
 
-  if(fabs(ret) < 0.5){
-    return input;
+  if(fabs(input) <= 16383){
+
+    if(fabs(val)> 16056){
+    //printf("%f\n",(ret*max/input));
+      clpval = ((ret*max)/input);
+    }
+    
+    return input*clpval;
   }
   return ret*max;
 }
@@ -44,5 +78,33 @@ float sin_clip_sigmoidal(float input,float coeff,float max){
 
   return sin(ccdiv)*max;
   
+}
+float sin_clip_bouncy(float input,float coeff,float max, float* max_audio){
+  if(fabs(input) > *max_audio){
+    *max_audio = fabs(input);
+  }else if(fabs(input) > DYN_RANGE){
+
+    float attarashi = fabs(input) + (32767 - DYN_RANGE);
+    if(attarashi > *max_audio)
+      *max_audio=attarashi;
+  }
+  float val = input/(*max_audio/PIHALF);
+  if(*max_audio > 32767 &&fabs(input) < DYN_RANGE ){
+    *max_audio = *max_audio - (*max_audio - 32767)*COOL_DOWN;
+  }
+   float ret=sin(val);
+
+   return ret*max;
+}
+float dynamic_limiter = 32767;
+float dynamic_compressor(float input, int strength){
+  if(strength < 1)
+    return input;
+
+  float vv = sin_clip_bouncy(input,0,32767,&dynamic_limiter);
+  
+    
+
+  return dynamic_compressor(vv,strength - 1);
 }
 

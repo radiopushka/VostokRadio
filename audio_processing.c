@@ -4,6 +4,7 @@
 #include "./clippers/sin_clip.c"
 #include "./stereo/stereo_amp.c"
 #include "./multiband_compressor/mbc.h"
+#include "./lookahead_limiter/lookaheadlim.h"
 #include "ui.c"
 #include "DEFAULTS.h"
 
@@ -33,6 +34,8 @@ void gained(fmux muxf){
 }
 
 int main(){
+  float mt1,mt2;
+  mt1 = 32767; mt2 = 32767; 
   int ch1=2;
   int ch2=2;
   int rate1=RATE;
@@ -56,8 +59,8 @@ int main(){
 
 
   //pre agc bass filter
-  afilter rbassc=poled_f(RATE,200,1,1);
-  afilter lbassc=poled_f(RATE,200,1,1);
+  afilter rbassc=poled_f(RATE,200,4,1);
+  afilter lbassc=poled_f(RATE,200,4,1);
   
 
   //multiband compression
@@ -65,6 +68,12 @@ int main(){
 
   Multiband lmbt=create_mbt(lmux);
   Multiband rmbt=create_mbt(rmux);
+
+
+  //final limiter
+  Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
+  Limiter hidari = create_limiter(FINAL_CLIP_LOOKAHEAD);
+
 
   set_compressor_defaults(lmbt);
   set_compressor_defaults(rmbt);
@@ -139,7 +148,7 @@ int main(){
             }
 
             //this value is the maximum value the clipper can reach
-            buffer=sin_clip_sigmoidal(buffer,sin_clip_c1,32760);
+            buffer=dynamic_compressor(buffer,1);
           }else{
             buffer=0;
           }
@@ -157,12 +166,19 @@ int main(){
             if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
-            buffer=sin_clip_sigmoidal(buffer,sin_clip_c1,32760);
+                       
+            buffer=run_f(lpassfinal,buffer);
+            #ifdef FINAL_CLIP 
+              buffer=run_limiter(hidari,buffer*FINAL_AMP,32760);
+            #else
+              buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
+            #endif 
+
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
             }
-            
-            buffer=run_f(lpassfinal,buffer);
+
+
           }else{
             //migi
             mux(rmux,buffer);
@@ -175,23 +191,23 @@ int main(){
              if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
-            buffer=sin_clip_sigmoidal(buffer,sin_clip_c1,32760);
+           // buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt2);
+           
+            buffer=run_f(rpassfinal,buffer);
+            #ifdef FINAL_CLIP 
+              buffer=run_limiter(migi,buffer*FINAL_AMP,32760);
+            #else
+              buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
+            #endif 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
             }
-
-            buffer=run_f(rpassfinal,buffer);
 
           }
         }else{
           buffer=(*start);
         }
-        #ifdef FINAL_CLIP 
-          buffer=sin_clip_sigmoidal(buffer*FINAL_AMP,sin_clip_c1,32760);
-        #else
-          buffer=buffer*FINAL_AMP;
-        #endif 
-
+       
         *start=buffer;
         count=~count;
       }
@@ -209,6 +225,9 @@ int main(){
 
   free_f(rbassc);
   free_f(lbassc);
+
+  free_limiter(migi);
+  free_limiter(hidari);
 
   free_multiband(lmbt);
   free_multiband(rmbt);

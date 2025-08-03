@@ -4,10 +4,11 @@ MULTIBAND=./multiband_compressor/main.c
 MULTIPOLE=./multiband_compressor/multi_pole/multi_pole.c
 RC=./multiband_compressor/multi_pole/RC/rc.c
 ALSA=alsa_pipe/main.c
+LIMITER=./lookahead_limiter/lookaheadlim.c
 
 FLAGS=-O2 -g -march=native
 
 
 all:
-	$(CC) audio_processing.c $(COMPRESSOR) $(MUXER) $(MULTIBAND) $(MULTIPOLE) $(RC) $(ALSA) -lm -lasound $(FLAGS) -Wall -o touhouradio
+	$(CC) audio_processing.c $(LIMITER) $(COMPRESSOR) $(MUXER) $(MULTIBAND) $(MULTIPOLE) $(RC) $(ALSA) -lm -lasound $(FLAGS) -Wall -o touhouradio
 
