@@ -4,7 +4,7 @@
 
 
 int itterator=0;
-float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,float percent_mono,Limiter composite_clip){
+float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,float percent_mono,Limiter composite_clip,float release){
   float mult19=_19KHZ_96[itterator];
   float mult38=_38KHZ_96[itterator];
   if(ratekhz==192000){
@@ -33,7 +33,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   float limiter_out=pre_mpx;
 
   if(composite_clip!=NULL)
-    limiter_out=run_limiter(composite_clip,pre_mpx,clip_value);
+    limiter_out=run_limiter(composite_clip,pre_mpx,clip_value,release);
 
   float pilot=(percent_pilot*32760)*mult19;
 

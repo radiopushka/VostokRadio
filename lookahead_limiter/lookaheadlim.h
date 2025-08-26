@@ -4,6 +4,7 @@
 
 struct limiter{
   float* ring_buffer;
+  float local_gain;
   int size;
 
 };
@@ -11,7 +12,7 @@ struct limiter{
 typedef struct limiter* Limiter;
 
 Limiter create_limiter(int size);
-float run_limiter(Limiter limiter,float input,float limit);
+float run_limiter(Limiter limiter,float input,float limit,float release);
 void free_limiter(Limiter limiter);
 
 

@@ -182,7 +182,7 @@ int main(){
                        
             buffer=run_f(lpassfinal,buffer);
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(hidari,buffer*FINAL_AMP,32760);
+              buffer=run_limiter(hidari,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
             #endif 
@@ -208,7 +208,7 @@ int main(){
            
             buffer=run_f(rpassfinal,buffer);
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(migi,buffer*FINAL_AMP,32760);
+              buffer=run_limiter(migi,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
             #endif 
@@ -230,7 +230,7 @@ int main(){
         if(rate2 == 96000||rate2 == 192000){
           for(short* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             short* right=loop+1;
-            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip);
+            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE );
             *right=mpx;
             *loop=mpx;
           }
