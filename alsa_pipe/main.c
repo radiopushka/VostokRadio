@@ -192,11 +192,14 @@ int queue_audio(short* data){
   return 1;
 }
 
-int get_audio(short* data){
+int get_audio(short* data,int local_buffer_size){
   if(input==NULL)
     return -1;
 
   unsigned int bsize=forward_buffer_size;
+  if(local_buffer_size>0){
+    bsize=local_buffer_size;
+  }
   if(input_channels>1){
     bsize=bsize>>1;
   }
