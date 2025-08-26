@@ -36,21 +36,33 @@ float run_limiter(Limiter limiter, float input,float limit,float release){
   float* endptr = limiter->ring_buffer + (size-1);
   float max = fabs(output);
   float* strptr;
+  int max_index=0;
   for(strptr = limiter->ring_buffer; strptr<endptr ;strptr++){
     float next = *(strptr+1);
     *strptr = next;
     if(fabs(next)>max){
       max = fabs(next);
+      max_index=strptr-limiter->ring_buffer;
     }
 
   }
   *strptr = input;
   if(fabs(input) > max){
     max=fabs(input);
+    max_index=size-1;
   }
 
   if(max > limit){
-    gain=(limit/max);
+    float real_gain = limit/max;
+    float tmp_gain= real_gain+((1.0-real_gain)*(((float)max_index)/((float)size)));
+    if(tmp_gain>1){
+      tmp_gain=1;
+    }
+    if(fabs(tmp_gain*output)>limit){
+      gain=real_gain;
+    }else{
+      gain = tmp_gain;
+    }
     increment_gain(limiter,release);
     if(gain<limiter->local_gain){
       limiter->local_gain=gain;
