@@ -41,7 +41,7 @@ int main(){
   int ch2=2;
   int rate1=48000;
   int rate2=RATE;
-  int buffer_size=5000;
+  int buffer_size=40000;
   if(setup_alsa_pipe(RECORDING_IFACE,PLAYBACK_IFACE,&ch1,&ch2,&rate1,&rate2,buffer_size)==-1){
     return -1;
   }
