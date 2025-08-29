@@ -125,6 +125,7 @@ int main(){
   int stereo_on=STEREO;
 
 
+
   while(c!='q' && c!=CTRLC){
     //printf("buffer1\n");
     if(get_audio(buffer_t,i_buffer_size)!=-1){
@@ -142,6 +143,7 @@ int main(){
 
       avg_post_clip=0;
       avg_pre_clip=0;
+      
 
       for(short* start=buffer_t;start<buffer_end;start++){
         if(*start==0){
@@ -157,24 +159,28 @@ int main(){
             if(count%2==0){
             
              #ifdef HIGH_PASS
-              buffer=run_f(lbassc3,buffer);
+              ch_nobass=run_f(lbassc3,buffer);
+              ch_nobass=run_f(lbassc,ch_nobass);
+              #else
+             ch_nobass=run_f(lbassc,buffer);
 
              #endif /* ifdef MACRO */
             
-             ch_nobass=run_f(lbassc,buffer);
             }else{
              #ifdef HIGH_PASS
-              buffer=run_f(rbassc3,buffer);
-
+              ch_nobass=run_f(rbassc3,buffer);
+              ch_nobass=run_f(rbassc,ch_nobass);
+             #else
+              ch_nobass=run_f(rbassc,buffer);
              #endif /* ifdef MACRO */
 
-              ch_nobass=run_f(rbassc,buffer);
             }
           
             if(avg_pre_agc<abs(*start)){
               avg_pre_agc=abs(*start);
             }
             buffer=apply_agc(buffer,agc_targ,agc_speed,agc_gate,ch_nobass);
+            
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
             }
@@ -202,11 +208,7 @@ int main(){
               avg_pre_clip=abs(buffer);
             }
                        
-            /*buffer=run_f(lpassfinal,buffer);
-            #ifdef HIGH_PASS
-              buffer=run_f(lbassc2,buffer);
-            #endif /* ifdef MACRO */
-
+          
             #ifdef FINAL_CLIP 
               buffer=run_limiter(hidari,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
@@ -235,13 +237,7 @@ int main(){
              if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
-           // buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt2);
-           
-           /* buffer=run_f(rpassfinal,buffer);
-           #ifdef HIGH_PASS
-              buffer=run_f(rbassc2,buffer);
-            #endif /* ifdef MACRO */
-
+         
             #ifdef FINAL_CLIP 
               buffer=run_limiter(migi,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
