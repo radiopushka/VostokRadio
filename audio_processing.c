@@ -156,10 +156,18 @@ int main(){
             buffer = *start;
             if(count%2==0){
             
+             #ifdef HIGH_PASS
+              buffer=run_f(lbassc3,buffer);
+
+             #endif /* ifdef MACRO */
             
              ch_nobass=run_f(lbassc,buffer);
             }else{
-           
+             #ifdef HIGH_PASS
+              buffer=run_f(rbassc3,buffer);
+
+             #endif /* ifdef MACRO */
+
               ch_nobass=run_f(rbassc,buffer);
             }
           
