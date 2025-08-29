@@ -9,11 +9,11 @@ float avg_error=0;
 
 #define PIHALF 1.570796327
 
-float apply_agc(float input,float target,float sens,int thresh,int trace_val){
+float apply_agc(float input,float target,float sens,int thresh,float trace_val){
  /* if(sens<0){
     return input;
   }*/
-  short absv=abs(trace_val);
+  float absv=fabs(trace_val);
   
   if(absv>thresh){
     float cur_val=absv*gain;

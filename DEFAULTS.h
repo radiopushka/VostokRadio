@@ -13,12 +13,24 @@ float pre_amp[]={1,2,1,4,40}; //multiband compressor pre compression gain
 float def_gate[]={6000,3000,4000,4000,4000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1}; // band compression post amplification
-int types[]={COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
+int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band compression compressor types
+                                                             //
+//#define DYNAMIC_COMPRESSOR //makes the sound louder but ruins quality
+
+/* Not yet implemented
+#define GATE
+#define GATE_RELEASE 0.00001
+#define GATE_ATTACK 0.001
+#define GATE_THRESHOLD 2000
+*/
 
 #define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
-#define FINAL_CLIP_LOOKAHEAD 1000 //samples
-#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.0001 //release coeficient, proportional to # samples
+#define FINAL_CLIP_LOOKAHEAD 500 //samples
+#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.001 //release coeficient, proportional to # samples
+
+//#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
+#define HIGH_PASS_CUTOFF 60 //comment the line above to disable
 
 //alsa configuration
 #define RECORDING_IFACE "default"

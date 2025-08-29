@@ -66,8 +66,15 @@ int main(){
 
 
   //pre agc bass filter
-  afilter rbassc=poled_f(rate1,200,4,1);
-  afilter lbassc=poled_f(rate1,200,4,1);
+  afilter rbassc=poled_f(rate1,200,1,1);
+  afilter lbassc=poled_f(rate1,200,1,1);
+
+
+  afilter rbassc2=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
+  afilter lbassc2=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
+
+  afilter rbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
+  afilter lbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   
 
   //multiband compression
@@ -80,6 +87,7 @@ int main(){
   //final limiter
   Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari = create_limiter(FINAL_CLIP_LOOKAHEAD);
+  
 
   //composite_clipper
   Limiter Composite_clip = NULL;
@@ -99,7 +107,7 @@ int main(){
   float sin_clip_c1=get_sin_clip_coeff(32760);
 
   int time_off=0;
-  int is_silence=80000;
+  int is_silence=200000;
 
   int avg_post_agc=0;
   int avg_pre_agc=0;
@@ -116,6 +124,7 @@ int main(){
 
   int stereo_on=STEREO;
 
+
   while(c!='q' && c!=CTRLC){
     //printf("buffer1\n");
     if(get_audio(buffer_t,i_buffer_size)!=-1){
@@ -127,7 +136,7 @@ int main(){
 
       float buffer;
       int count=0;
-      int ch_nobass;
+      float ch_nobass;
       avg_pre_agc=0;
       avg_post_agc=0;
 
@@ -144,24 +153,29 @@ int main(){
         }
         if(time_off<is_silence){
           if(*start!=0){
+            buffer = *start;
             if(count%2==0){
             
-             ch_nobass=run_f(lbassc,*start);
+            
+             ch_nobass=run_f(lbassc,buffer);
             }else{
-
-              ch_nobass=run_f(rbassc,*start);
+           
+              ch_nobass=run_f(rbassc,buffer);
             }
           
             if(avg_pre_agc<abs(*start)){
               avg_pre_agc=abs(*start);
             }
-            buffer=apply_agc(*start,agc_targ,agc_speed,agc_gate,ch_nobass);
+            buffer=apply_agc(buffer,agc_targ,agc_speed,agc_gate,ch_nobass);
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
             }
 
             //this value is the maximum value the clipper can reach
+            #ifdef DYNAMIC_COMPRESSOR
+            
             buffer=dynamic_compressor(buffer,1);
+            #endif /* ifdef DYNAMIC_COMPRESSOR */
           }else{
             buffer=0;
           }
@@ -180,12 +194,21 @@ int main(){
               avg_pre_clip=abs(buffer);
             }
                        
-            buffer=run_f(lpassfinal,buffer);
+            /*buffer=run_f(lpassfinal,buffer);
+            #ifdef HIGH_PASS
+              buffer=run_f(lbassc2,buffer);
+            #endif /* ifdef MACRO */
+
             #ifdef FINAL_CLIP 
               buffer=run_limiter(hidari,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
             #endif 
+
+            buffer=run_f(lpassfinal,buffer);
+            #ifdef HIGH_PASS
+              buffer=run_f(lbassc2,buffer);
+            #endif /* ifdef MACRO */
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -206,12 +229,21 @@ int main(){
             }
            // buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt2);
            
-            buffer=run_f(rpassfinal,buffer);
+           /* buffer=run_f(rpassfinal,buffer);
+           #ifdef HIGH_PASS
+              buffer=run_f(rbassc2,buffer);
+            #endif /* ifdef MACRO */
+
             #ifdef FINAL_CLIP 
               buffer=run_limiter(migi,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
             #endif 
+
+            buffer=run_f(rpassfinal,buffer);
+           #ifdef HIGH_PASS
+              buffer=run_f(rbassc2,buffer);
+            #endif /* ifdef MACRO */
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
             }
@@ -252,8 +284,17 @@ int main(){
   free_f(rbassc);
   free_f(lbassc);
 
+  free_f(rbassc2);
+  free_f(lbassc2);
+
+  free_f(rbassc3);
+  free_f(lbassc3);
+
   free_limiter(migi);
   free_limiter(hidari);
+
+
+
 
   if(Composite_clip!=NULL){
     free_limiter(Composite_clip);
