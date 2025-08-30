@@ -152,10 +152,16 @@ int main(){
     //printf("buffer1\n");
     if(get_audio(buffer_t,i_buffer_size)!=-1){
     //printf("buffer1_out\n");
-      if(stereo_on==1)
-        amplify_stereo_plex(buffer_t,buffer_end,stereo_gain);
-      else
+      #ifndef BYPASS
+      
+      
+      if(stereo_on==1){
+        if(stereo_gain!=1){
+          amplify_stereo_plex(buffer_t,buffer_end,stereo_gain);
+        }
+      }else
         demux_mono(buffer_t,buffer_end);
+      #endif /* ifndef BYPASS */
 
       float buffer;
       int count=0;
@@ -169,6 +175,8 @@ int main(){
 
       int* helper_dr=helper_buffer;
       for(short* start=buffer_t;start<buffer_end;start++){
+        #ifndef BYPASS
+        
         if(*start==0){
           if(time_off<=is_silence){
             time_off++;
@@ -220,6 +228,7 @@ int main(){
             buffer=0;
           }
           if(count==0){
+            #ifdef MULTIBAND_COMPRESSION
              mux(lmux,buffer);
              gained(lmux);
 
@@ -243,6 +252,7 @@ int main(){
             buffer=demux(lmux);
                       
 
+            #endif
             if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
@@ -268,6 +278,8 @@ int main(){
 
 
           }else{
+            #ifdef MULTIBAND_COMPRESSION
+            
             //migi
             mux(rmux,buffer);
             gained(rmux);
@@ -290,6 +302,7 @@ int main(){
 
             buffer=demux(rmux);
 
+            #endif /* ifdef MULTIBAND_COMPRESSION */
              if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
@@ -316,7 +329,11 @@ int main(){
         }else{
           buffer=0;
         }
+        #else
+
+          buffer=(*start);
        
+        #endif /* ifdef BYPASS */
         *helper_dr=buffer*65538.0;
         helper_dr++;
         count=~count;

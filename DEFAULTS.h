@@ -16,9 +16,15 @@ float post_amp[]={0.5,1,1,1,1}; // band compression post amplification
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression compressor types
                 
 //this maximizes loudness, you can comment this out if you are using mono
-//#define MONO_COMPRESSION //enable for FM Stereo
+//#define MONO_COMPRESSION //turns the compressor from stereo to mono
 //
 //#define DYNAMIC_COMPRESSOR //makes the sound louder but ruins quality
+
+#define MULTIBAND_COMPRESSION // comment this to disable the multiband compressor
+
+//#define BYPASS //uncomment this to bypass compressor chain
+
+
 
 /* Not yet implemented
 #define GATE
@@ -49,7 +55,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 // 0 is false 1 is true
 #define STEREO 1
-#define STEREO_GAIN 1.6 //the stereo amplification coefficient(good setting for streams)
+//#define STEREO_GAIN 1.6 //the stereo amplification coefficient(good setting for streams) 
+#define STEREO_GAIN 1 //have this always set to 1 when running in MPX mode
 
 #define AGC_TARG 14000 //input AGC baseline target
 
@@ -60,7 +67,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
 
 //FM radio setings, only apply if the output sampling rate is 96khz or higher
-//#define MPX_ENABLE //uncomment to enable
+#define MPX_ENABLE //uncomment to enable
 #define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 100
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.001
