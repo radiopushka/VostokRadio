@@ -37,6 +37,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 10 //comment the line above to disable
 
+
 //alsa configuration
 #define RECORDING_IFACE "default"
 #define PLAYBACK_IFACE "default"
@@ -61,7 +62,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define COMPOSITE_CLIPPER_LOOKAHEAD 100
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.001
 #define PERCENT_PILOT 0.09 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 0.45 // percent of the signal devoted to mono audio
+#define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 0.85// percent of the signal devoted to mono audio
 
 
 
