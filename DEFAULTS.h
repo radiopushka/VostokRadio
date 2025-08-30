@@ -28,9 +28,14 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 #define FINAL_CLIP_LOOKAHEAD 500 //samples
 #define FINAL_CLIP_LOOKAHEAD_RELEASE 0.001 //release coeficient, proportional to # samples
+//Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
+//most other AM transmitters require bass cut, so set this to like 70hz
+//some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
+//poor bass response in FM transmitters is caused by the milivolts of change even after filtering, from the power supply's rectifier circuit (PLL VCOs are more sensitive than you think)
+//The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 20 //comment the line above to disable
+#define HIGH_PASS_CUTOFF 10 //comment the line above to disable
 
 //alsa configuration
 #define RECORDING_IFACE "default"
