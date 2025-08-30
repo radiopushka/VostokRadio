@@ -5,9 +5,9 @@
 int fdef[]={190,500,3000,7000,15000}; //multiband compression filters
 int fdef_size=5;
 
-float def_attack[]={0.0000000001      ,0.000001     ,0.0001     ,0.0002     ,0.001};//multiband compression attack
-float def_release[]={0.00000000000001  ,0.000000001  ,0.000003   ,0.000003   ,0.0005}; //multiband compression release
-float def_target[]={15000,17000,17000,17000,24000}; //multiband compression target volume 
+float def_attack[]={0.000008      ,0.000001     ,0.0001     ,0.0002     ,0.001};//multiband compression attack
+float def_release[]={0.0000001  ,0.000000001  ,0.000003   ,0.000003   ,0.0005}; //multiband compression release
+float def_target[]={14000,17000,17000,17000,24000}; //multiband compression target volume 
 float def_m_gain[]={400,400,400,400,400}; //multiband compressor max gain
 float pre_amp[]={1,2,1,4,40}; //multiband compressor pre compression gain
 float def_gate[]={6000,3000,4000,4000,4000}; //multi band compressor gate
