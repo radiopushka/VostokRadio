@@ -270,7 +270,7 @@ int main(){
         if(rate2 == 96000||rate2 == 192000){
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             int* right=loop+1;
-            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640);
+            float mpx=get_mpx_next_value(*right,*loop,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640);
             *right=mpx;
             *loop=mpx;
           }
