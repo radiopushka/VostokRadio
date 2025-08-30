@@ -89,7 +89,8 @@ int main(){
   //final limiter
   Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari = create_limiter(FINAL_CLIP_LOOKAHEAD);
-  
+  Limiter migi_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
+  Limiter hidari_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
 
   //composite_clipper
   Limiter Composite_clip = NULL;
@@ -222,6 +223,9 @@ int main(){
             #ifdef HIGH_PASS
               buffer=run_f(lbassc2,buffer);
             #endif /* ifdef MACRO */
+           #ifdef FINAL_CLIP 
+              buffer=run_limiter(hidari_h,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+            #endif
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -251,6 +255,10 @@ int main(){
            #ifdef HIGH_PASS
               buffer=run_f(rbassc2,buffer);
             #endif /* ifdef MACRO */
+            #ifdef FINAL_CLIP 
+              buffer=run_limiter(migi_h,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+            #endif
+
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
             }
@@ -271,6 +279,7 @@ int main(){
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             int* right=loop+1;
             float mpx=get_mpx_next_value(*right,*loop,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640);
+
             *right=mpx;
             *loop=mpx;
           }
@@ -300,7 +309,8 @@ int main(){
 
   free_limiter(migi);
   free_limiter(hidari);
-
+  free_limiter(migi_h);
+  free_limiter(hidari_h);
 
 
 
