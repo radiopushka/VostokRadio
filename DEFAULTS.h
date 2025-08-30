@@ -55,8 +55,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 // 0 is false 1 is true
 #define STEREO 1
-//#define STEREO_GAIN 1.6 //the stereo amplification coefficient(good setting for streams) 
-#define STEREO_GAIN 1 //have this always set to 1 when running in MPX mode
+#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 
 #define AGC_TARG 14000 //input AGC baseline target
 
