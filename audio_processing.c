@@ -344,7 +344,15 @@ int main(){
         if(rate2 == 96000||rate2 == 192000){
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             int* right=loop+1;
-            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_STEREO,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640);
+            
+            int synth=-1;
+
+            #ifdef SYNTHESIZE_MPX_REALTIME
+              synth=1;
+            
+            #endif /* ifdef SYNTHESIZE_MPX_REALTIME */
+
+            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_STEREO,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640,synth);
 
             *right=mpx;
             *loop=mpx;
