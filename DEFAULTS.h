@@ -13,7 +13,7 @@ float pre_amp[]={1,2,1,4,40}; //multiband compressor pre compression gain
 float def_gate[]={6000,3000,4000,4000,4000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1}; // band compression post amplification
-int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band compression compressor types
+int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression compressor types
                                                              //
 //#define DYNAMIC_COMPRESSOR //makes the sound louder but ruins quality
 
@@ -42,9 +42,9 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band compression 
 #define STEREO 1
 #define STEREO_GAIN 1.6 //the stereo amplification coefficient
 
-#define AGC_TARG 12000 //input AGC baseline target
+#define AGC_TARG 14000 //input AGC baseline target
 
-#define AGC_SPEED 0.0001 //response coefficient
+#define AGC_SPEED 0.0004 //response coefficient
 #define AGC_GATE 3000
 
 // set to 1 to show the levels in real time, 0 to keep silent

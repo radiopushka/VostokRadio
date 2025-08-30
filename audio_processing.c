@@ -41,19 +41,21 @@ int main(){
   int ch2=2;
   int rate1=48000;
   int rate2=RATE;
-  int buffer_size=40000;
+  int buffer_size=50000;
   if(setup_alsa_pipe(RECORDING_IFACE,PLAYBACK_IFACE,&ch1,&ch2,&rate1,&rate2,buffer_size)==-1){
     return -1;
   }
   int input_buffer_prop = rate2/rate1;
   int i_buffer_size = buffer_size/input_buffer_prop;
-  short buffer_o[buffer_size];//--
+  int buffer_o[buffer_size];//output buffer
 
   printf("starting rates: input: %d, output: %d\n",rate1, rate2);
   
-  short buffer_t[i_buffer_size];//--
+  short buffer_t[i_buffer_size];//input buffer
+  int helper_buffer[i_buffer_size];
+  int* helper_buffer_end=helper_buffer+i_buffer_size;
   short* buffer_end=buffer_t+i_buffer_size;
-  short* o_buffer_end=buffer_o+buffer_size;
+  int* o_buffer_end=buffer_o+buffer_size;
   memset(buffer_t,0,i_buffer_size<<1);
   //frequency splitter and combiner
   fmux lmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);
@@ -145,6 +147,7 @@ int main(){
       avg_pre_clip=0;
       
 
+      int* helper_dr=helper_buffer;
       for(short* start=buffer_t;start<buffer_end;start++){
         if(*start==0){
           if(time_off<=is_silence){
@@ -254,19 +257,20 @@ int main(){
 
           }
         }else{
-          buffer=(*start);
+          buffer=0;
         }
        
-        *start=buffer;
+        *helper_dr=buffer*65538.0;
+        helper_dr++;
         count=~count;
       }
       
-      resample_up_stereo(buffer_t,buffer_o,buffer_end,input_buffer_prop);
+      resample_up_stereo(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);
       #ifdef MPX_ENABLE
         if(rate2 == 96000||rate2 == 192000){
-          for(short* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
-            short* right=loop+1;
-            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE );
+          for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
+            int* right=loop+1;
+            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640);
             *right=mpx;
             *loop=mpx;
           }

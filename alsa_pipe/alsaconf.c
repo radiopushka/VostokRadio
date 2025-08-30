@@ -1,7 +1,7 @@
 #include <alsa/asoundlib.h>
 #include<stdio.h>
 
-int configure_sound_card(snd_pcm_t* handle,int buffer,unsigned int* samplerate,int* channels){
+int configure_sound_card(snd_pcm_t* handle,int buffer,unsigned int* samplerate,int* channels,int format){
   snd_pcm_hw_params_t* aparams;
   snd_pcm_hw_params_alloca(&aparams);
   if(snd_pcm_hw_params_any(handle,aparams)<0){
@@ -14,7 +14,7 @@ int configure_sound_card(snd_pcm_t* handle,int buffer,unsigned int* samplerate,i
     printf("alsa unable to se access\n");
     return -1;
   }
-  if(snd_pcm_hw_params_set_format(handle,aparams,SND_PCM_FORMAT_S16_LE)<0){
+  if(snd_pcm_hw_params_set_format(handle,aparams,format)<0){
     snd_pcm_hw_params_free(aparams);
     printf("failed to set card format\n");
     return -1;

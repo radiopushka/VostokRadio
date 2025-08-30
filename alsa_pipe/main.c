@@ -5,8 +5,9 @@
 
 #include "alsa_pipe.h"
 
-short* input_buffer=NULL;
-short* input_end_ptr=NULL;
+int* input_buffer=NULL;
+int* input_buffer_helper=NULL;
+int* input_end_ptr=NULL;
 unsigned int data_in_buffer=0;
 unsigned int buffer_space=0;
 unsigned int start_point=0;
@@ -27,10 +28,10 @@ unsigned int forward_buffer_size=1500; // set from main function
 unsigned int step_back=0;
 unsigned int sink_back=0;
 unsigned int start_drop=0;
-short* tmp_buff;
+int* tmp_buff;
 
 unsigned int empty_size=15;
-short* empty_buff;
+int* empty_buff;
 
 int input_channels=1;
 int output_channels=1;
@@ -41,8 +42,11 @@ pthread_t playback_thread;
 unsigned int sink_state=0;
 unsigned int logged=20; //latency
 //extra space for overflows
+//
+int rate=48000;
+int memcpy_size=1;
 
-int pcm_write(short* data,unsigned int size){
+int pcm_write(int* data,unsigned int size){
  
  snd_pcm_t* ptr_cpy=NULL;
 
@@ -66,7 +70,7 @@ int pcm_write(short* data,unsigned int size){
 
   int status;
 	if((status=snd_pcm_writei(ptr_cpy,data,bsize ))== -EPIPE){
-    //snd_pcm_drain(output);
+    snd_pcm_drain(output);
 		snd_pcm_recover(ptr_cpy,status,1);
     snd_pcm_prepare(ptr_cpy);
   }
@@ -111,14 +115,15 @@ int forward_audio(){
     sink_state=0;
   }
 
-  short* start_ptr=input_end_ptr - forward_buffer_size;
-  unsigned int nosize=start_ptr-input_buffer;
-  memcpy(tmp_buff,start_ptr,forward_buffer_size<<1);
+  int* start_ptr=input_end_ptr - forward_buffer_size;
+  unsigned int nosize=(start_ptr-input_buffer)*sizeof(int);
+  memcpy(tmp_buff,start_ptr,memcpy_size);
 
    
   if(data_in_buffer!=0){
-    memcpy(input_buffer+forward_buffer_size,input_buffer,nosize<<1);
-    memset(input_buffer,0,forward_buffer_size<<1);
+    memcpy(input_buffer_helper,input_buffer,nosize);
+    memcpy(input_buffer+forward_buffer_size,input_buffer_helper,nosize);
+    memset(input_buffer,0,memcpy_size);
 
     data_in_buffer=data_in_buffer-forward_buffer_size;
     start_point=start_point+forward_buffer_size;
@@ -146,7 +151,7 @@ void* audio_thread_cont(void* arg){
 }
 
 int queue_overflow=0;
-int queue_audio(short* data){
+int queue_audio(int* data){
   pthread_mutex_lock(&write_access);
   
   //printf("%d %d\n",start_point,data_in_buffer);
@@ -166,7 +171,7 @@ int queue_audio(short* data){
 
   if(start_point==0){
 
-    usleep(1000000);
+    usleep(forward_buffer_size*((1.0/((float) rate))*1000000));
   }
   /*if(synced==1){
     synced=0;
@@ -178,8 +183,8 @@ int queue_audio(short* data){
 
   }*/
 
-  //printf("%d %d\n",start_point,data_in_buffer);
-  memcpy(input_buffer+start_point,data,forward_buffer_size<<1);
+  //printf("%d %d\n",data_in_buffer,data_in_buffer);
+  memcpy(input_buffer+start_point,data,memcpy_size);
   if(start_point!=0){
     start_point=start_point-forward_buffer_size;
     data_in_buffer=data_in_buffer+forward_buffer_size;
@@ -224,6 +229,7 @@ int setup_alsa_pipe(char* recording_iface, char* playback_iface, int* channels_i
   step_back=STEP_BACK*forward_buffer_size;
   sink_back=forward_buffer_size*SINK_BACK;
   start_drop=forward_buffer_size*DROPPING;
+  memcpy_size=forward_buffer_size*sizeof(int);
 
   //alsa stuff
 
@@ -236,15 +242,16 @@ int setup_alsa_pipe(char* recording_iface, char* playback_iface, int* channels_i
 		return -1;
 	} 
 
-	if(configure_sound_card(output,step_back,(unsigned int*)output_rate,channels_out)<0){
+	if(configure_sound_card(output,forward_buffer_size*STEP_BACK,(unsigned int*)output_rate,channels_out,SND_PCM_FORMAT_S32_LE)<0){
     printf("play config failed \n");
 		return -1;
 	}
-	if(configure_sound_card(input,step_back,(unsigned int*)input_rate,channels_in)<0){
+	if(configure_sound_card(input,forward_buffer_size*STEP_BACK,(unsigned int*)input_rate,channels_in,SND_PCM_FORMAT_S16_LE)<0){
     printf("record config failed \n");
 		return -1;
 	}
 
+  rate = *output_rate;
   snd_pcm_link(input,output);//synchornize
 	snd_pcm_prepare(output);
 	snd_pcm_prepare(input);
@@ -255,13 +262,14 @@ int setup_alsa_pipe(char* recording_iface, char* playback_iface, int* channels_i
   buffer_space=forward_buffer_size*logged;
   start_point=forward_buffer_size*(logged-1);
   data_in_buffer=0;
-  input_buffer=malloc(sizeof(short)*(buffer_space+1));//short is always 2 bytes on all operating systems
+  input_buffer=malloc(sizeof(int)*(buffer_space+1));
+  input_buffer_helper=malloc(sizeof(int)*(buffer_space+1));
   input_end_ptr=input_buffer+buffer_space;
 
-  tmp_buff=malloc(sizeof(short)*buffer_Size);
-  empty_buff=malloc(sizeof(short)*buffer_Size);
+  tmp_buff=malloc(sizeof(int)*buffer_Size);
+  empty_buff=malloc(sizeof(int)*buffer_Size);
 
-  memset(empty_buff,0,sizeof(short)*buffer_Size);
+  memset(empty_buff,0,sizeof(int)*buffer_Size);
 
 
 	pthread_mutex_init(&write_access, NULL);
@@ -294,6 +302,7 @@ void alsa_pipe_exit(){
     pthread_mutex_destroy(&write_access);
 
     free(input_buffer);
+    free(input_buffer_helper);
     free(tmp_buff);
     free(empty_buff);
 

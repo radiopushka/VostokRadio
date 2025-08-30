@@ -21,7 +21,7 @@ int setup_alsa_pipe(char* recording_iface,
 
 //the data buffer should be the same size as set in setup
 int get_audio(short* data,int bsize);
-int queue_audio(short* data);
+int queue_audio(int* data);
 //puts in the next segment to be played
 
 
