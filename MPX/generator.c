@@ -4,7 +4,7 @@
 
 
 int itterator=0;
-float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,float percent_mono,Limiter composite_clip,float release,float max){
+float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,float percent_stereo,float percent_mono,Limiter composite_clip,float release,float max){
   float mult19=_19KHZ_96[itterator];
   float mult38=_38KHZ_96[itterator];
   if(ratekhz==192000){
@@ -22,7 +22,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
 
   }
   //100percent: 32760
-  float percent_38=1.0-(percent_pilot+percent_mono);
+  float percent_38=percent_stereo;
   float mono = ((left+right)/2.0)*percent_mono;
   float stereo = (((left - right)/2.0)*percent_38)*mult38;
   float percentnmpx = 1.0-percent_pilot;
