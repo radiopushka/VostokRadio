@@ -29,8 +29,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define FINAL_CLIP_LOOKAHEAD 500 //samples
 #define FINAL_CLIP_LOOKAHEAD_RELEASE 0.001 //release coeficient, proportional to # samples
 
-//#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 60 //comment the line above to disable
+#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
+#define HIGH_PASS_CUTOFF 20 //comment the line above to disable
 
 //alsa configuration
 #define RECORDING_IFACE "default"
