@@ -12,9 +12,12 @@ float def_m_gain[]={400,400,400,400,400}; //multiband compressor max gain
 float pre_amp[]={1,2,1,4,40}; //multiband compressor pre compression gain
 float def_gate[]={6000,3000,4000,4000,4000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,1,1,1}; // band compression post amplification
+float post_amp[]={0.5,1,1,1,1}; // band compression post amplification
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression compressor types
-                                                             //
+                
+//this maximizes loudness, you can comment this out if you are using mono
+//#define MONO_COMPRESSION //enable for FM Stereo
+//
 //#define DYNAMIC_COMPRESSOR //makes the sound louder but ruins quality
 
 /* Not yet implemented
@@ -46,7 +49,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 // 0 is false 1 is true
 #define STEREO 1
-#define STEREO_GAIN 1.6 //the stereo amplification coefficient
+#define STEREO_GAIN 1.6 //the stereo amplification coefficient(good setting for streams)
 
 #define AGC_TARG 14000 //input AGC baseline target
 
@@ -64,6 +67,9 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define PERCENT_PILOT 0.09 //percent of the signal devoted to the 19khz pilot tone
 #define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
 #define PERCENT_STEREO 0.85// percent of the signal devoted to mono audio
+
+
+                           
 
 
 

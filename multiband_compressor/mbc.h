@@ -46,6 +46,7 @@ float get_amplitude_at(Multiband mbt,int index);
 
 //run after the frequency muxer
 void run_compressors(Multiband mbt);
+void run_compressors_advanced(Multiband mbt,float (*on_gain_value)(float,float,int));
 
 //free memory
 void free_multiband(Multiband mbc);

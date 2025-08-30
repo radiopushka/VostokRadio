@@ -34,6 +34,18 @@ void gained(fmux muxf){
   }
 }
 
+fmux lmux;
+fmux rmux;
+//for mono compression in stereo audio
+float* gains;
+float h_compressor_left(float signal,float gain,int location){
+
+  gains[location]=gain;
+  float amplitude=power_at(lmux,location);
+  set_power_at(lmux,location, amplitude*gain);
+  return amplitude;
+}
+
 int main(){
   float mt1,mt2;
   mt1 = 32767; mt2 = 32767; 
@@ -58,8 +70,9 @@ int main(){
   int* o_buffer_end=buffer_o+buffer_size;
   memset(buffer_t,0,i_buffer_size<<1);
   //frequency splitter and combiner
-  fmux lmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);
-  fmux rmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);
+  lmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);
+  rmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);
+  fmux mmux=create_fmux_from_pre(5,rate1,fdef,fdef_size);//mono mux
 
   //final low pass (this is the setting for AM 15khz)
   //pretty soon FM MPX will be supported
@@ -84,6 +97,7 @@ int main(){
 
   Multiband lmbt=create_mbt(lmux);
   Multiband rmbt=create_mbt(rmux);
+  Multiband mmbt=create_mbt(mmux);//mono
 
 
   //final limiter
@@ -101,6 +115,7 @@ int main(){
 
   set_compressor_defaults(lmbt);
   set_compressor_defaults(rmbt);
+  set_compressor_defaults(mmbt);
 
   if(GUI==1)
     init_inputs();
@@ -127,6 +142,10 @@ int main(){
 
   int stereo_on=STEREO;
 
+  float local_right=0;
+  int taken_sample=0;
+
+  gains=malloc(sizeof(float)*fdef_size);
 
 
   while(c!='q' && c!=CTRLC){
@@ -160,6 +179,7 @@ int main(){
         if(time_off<is_silence){
           if(*start!=0){
             buffer = *start;
+            
             if(count%2==0){
             
              #ifdef HIGH_PASS
@@ -179,6 +199,8 @@ int main(){
              #endif /* ifdef MACRO */
 
             }
+
+
           
             if(avg_pre_agc<abs(*start)){
               avg_pre_agc=abs(*start);
@@ -198,15 +220,28 @@ int main(){
             buffer=0;
           }
           if(count==0){
-            //hidari
-            mux(lmux,buffer);
-            gained(lmux);
+             mux(lmux,buffer);
+             gained(lmux);
 
-            run_compressors(lmbt);
-            //printf("%f\n",get_amplitude_at(lmbt,0));
+            #ifdef MONO_COMPRESSION
+              float value=(local_right+buffer)/2.0;
+             
+               mux(mmux,value);
+               gained(mmux);
+               run_compressors_advanced(mmbt,h_compressor_left);
+              //printf("%f\n",get_amplitude_at(lmbt,0));
 
+              taken_sample=1;
+
+            #else
+             
+              run_compressors(lmbt);
+              //printf("%f\n",get_amplitude_at(lmbt,0));
+
+
+            #endif /* ifdef MACRO */
             buffer=demux(lmux);
-            
+                      
 
             if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
@@ -236,8 +271,22 @@ int main(){
             //migi
             mux(rmux,buffer);
             gained(rmux);
+
+            #ifdef MONO_COMPRESSION
+              float copy=buffer;
+              if(taken_sample==1){
+                  for(int i=0;i<fdef_size;i++){
+                    
+                    float amplitude=power_at(rmux,i);
+                    set_power_at(rmux,i, amplitude*gains[i]);
+                  }
+              }
+              taken_sample=0;
+              local_right=copy;
+            #else
+              run_compressors(rmbt);
+            #endif /* ifdef MONO_COMPRESSION */
             
-            run_compressors(rmbt);
 
             buffer=demux(rmux);
 
@@ -272,7 +321,7 @@ int main(){
         helper_dr++;
         count=~count;
       }
-      
+   
       resample_up_stereo(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);
       #ifdef MPX_ENABLE
         if(rate2 == 96000||rate2 == 192000){
@@ -312,6 +361,7 @@ int main(){
   free_limiter(migi_h);
   free_limiter(hidari_h);
 
+  free(gains);
 
 
   if(Composite_clip!=NULL){
@@ -320,6 +370,7 @@ int main(){
 
   free_multiband(lmbt);
   free_multiband(rmbt);
+  free_multiband(mmbt);
   
   free_f(lpassfinal);
   free_f(rpassfinal);

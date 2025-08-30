@@ -87,7 +87,11 @@ float get_amplitude_at(Multiband mbt,int index){
   return power_at(mbt->freq_mux,index);
 }
 
-void run_compressors(Multiband mbt){
+float default_on_gain_value(float signal,float gain,int location){
+  return signal*gain;
+}
+
+void run_compressors_advanced(Multiband mbt,float (*on_gain_value)(float,float,int)){
 
     Compressor* ptrstart=mbt->compressors;
     Compressor* ptrend=mbt->end_ptr;
@@ -111,10 +115,14 @@ void run_compressors(Multiband mbt){
           if(*bypass!=1){
 
             cmpd=run_comp(*citr,*release,*attacks,*targs,amplitude,*gate,*mgn);
-            val=amplitude*cmpd;
+            //val=amplitude*cmpd;
+            val=(*on_gain_value)(amplitude,cmpd*(*post_gain),locs);
+          }else{
+            val=(*on_gain_value)(amplitude,(*post_gain),locs);
           }
+    
           
-          set_power_at(mux,locs, val*(*post_gain));
+          set_power_at(mux,locs, val);
 
           locs++;
           targs++;
@@ -125,6 +133,10 @@ void run_compressors(Multiband mbt){
           post_gain++;
           bypass++;
     }
+}
+
+void run_compressors(Multiband mbt){
+  run_compressors_advanced(mbt,&default_on_gain_value);
 }
 
 void free_multiband(Multiband mbc){
