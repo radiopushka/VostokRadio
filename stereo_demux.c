@@ -2,13 +2,13 @@
 
 
 
-void demux_mono(short* buffer, short* buffer_end){
+void demux_mono(float* buffer, float* buffer_end){
 int pcount=0;
-short* pptr;
+float* pptr;
 
 
 
-  for(short* ittr=buffer;ittr<buffer_end;ittr++){
+  for(float* ittr=buffer;ittr<buffer_end;ittr++){
     if(pcount!=0){
       int cur=*ittr;
       int prev=*pptr;

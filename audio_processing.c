@@ -64,9 +64,11 @@ int main(){
   printf("starting rates: input: %d, output: %d\n",rate1, rate2);
   
   short buffer_t[i_buffer_size];//input buffer
+  float buffer_tf[i_buffer_size];//input buffer
   int helper_buffer[i_buffer_size];
   int* helper_buffer_end=helper_buffer+i_buffer_size;
   short* buffer_end=buffer_t+i_buffer_size;
+  float* buffer_endf=buffer_tf+i_buffer_size;
   int* o_buffer_end=buffer_o+buffer_size;
   memset(buffer_t,0,i_buffer_size<<1);
   //frequency splitter and combiner
@@ -152,15 +154,21 @@ int main(){
     //printf("buffer1\n");
     if(get_audio(buffer_t,i_buffer_size)!=-1){
     //printf("buffer1_out\n");
+       //convert to float
+      float* ittr=buffer_tf;
+      for(short* pl=buffer_t;pl<buffer_end;pl++){
+        *ittr=*pl;
+        ittr++;
+      }
+
       #ifndef BYPASS
-      
-      
+           
       if(stereo_on==1){
         if(stereo_gain!=1){
-          amplify_stereo_plex(buffer_t,buffer_end,stereo_gain);
+          amplify_stereo_plex(buffer_tf,buffer_endf,stereo_gain);
         }
       }else
-        demux_mono(buffer_t,buffer_end);
+        demux_mono(buffer_tf,buffer_endf);
       #endif /* ifndef BYPASS */
 
       float buffer;
@@ -174,7 +182,7 @@ int main(){
       
 
       int* helper_dr=helper_buffer;
-      for(short* start=buffer_t;start<buffer_end;start++){
+      for(float* start=buffer_tf;start<buffer_endf;start++){
         #ifndef BYPASS
         
         if(*start==0){
