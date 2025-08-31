@@ -4,12 +4,12 @@
 #include <stddef.h>
 
 int intialize_timings=0;
-double shifter_19=0;
-double current_19 = 0;
-double shifter_38=0;
-double current_38 = 0;
-const double PI=3.14159265359;
-double TPI=PI*2;
+float shifter_19=0;
+float current_19 = 0;
+float shifter_38=0;
+float current_38 = 0;
+
+float TPI=M_PI*2;
 
 
 int itterator=0;
@@ -21,8 +21,8 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   
   if(intialize_timings!=ratekhz){
 
-    shifter_19 = (19000.0 / ratekhz)*(2*PI);
-    shifter_38 = (38000.0 / ratekhz)*(2*PI);
+    shifter_19 = (19000.0 / ratekhz)*(2*M_PI);
+    shifter_38 = (38000.0 / ratekhz)*(2*M_PI);
 
     current_19=0;
     current_38=0;
