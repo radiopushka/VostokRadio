@@ -78,7 +78,13 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   //100percent: 32760
   float percent_38=percent_stereo;
   float mono = ((left+right)/2.0)*percent_mono;
-  float stereo = (((left - right)/2.0)*percent_38)*mult38;
+  float stereo = (((left - right)/2.0)*percent_38);
+
+  if(fabs(stereo)>100){
+	stereo=stereo*mult38;
+  }else{
+	stereo=0;
+  }
 
   float pre_mpx=mono+stereo;
 

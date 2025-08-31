@@ -8,7 +8,7 @@ int fdef_size=5;
 float mix_stereo[]={0           ,0              ,0          ,0          ,0     };
 float def_attack[]={0.000001    ,0.0001     ,0.0005   ,0.000009   ,0.0005};//multiband compression attack
 float def_release[]={0.0000001  ,0.000000001  ,0.000001   ,0.00005   ,0.0001}; //multiband compression release
-float def_target[]={10000,8000,8000,12000,20000}; //multiband compression target volume 
+float def_target[]={14000,12000,12000,14000,24000}; //multiband compression target volume 
 float def_m_gain[]={400,400,400,400,400}; //multiband compressor max gain
 float pre_amp[]={1,2,1,2,20}; //multiband compressor pre compression gain
 float def_gate[]={6000,6000,4000,4000,4000}; //multi band compressor gate
@@ -49,8 +49,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 
 //alsa configuration
-#define RECORDING_IFACE "default"
-#define PLAYBACK_IFACE "default"
+#define RECORDING_IFACE "hw:1,1,0"
+#define PLAYBACK_IFACE "hw:0,0"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 
@@ -58,7 +58,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define STEREO 1
 #define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 
-#define AGC_TARG 14000 //input AGC baseline target
+#define AGC_TARG 15000 //input AGC baseline target
 
 #define AGC_SPEED 0.000004 //response coefficient
 #define AGC_GATE 1000
