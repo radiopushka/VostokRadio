@@ -13,7 +13,7 @@ float current_38 = 0;
 
 float TPI=M_PI*2;
 
-const float correct_38=505;
+const float correct_38=507.5;
 float correct_19=correct_38/2;
 
 int itterator=0;
