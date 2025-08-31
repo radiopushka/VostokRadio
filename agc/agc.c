@@ -17,7 +17,7 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
 
   if(absv<thresh){
 
-    sens=sens/(thresh-absv);
+    sens=sens/(1-1/(thresh+1-absv));
   }
   
     float cur_val=absv*gain;
