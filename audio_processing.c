@@ -37,12 +37,19 @@ void gained(fmux muxf){
 fmux lmux;
 fmux rmux;
 //for mono compression in stereo audio
+float* pvals;
 float* gains;
 float h_compressor_left(float signal,float gain,int location){
 
   gains[location]=gain;
   float amplitude=power_at(lmux,location);
-  set_power_at(lmux,location, amplitude*gain);
+  pvals[location]=signal*gain;
+  if(mix_stereo[location]==1){
+
+    set_power_at(lmux,location, pvals[location]);
+  }else{
+    set_power_at(lmux,location, amplitude*gain);
+  }
   return amplitude;
 }
 
@@ -148,6 +155,7 @@ int main(){
   int taken_sample=0;
 
   gains=malloc(sizeof(float)*fdef_size);
+  pvals=malloc(sizeof(float)*fdef_size);
 
 
   while(c!='q' && c!=CTRLC){
@@ -297,8 +305,13 @@ int main(){
               if(taken_sample==1){
                   for(int i=0;i<fdef_size;i++){
                     
-                    float amplitude=power_at(rmux,i);
-                    set_power_at(rmux,i, amplitude*gains[i]);
+                    if(mix_stereo[i]==1){
+
+                      set_power_at(rmux,i, pvals[i]);
+                    }else{
+                      float amplitude=power_at(rmux,i);
+                      set_power_at(rmux,i, amplitude*gains[i]);
+                    }
                   }
               }
               taken_sample=0;
@@ -395,6 +408,7 @@ int main(){
   free_limiter(hidari_h);
 
   free(gains);
+  free(pvals);
 
 
   if(Composite_clip!=NULL){

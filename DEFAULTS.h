@@ -5,6 +5,7 @@
 int fdef[]={190,500,3000,7000,17000}; //multiband compression filters
 int fdef_size=5;
 
+float mix_stereo[]={1           ,0              ,1          ,0          ,0     };
 float def_attack[]={0.000001    ,0.00000001     ,0.000008   ,0.000005   ,0.0005};//multiband compression attack
 float def_release[]={0.000000001  ,0.000000001  ,0.000001   ,0.000003   ,0.0001}; //multiband compression release
 float def_target[]={14000,8000,8000,12000,20000}; //multiband compression target volume 
@@ -66,7 +67,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
 
 //FM radio setings, only apply if the output sampling rate is 96khz or higher
-#define MPX_ENABLE //uncomment to enable
+//#define MPX_ENABLE //uncomment to enable
 #define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006

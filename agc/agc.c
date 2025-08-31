@@ -14,8 +14,12 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
     return input;
   }*/
   float absv=fabs(trace_val);
+
+  if(absv<thresh){
+
+    sens=sens/(thresh-absv);
+  }
   
-  if(absv>thresh){
     float cur_val=absv*gain;
     float error=target-cur_val;
     if(dtime==0){
@@ -36,7 +40,7 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
   if(gain<0.1){
     gain=0.1;
   }
-  }
+
   return input*gain;
   /*
   //printf("%g\n",gain);
