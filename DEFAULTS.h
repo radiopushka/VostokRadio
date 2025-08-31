@@ -5,9 +5,9 @@
 int fdef[]={190,500,3000,7000,15000}; //multiband compression filters
 int fdef_size=5;
 
-float def_attack[]={0.000008      ,0.000001     ,0.0001     ,0.0002     ,0.001};//multiband compression attack
-float def_release[]={0.0000001  ,0.000000001  ,0.000003   ,0.000003   ,0.0005}; //multiband compression release
-float def_target[]={14000,17000,17000,17000,24000}; //multiband compression target volume 
+float def_attack[]={0.000008      ,0.000001     ,0.0001     ,0.0002     ,0.0004};//multiband compression attack
+float def_release[]={0.0000001  ,0.000000001  ,0.000003   ,0.000003   ,0.00005}; //multiband compression release
+float def_target[]={14000,14000,14000,17000,20000}; //multiband compression target volume 
 float def_m_gain[]={400,400,400,400,400}; //multiband compressor max gain
 float pre_amp[]={1,2,1,4,40}; //multiband compressor pre compression gain
 float def_gate[]={6000,3000,4000,4000,4000}; //multi band compressor gate
@@ -35,8 +35,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 #define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
-#define FINAL_CLIP_LOOKAHEAD 500 //samples
-#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.001 //release coeficient, proportional to # samples
+#define FINAL_CLIP_LOOKAHEAD 100 //samples
+#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.005 //release coeficient, proportional to # samples
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -44,7 +44,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 10 //comment the line above to disable
+#define HIGH_PASS_CUTOFF 30 //comment the line above to disable
 
 
 //alsa configuration
@@ -57,7 +57,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define STEREO 1
 #define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 
-#define AGC_TARG 14000 //input AGC baseline target
+#define AGC_TARG 16000 //input AGC baseline target
 
 #define AGC_SPEED 0.0004 //response coefficient
 #define AGC_GATE 3000
@@ -70,13 +70,12 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 4000
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
-#define PERCENT_PILOT 0.09 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 0.85// percent of the signal devoted to mono audio
-
-#define SYNTHESIZE_MPX_REALTIME //comment this if your CPU has a large Cache, degrades audio quality but reduces CPU load in some cases
+#define PERCENT_PILOT 0.03 //percent of the signal devoted to the 19khz pilot tone
+#define PERCENT_MONO 0.90 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 0.70// percent of the signal devoted to mono audio
 
 
+#define SYNTHESIZE_MPX_REALTIME
                            
 
 
