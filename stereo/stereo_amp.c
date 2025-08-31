@@ -9,8 +9,8 @@ if(gain<1){
 
   for(short* ittr=buffer;ittr<buffer_end;ittr=ittr+2){
     if(pcount!=0){
-      int L=*ittr;
-      int R=*ittr+1;
+      float L=*ittr;
+      float R=*ittr+1;
     
 
       float sum=L+R;
@@ -45,8 +45,8 @@ if(gain<1){
 
   for(int* ittr=buffer;ittr<buffer_end;ittr=ittr+2){
     if(pcount!=0){
-      int L=*ittr;
-      int R=*ittr+1;
+      float L=*ittr;
+      float R=*ittr+1;
     
 
       float sum=L+R;
