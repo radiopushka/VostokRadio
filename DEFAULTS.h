@@ -5,7 +5,7 @@
 int fdef[]={190,500,3000,7000,17000}; //multiband compression filters
 int fdef_size=5;
 
-float def_attack[]={0.00000008    ,0.00000001     ,0.000008   ,0.000005   ,0.0005};//multiband compression attack
+float def_attack[]={0.000001    ,0.00000001     ,0.000008   ,0.000005   ,0.0005};//multiband compression attack
 float def_release[]={0.000000001  ,0.000000001  ,0.000001   ,0.000003   ,0.0001}; //multiband compression release
 float def_target[]={14000,8000,8000,12000,20000}; //multiband compression target volume 
 float def_m_gain[]={400,400,400,400,400}; //multiband compressor max gain
@@ -59,7 +59,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 
 #define AGC_TARG 17000 //input AGC baseline target
 
-#define AGC_SPEED 0.000001 //response coefficient
+#define AGC_SPEED 0.00004 //response coefficient
 #define AGC_GATE 1000
 
 // set to 1 to show the levels in real time, 0 to keep silent
