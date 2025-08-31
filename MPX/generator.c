@@ -13,8 +13,8 @@ float current_38 = 0;
 
 float TPI=M_PI*2;
 
-float correct_19=250;
-float correct_38=500;
+const float correct_38=505;
+float correct_19=correct_38/2;
 
 int itterator=0;
 float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,float percent_stereo,float percent_mono,Limiter composite_clip,float release,float max,int synth){
