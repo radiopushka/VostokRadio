@@ -22,7 +22,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   if(intialize_timings!=ratekhz){
 
     shifter_19 = (19000.0 / ratekhz)*(2*PI);
-    shifter_38 = (19000.0 / ratekhz)*(2*PI);
+    shifter_38 = (38000.0 / ratekhz)*(2*PI);
 
     current_19=0;
     current_38=0;

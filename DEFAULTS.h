@@ -74,7 +74,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 #define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
 #define PERCENT_STEREO 0.85// percent of the signal devoted to mono audio
 
-//#define SYNTHESIZE_MPX_REALTIME //comment this if your CPU has a large Cache, degrades audio quality but reduces CPU load in some cases
+#define SYNTHESIZE_MPX_REALTIME //comment this if your CPU has a large Cache, degrades audio quality but reduces CPU load in some cases
 
 
                            
