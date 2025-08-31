@@ -10,6 +10,8 @@ float shifter_19=0;
 float current_19 = 0;
 float shifter_38=0;
 float current_38 = 0;
+float clip_value=0;
+float _pilot=0;
 
 float TPI=M_PI*2;
 
@@ -22,7 +24,20 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   float mult19=0;
   float mult38=0;
 
-  
+   if(intialize_timings!=ratekhz){
+
+      shifter_19 = ((19000.0 + correct_19) / ratekhz)*(2*M_PI);
+      shifter_38 = ((38000.0 + correct_38) / ratekhz)*(2*M_PI);
+
+      current_19=0;
+      current_38=0;
+
+      intialize_timings=ratekhz;
+
+      clip_value=(1.0-percent_pilot)*max;
+      _pilot=percent_pilot*max;
+    }
+
    
 
   if(synth<0){ 
@@ -47,17 +62,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   }
   }else{
     //realtime synthersis
-    if(intialize_timings!=ratekhz){
-
-      shifter_19 = ((19000.0 + correct_19) / ratekhz)*(2*M_PI);
-      shifter_38 = ((38000.0 + correct_38) / ratekhz)*(2*M_PI);
-
-      current_19=0;
-      current_38=0;
-
-      intialize_timings=ratekhz;
-    }
-
+   
     mult19=sin(current_19);    
     mult38=sin(current_38);    
 
@@ -74,8 +79,6 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   float percent_38=percent_stereo;
   float mono = ((left+right)/2.0)*percent_mono;
   float stereo = (((left - right)/2.0)*percent_38)*mult38;
-  float percentnmpx = 1.0-percent_pilot;
-  float clip_value = percentnmpx*max;
 
   float pre_mpx=mono+stereo;
 
@@ -84,7 +87,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   if(composite_clip!=NULL)
     limiter_out=run_limiter(composite_clip,pre_mpx,clip_value,release);
 
-  float pilot=(percent_pilot*max)*mult19;
+  float pilot=(_pilot)*mult19;
 
   return limiter_out+pilot;
 

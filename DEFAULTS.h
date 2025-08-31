@@ -68,7 +68,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression c
 //FM radio setings, only apply if the output sampling rate is 96khz or higher
 #define MPX_ENABLE //uncomment to enable
 #define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
-#define COMPOSITE_CLIPPER_LOOKAHEAD 4000
+#define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.045 //percent of the signal devoted to the 19khz pilot tone
 #define PERCENT_MONO 0.90 // percent of the signal devoted to mono audio
