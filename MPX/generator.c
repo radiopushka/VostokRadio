@@ -57,8 +57,9 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   }else{
     //realtime synthersis
 
-    mult19=sin(current_19);    
-    mult38=sin(current_38);    
+    //cosine gives better quality
+    mult19=cos(current_19);    
+    mult38=cos(current_38);    
 
     current_19 = current_19 + shifter_19;
     if(current_19 >= TPI)
