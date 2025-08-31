@@ -23,19 +23,10 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   float mult38=0;
 
   
-  if(intialize_timings!=ratekhz){
+   
 
-    shifter_19 = ((19000.0 + correct_19) / ratekhz)*(2*M_PI);
-    shifter_38 = ((38000.0 + correct_38) / ratekhz)*(2*M_PI);
-
-    current_19=0;
-    current_38=0;
-
-    intialize_timings=ratekhz;
-  }
-  
-
-  if(synth<0){
+  if(synth<0){ 
+ 
   //cache synthesis
   if(ratekhz==192000){
         mult19=_19KHZ_192[itterator];
@@ -56,6 +47,16 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   }
   }else{
     //realtime synthersis
+    if(intialize_timings!=ratekhz){
+
+      shifter_19 = ((19000.0 + correct_19) / ratekhz)*(2*M_PI);
+      shifter_38 = ((38000.0 + correct_38) / ratekhz)*(2*M_PI);
+
+      current_19=0;
+      current_38=0;
+
+      intialize_timings=ratekhz;
+    }
 
     mult19=sin(current_19);    
     mult38=sin(current_38);    
