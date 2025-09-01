@@ -14,7 +14,7 @@ float TPI=M_PI*2;
 
 
 float offset=0;
-float offseth=0.0716755875221;
+float offseth=0.0716755875220826;
 
 int itterator=0;
 
