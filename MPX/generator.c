@@ -14,7 +14,7 @@ float TPI=M_PI*2;
 
 
 float offset=0;
-float offseth=0.07167558;
+float offseth=0.0716755875225;
 
 int itterator=0;
 
@@ -82,11 +82,7 @@ float get_mpx_next_value(float left,float right,int ratekhz,float percent_pilot,
   float mono = ((left+right)/2.0)*percent_mono;
   float stereo = (((left - right)/2.0)*percent_38);
 
-  if(fabs(stereo)>200){
 	stereo=stereo*mult38;
-  }else{
-	stereo=0;
-  }
 
   float pre_mpx=mono+stereo;
 
