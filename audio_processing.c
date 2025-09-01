@@ -154,6 +154,9 @@ int main(){
   float local_right=0;
   int taken_sample=0;
 
+  float dc_removal_l=0;
+  float dc_removal_r=0;
+
   gains=malloc(sizeof(float)*fdef_size);
   pvals=malloc(sizeof(float)*fdef_size);
 
@@ -209,15 +212,24 @@ int main(){
              #ifdef HIGH_PASS
               ch_nobass=run_f(lbassc3,buffer);
               ch_nobass=run_f(lbassc,ch_nobass);
+
+               dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*0.00001;
+              buffer=buffer - dc_removal_l;
+
               #else
              ch_nobass=run_f(lbassc,buffer);
 
              #endif /* ifdef MACRO */
             
+              
             }else{
              #ifdef HIGH_PASS
               ch_nobass=run_f(rbassc3,buffer);
               ch_nobass=run_f(rbassc,ch_nobass);
+
+              dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*0.00001;
+              buffer=buffer - dc_removal_r;
+
              #else
               ch_nobass=run_f(rbassc,buffer);
              #endif /* ifdef MACRO */
