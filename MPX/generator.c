@@ -13,6 +13,8 @@ float _pilot=0;
 float TPI=M_PI*2;
 
 
+//determined experimentally on an old ASUS laptop
+//192khz sample rate card
 float offset=0;
 float offseth=0.0716755875220826;
 
