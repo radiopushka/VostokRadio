@@ -410,6 +410,8 @@ int main(){
   free(gains);
   free(pvals);
 
+  free_mpx_cache();
+
 
   if(Composite_clip!=NULL){
     free_limiter(Composite_clip);
