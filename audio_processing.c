@@ -115,6 +115,9 @@ int main(){
   Limiter migi_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
 
+  //MPX
+  init_mpx(rate2,PERCENT_PILOT,2147483640);
+
   //composite_clipper
   Limiter Composite_clip = NULL;
   #ifdef COMPOSITE_CLIPPER
@@ -210,11 +213,13 @@ int main(){
             if(count%2==0){
             
              #ifdef HIGH_PASS
+
+		    dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_l;
+
               ch_nobass=run_f(lbassc3,buffer);
               ch_nobass=run_f(lbassc,ch_nobass);
 
-               dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*0.00001;
-              buffer=buffer - dc_removal_l;
 
               #else
              ch_nobass=run_f(lbassc,buffer);
@@ -224,11 +229,14 @@ int main(){
               
             }else{
              #ifdef HIGH_PASS
+
+		    dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_r;
+
+
               ch_nobass=run_f(rbassc3,buffer);
               ch_nobass=run_f(rbassc,ch_nobass);
 
-              dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*0.00001;
-              buffer=buffer - dc_removal_r;
 
              #else
               ch_nobass=run_f(rbassc,buffer);
@@ -375,20 +383,23 @@ int main(){
       resample_up_stereo(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);
       #ifdef MPX_ENABLE
         if(rate2 == 96000||rate2 == 192000){
+	  int* right;
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
-            int* right=loop+1;
+            right=loop+1;
             
-            int synth=-1;
+         
+            float mpx=get_mpx_next_value(*loop,*right,PERCENT_STEREO,PERCENT_MONO);
 
-            #ifdef SYNTHESIZE_MPX_REALTIME
-              synth=1;
-            
-            #endif /* ifdef SYNTHESIZE_MPX_REALTIME */
-
-            float mpx=get_mpx_next_value(*loop,*right,rate2,PERCENT_PILOT,PERCENT_STEREO,PERCENT_MONO,Composite_clip,COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE, 2147483640,synth);
-
-            *right=mpx;
-            *loop=mpx;
+		#ifdef RIGHT_MPX
+            		*right=mpx;
+		#else
+	    		*right=0;
+		#endif
+		#ifdef LEFT_MPX
+            		*loop=mpx;
+		#else
+	    		*loop=0;
+		#endif
           }
       }
       
