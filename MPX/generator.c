@@ -16,7 +16,7 @@ const int over_sample_co=64;
 const int buffer_size=192000*over_sample_co;
 
 //most sound cards require this to generate the MPX signal propperly
-float ANALOG_BIAS=200000;
+float ANALOG_BIAS=2000;
 float HF_BIAS=300;
 
 //the measured amplitude of the 2nd harmonic of the 19khz signal

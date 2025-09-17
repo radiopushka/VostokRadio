@@ -158,7 +158,9 @@ int main(){
   int taken_sample=0;
 
   float dc_removal_l=0;
+  float dc_removal_l2=0;
   float dc_removal_r=0;
+  float dc_removal_r2=0;
 
   gains=malloc(sizeof(float)*fdef_size);
   pvals=malloc(sizeof(float)*fdef_size);
@@ -214,8 +216,8 @@ int main(){
             
              #ifdef HIGH_PASS
 
-		    dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_l;
+		    dc_removal_l2 = dc_removal_l2 + (buffer- dc_removal_l2)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_l2;
 
               ch_nobass=run_f(lbassc3,buffer);
               ch_nobass=run_f(lbassc,ch_nobass);
@@ -230,8 +232,8 @@ int main(){
             }else{
              #ifdef HIGH_PASS
 
-		    dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_r;
+		    dc_removal_r2 = dc_removal_r2 + (buffer- dc_removal_r2)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_r2;
 
 
               ch_nobass=run_f(rbassc3,buffer);
@@ -253,6 +255,15 @@ int main(){
             
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
+            }
+
+            if(count%2==0){
+            //remove the AGC artifacts
+            dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_l;
+            }else{
+            dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_r;
             }
 
             //this value is the maximum value the clipper can reach

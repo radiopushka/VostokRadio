@@ -15,6 +15,14 @@ Compressor create_compressor(int method){
 
 float run_comp(Compressor comp,float release, float attack, float target, float input,float gate,float max_gain){
   if(fabs(input)<gate){
+    if(comp->gain < 1)
+      comp->gain=comp->gain*(1+release);
+    if(comp->gain > 1)
+      comp->gain=comp->gain*(1-attack);
+
+    
+
+    
     return (comp->gain);
   }
   int method=comp->method;
