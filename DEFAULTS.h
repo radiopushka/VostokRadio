@@ -61,7 +61,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
 
-#define AGC_TARG 15000 //input AGC baseline target
+#define AGC_TARG 17000 //input AGC baseline target
 
 #define AGC_SPEED 0.00004 //response coefficient
 #define AGC_GATE 1000
