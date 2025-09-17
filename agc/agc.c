@@ -36,7 +36,12 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
     avg_error=avg_error/2+(target-cur_val);
   }
   
-  gain=gain+sin(avg_error/20860)*sens;
+  //roll down slow roll up quickyl
+  if(avg_audio<thresh){
+    gain=gain+cos(avg_error/20860)*sens;
+  }else{
+    gain=gain+sin(avg_error/20860)*sens;
+  }
   if(gain>gain_max){
     gain=gain_max;
   }
