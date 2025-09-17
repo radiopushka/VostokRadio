@@ -6,6 +6,7 @@ float gain=1;
 float gain_max=20;
 int dtime=0;
 float avg_error=0;
+float avg_audio=0;
 
 #define PIHALF 1.570796327
 
@@ -15,13 +16,14 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
   }*/
   float absv=fabs(trace_val);
 
-  if(absv<thresh){
+  avg_audio=avg_audio/2+absv/2;
+  if(avg_audio<thresh){
 
-      target = absv;      
+      target = avg_audio;      
 
   }
   
-    float cur_val=absv*gain;
+    float cur_val=avg_audio*gain;
     float error=target-cur_val;
     if(dtime==0){
       avg_error=error;
