@@ -29,7 +29,7 @@ float st_lowpass=0;
 float st_lowpass2=0;
 float m_lowpass=0;
 float m_lowpass2=0;
-const float mult_new=0.53333;
+const float mult_new=0.73333;
 float mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop
