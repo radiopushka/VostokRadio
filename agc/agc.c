@@ -14,16 +14,16 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
  /* if(sens<0){
     return input;
   }*/
-  float absv=fabs(trace_val);
+  float absv=fabs(trace_val)*gain;
 
   avg_audio=avg_audio/2+absv/2;
-  if(avg_audio<thresh){
+  /*if(avg_audio<thresh){
 
-      target = avg_audio;      
+      //target = avg_audio;      
 
-  }
+  }*/
   
-    float cur_val=avg_audio*gain;
+    float cur_val=avg_audio;
     float error=target-cur_val;
     if(dtime==0){
       avg_error=error;
@@ -37,11 +37,17 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val){
   }
   
   //roll down slow roll up quickyl
-  if(avg_audio<thresh){
-    gain=gain+cos(avg_error/20860)*sens;
-  }else{
+  /*if(avg_audio<thresh){
+    float vcalc=sin(avg_error/20860);
+    if(vcalc<0){
+      vcalc=-(1+vcalc);
+    }else{
+      vcalc=1-vcalc;
+    }
+    gain=gain+vcalc*sens;
+  }else{*/
     gain=gain+sin(avg_error/20860)*sens;
-  }
+ // }
   if(gain>gain_max){
     gain=gain_max;
   }
