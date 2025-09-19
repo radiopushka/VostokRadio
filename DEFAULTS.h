@@ -14,7 +14,7 @@ float pre_amp[]={0.7,1,1,2,23}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.9,1,1,1,1}; // band compression post amplification
-float effect[]={0.7,0.8,0.5,0.5,1};//ratio, 1 being strongest
+float effect[]={0.5,0.6,0.4,0.4,1};//ratio, 1 being strongest
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
