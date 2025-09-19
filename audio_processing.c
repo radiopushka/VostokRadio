@@ -22,6 +22,7 @@ void set_compressor_defaults(Multiband mbt){
       set_post_amp(mbt,i,post_amp[i]);
       set_bypass(mbt,i,bypass[i]);
       set_type(mbt,i,types[i]);
+      set_ratio(mbt,i,effect[i]);
       
     }
 }
@@ -150,7 +151,7 @@ int main(){
 
   float agc_targ=AGC_TARG;
   float agc_speed=AGC_SPEED;
-  float agc_gate=AGC_GATE;
+  float agc_thresh=AGC_GATE;
 
   int stereo_on=STEREO;
 
@@ -251,7 +252,7 @@ int main(){
             if(avg_pre_agc<abs(*start)){
               avg_pre_agc=abs(*start);
             }
-            buffer=apply_agc(buffer,agc_targ,agc_speed,agc_gate,ch_nobass);
+            buffer=apply_agc(buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
             
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
@@ -399,7 +400,7 @@ int main(){
             right=loop+1;
             
          
-            float mpx=get_mpx_next_value(*loop,*right,PERCENT_STEREO,PERCENT_MONO);
+            double mpx=get_mpx_next_value(*loop,*right,PERCENT_STEREO,PERCENT_MONO);
 
 		#ifdef RIGHT_MPX
             		*right=mpx;

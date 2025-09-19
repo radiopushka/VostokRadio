@@ -9,26 +9,28 @@ if(gain<1){
 
   for(float* ittr=buffer;ittr<buffer_end;ittr=ittr+2){
     if(pcount!=0){
-      float L=*ittr;
-      float R=*ittr+1;
+      double L=*ittr;
+      double R=*ittr+1;
     
 
-      float sum=L+R;
-      float diff=L-R;//L-R
-      diff=diff*gain;
+      double sum=L+R;
+      double diff=L-R;//L-R
+      
+      if(diff>4){//distortion protection
+        diff=diff*gain;
 
-      float L_t= diff + sum;
-      float R_t= diff + sum;
+        double L_t= diff + sum;
+        double R_t= diff + sum;
 
-      if(gain<1){
-      *ittr=L_t*cgain;
-      *(ittr+1)=R_t*cgain;
+        if(gain<1){
+          *ittr=L_t*cgain;
+          *(ittr+1)=R_t*cgain;
 
-      }else{
-      *ittr=L_t/cgain;
-      *(ittr+1)=R_t/cgain;
+        }else{
+          *ittr=L_t/cgain;
+          *(ittr+1)=R_t/cgain;
+        }
       }
-
     }
     pcount=~pcount;
   }

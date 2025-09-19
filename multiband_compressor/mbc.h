@@ -39,6 +39,7 @@ void set_max_gain(Multiband mbt,int index,float gain);
 void set_post_amp(Multiband mbt,int index, float gain);
 void set_bypass(Multiband mbt,int index,int bypass);
 void set_type(Multiband mbt,int index,int type);
+void set_ratio(Multiband mbt,int index,float ratio);
 
 
 //get the amplitude for visual rendering:

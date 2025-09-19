@@ -3,7 +3,7 @@
 #include "../lookahead_limiter/lookaheadlim.h"
 
 //get a value from the mpx encoder
-float get_mpx_next_value(float left,float right, float percent_stereo,float percent_mono);
+double get_mpx_next_value(double left,double right, double percent_stereo,double percent_mono);
 void free_mpx_cache();
 
 void init_mpx(int rate,float percent_pilot,float max);

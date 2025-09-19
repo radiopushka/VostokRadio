@@ -9,6 +9,7 @@ Compressor create_compressor(int method){
   comp->prev_val=0;
   comp->prevprev_val=0;
   comp->gain=1;
+  comp->ratio=1;
   comp->method=method;
   return comp;
 }
@@ -18,12 +19,12 @@ float run_comp(Compressor comp,float release, float attack, float target, float 
     if(comp->gain < 1)
       comp->gain=comp->gain*(1+release);
     if(comp->gain > 1)
-      comp->gain=comp->gain*(1-attack);
+      comp->gain=comp->gain*(1-release);
 
     
 
     
-    return (comp->gain);
+    return ((comp->gain)*(comp->ratio))+(1-comp->ratio);
   }
   int method=comp->method;
     
@@ -67,6 +68,6 @@ float run_comp(Compressor comp,float release, float attack, float target, float 
 
   comp->prevprev_val=comp->prev_val;
   comp->prev_val=slope2;
-  return comp->gain;
+  return ((comp->gain)*(comp->ratio))+(1-comp->ratio);
 }
 

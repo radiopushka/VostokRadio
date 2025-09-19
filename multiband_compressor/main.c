@@ -79,6 +79,10 @@ void set_bypass(Multiband mbt,int index,int bypass){
 void set_type(Multiband mbt,int index,int type){
   mbt->compressors[index]->method=type;
 } 
+void set_ratio(Multiband mbt,int index,float ratio){
+  mbt->compressors[index]->ratio=ratio;
+} 
+
 
 
 

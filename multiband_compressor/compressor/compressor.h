@@ -7,6 +7,7 @@ struct Compressor{
   float prev_val;
   float prevprev_val;
   float gain;
+  float ratio;
   int method;
 };
 

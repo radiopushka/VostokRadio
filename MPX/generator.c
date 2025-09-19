@@ -8,29 +8,29 @@
 
 int intialize_timings=0;
 float clip_value=0;
-float _pilot=0;
+double _pilot=0;
 
-float TPI=M_PI*2;
+double TPI=M_PI*2;
 
-const int over_sample_co=64;
-const int buffer_size=192000*over_sample_co;
+const int over_sample_co=128;
+const int buffer_size=192000;
 
 //most sound cards require this to generate the MPX signal propperly
-float ANALOG_BIAS=2000;
-float HF_BIAS=300;
+double ANALOG_BIAS=2000;
+double HF_BIAS=300;
 
 //the measured amplitude of the 2nd harmonic of the 19khz signal
-float P2nd_DAC_HARMONIC=0.00006;
+double P2nd_DAC_HARMONIC=0.00006;
 
-float st_bias_offset=0;
+double st_bias_offset=0;
 
 //so that the stereo is not modulated too much
-float st_lowpass=0;
-float st_lowpass2=0;
-float m_lowpass=0;
-float m_lowpass2=0;
-const float mult_new=0.73333;
-float mult_pr=1-mult_new;
+double st_lowpass=0;
+double st_lowpass2=0;
+double m_lowpass=0;
+double m_lowpass2=0;
+const double mult_new=0.73333;
+double mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop
 //192khz sample rate card
@@ -71,10 +71,10 @@ void free_mpx_cache(){
 
 }
 
-void init_mpx_cache(float ratekhz){
+void init_mpx_cache(long double ratekhz,long double over_sampling){
       free_mpx_cache();
-      float shifter_19 = ((19000.0) / ratekhz)*(2*M_PI);
-      float shifter_38 = shifter_19*2;
+      long double shifter_19 = ((19000.0) / (ratekhz*over_sampling))*(2*M_PI);
+      long double shifter_38 = shifter_19*2;
 
 
 
@@ -86,12 +86,20 @@ void init_mpx_cache(float ratekhz){
       synth_38=malloc(sizeof(float)*buffer_size);
 
 
-      float counter=0;
+      long double counter=0;
+      long double counter_secondary=0;
       float* s38=synth_38;
       for(float* s19=synth_19;counter<buffer_size;s19++){
+          long double v19=0;
+          long double v38=0;
+          for(int i=0;i<over_sampling;i++){ 
+            v19=v19+sinl(shifter_19*(counter_secondary+offset));  
+            v38=v38+sinl(shifter_38*(counter_secondary+offseth));  
+            counter_secondary=counter_secondary+1;
+          }
           counter=counter+1;
-          *s19=sin(shifter_19*(counter+offset));  
-          *s38=sin(shifter_38*(counter+offseth));  
+          *s19=(v19/over_sampling);
+          *s38=(v38/over_sampling);
           s38++;
       }
 
@@ -101,7 +109,7 @@ void init_mpx_cache(float ratekhz){
 
 
 void init_mpx(int ratekhz,float percent_pilot,float max){
-      init_mpx_cache(ratekhz*over_sample_co); 
+      init_mpx_cache(ratekhz,over_sample_co); 
       clip_value=(1.0-percent_pilot)*max;
       _pilot=percent_pilot*max;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
@@ -109,7 +117,7 @@ void init_mpx(int ratekhz,float percent_pilot,float max){
 
 }
 
-float get_mpx_next_value(float left,float right,float percent_stereo,float percent_mono){
+double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
 
 
   
@@ -117,8 +125,8 @@ float get_mpx_next_value(float left,float right,float percent_stereo,float perce
 
    
    //100percent: 32760
-  float mono = ((left+right)/2.0)*percent_mono;
-  float stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
+  double mono = ((left+right)/2.0)*percent_mono;
+  double stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
 
 
   //virtualy no need in adding this limiter
@@ -134,8 +142,8 @@ float get_mpx_next_value(float left,float right,float percent_stereo,float perce
 
   //perform oversampling to try and get rid of aliasing 
   
-  float k19=0;
-  float k38=0;
+  double k19=0;
+  double k38=0;
 
   m_lowpass2=(m_lowpass2*mult_pr+mono*mult_new);
   m_lowpass=(m_lowpass*mult_pr+m_lowpass2*mult_new);
@@ -157,26 +165,19 @@ float get_mpx_next_value(float left,float right,float percent_stereo,float perce
   st_lowpass=(st_lowpass*mult_pr+st_lowpass2*mult_new);
 
 
-  for(int i=0;i<over_sample_co;i++){
 
-	      float o38=synth_38[itterator];
-        float o19=synth_19[itterator];
-        itterator++;
-        if(itterator>=buffer_size){
+	double o38=synth_38[itterator];
+  double o19=synth_19[itterator];
+  itterator++;
+  if(itterator>=buffer_size){
           itterator=0;
-        }
+  }
 
-	float val_pilot = _pilot*o19;
-	float val_audio = (st_lowpass)*o38;
+	double val_pilot = _pilot*o19;
+	double val_audio = (st_lowpass)*o38;
 
-	if(i==0){
 		k19=val_pilot;
 		k38=val_audio;
-	}else{
-		k19=k19/2+val_pilot/2;
-		k38=k38/2+val_audio/2;
-	}
-  }
 
   //generate the sampled signal
 
