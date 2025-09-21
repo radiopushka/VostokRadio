@@ -7,7 +7,7 @@ A high-performance, low-latency AM/FM audio processor and MPX encoder written in
 - **Multiband Compression**: 5-band compressor with configurable parameters per band
 - **Advanced AGC**: Automatic gain control with adjustable target and response
 - **MPX Encoding**: Stereo encoder with pilot tone generation for FM broadcasting
-- **High Efficiency**: ~10-16% CPU usage on Intel i5 12th gen at 192kHz
+- **High Efficiency**: ~10-16% CPU usage on Intel i5 12th gen at 192kHz 20-30% on a 6th gen i5 with these settings.
 - **ALSA Support**: Native Linux audio support
 - **Lookahead Clipping**: Advanced clipping prevention algorithm
 
