@@ -7,9 +7,9 @@ int fdef_size=5;
 
 float mix_stereo[]={0           ,0              ,0          ,0          ,0     };
 float def_attack[]={ 0.0000001        ,0.000000004     ,0.00001       ,0.0003   ,0.000015};//multiband compression attack
-float def_release[]={0.0000000000001  ,0.00000000004  ,0.00000001   ,0.000002   ,0.00001}; //multiband compression release
+float def_release[]={0.0000000000001  ,0.00000000004  ,0.00000001   ,0.000002   ,0.000012}; //multiband compression release
 float def_target[]={9000,18500,19600,20700,9000}; //multiband compression target volume 
-float def_m_gain[]={1.2,1.1,1.1,1.2,2.6}; //make up gain
+float def_m_gain[]={1.2,1.1,1.1,1.2,2}; //make up gain
 float pre_amp[]={1,1,1,2,23}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
@@ -38,7 +38,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 #define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 #define FINAL_CLIP_LOOKAHEAD 100 //samples
-#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.001 //release coeficient, proportional to # samples
+#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
