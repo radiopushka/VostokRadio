@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <float.h>
 
 
 
@@ -9,16 +10,18 @@ Limiter create_limiter(int size){
 
 
   Limiter lim = malloc(sizeof(struct limiter));
-  lim->ring_buffer = malloc(sizeof(float)*size);
+  lim->ring_buffer = malloc(sizeof(double)*size);
+  lim->ring_buffer_helper = malloc(sizeof(double)*size);
   lim->size = size;
+  lim->max_cache=FLT_MIN;
   lim->local_gain=1;
 
-  memset(lim->ring_buffer,0,sizeof(float)*size);
+  memset(lim->ring_buffer,0,sizeof(double)*size);
   return lim;
 }
 
-void increment_gain(Limiter lim,float release){
-  float g_gain=lim->local_gain;
+void increment_gain(Limiter lim,double release){
+  double g_gain=lim->local_gain;
   g_gain=g_gain+release;
   if(g_gain>1){
     g_gain=1;
@@ -26,16 +29,25 @@ void increment_gain(Limiter lim,float release){
   lim->local_gain=g_gain;
 }
 
-float run_limiter(Limiter limiter, float input,float limit,float release){
+double run_limiter(Limiter limiter, double input,double limit,double release){
 
   //return the last index of the buffer and shift down
-  float output = *(limiter->ring_buffer);
+  double output = *(limiter->ring_buffer);
+  //max calculation
+  /*if(fabs(output)==limiter->max_cache){
+    double max_val=0;
+    for(float* ittr=outpu+1t;ittr<limiter->size;ittr++){
+      if(fabs(ittr)>max_val){
+        m
+      }
+    }
+  }*/
 
-  float gain;
+  double gain;
   int size = limiter->size;
-  float* endptr = limiter->ring_buffer + (size-1);
-  float max = fabs(output);
-  float* strptr;
+  double* endptr = limiter->ring_buffer + (size-1);
+  double max = fabs(output);
+  double* strptr;
   int max_index=0;
   for(strptr = limiter->ring_buffer; strptr<endptr ;strptr++){
     float next = *(strptr+1);
@@ -53,8 +65,8 @@ float run_limiter(Limiter limiter, float input,float limit,float release){
   }
 
   if(max > limit){
-    float real_gain = limit/max;
-    float tmp_gain= real_gain+((1.0-real_gain)*(((float)max_index)/((float)size)));
+    double real_gain = (limit)/(max);
+    double tmp_gain= real_gain+((1.0-real_gain)*(((double)max_index)/((double)size)));
     if(tmp_gain>1){
       tmp_gain=1;
     }
@@ -79,5 +91,6 @@ float run_limiter(Limiter limiter, float input,float limit,float release){
 
 void free_limiter(Limiter limiter){
   free(limiter -> ring_buffer);
+  free(limiter -> ring_buffer_helper);
   free(limiter);
 }

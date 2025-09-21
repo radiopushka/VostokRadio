@@ -9,11 +9,11 @@ fmux create_fmux(int poles,int rate,int max_freq,int bins){
   int fstep=max_freq/bins;
   
   int num_filters=bins*2-1;//because the lowest one has no highpass
-  mux->freqs=malloc(sizeof(int)*(bins));
+  mux->freqs=malloc(sizeof(double)*(bins));
   mux->num_segs=bins;
 
-  float* freq_itr=mux->freqs;
-  memset(freq_itr,0,sizeof(float)*bins);
+  double* freq_itr=mux->freqs;
+  memset(freq_itr,0,sizeof(double)*bins);
    
   afilter* filters=malloc(sizeof(struct a_f*)*(num_filters));
   mux->filters=filters;
@@ -52,11 +52,11 @@ fmux create_fmux_from_pre(int poles,int rate,int* freq_table,int size){
 
   
   int num_filters=bins*2-1;//because the lowest one has no highpass
-  mux->freqs=malloc(sizeof(int)*(bins));
+  mux->freqs=malloc(sizeof(double)*(bins));
   mux->num_segs=bins;
 
-  float* freq_itr=mux->freqs;
-  memset(freq_itr,0,sizeof(float)*bins);
+  double* freq_itr=mux->freqs;
+  memset(freq_itr,0,sizeof(double)*bins);
    
   afilter* filters=malloc(sizeof(struct a_f*)*(num_filters));
   mux->filters=filters;
@@ -88,17 +88,17 @@ fmux create_fmux_from_pre(int poles,int rate,int* freq_table,int size){
   
 }
 
-void mux(fmux mux,int in){
+void mux(fmux mux,double in){
 
 
   afilter* filters=mux->filters;
   afilter* end=mux->end_ptr;
-  float* dptr=mux->freqs;
+  double* dptr=mux->freqs;
   *dptr=run_f(*filters,in);
   dptr++;
   filters++;
 
-  int audio;
+  double audio;
   for(afilter* ft=filters;ft<end;ft++){
     audio=run_f(*ft,in);
     if(ft>=end){
@@ -112,13 +112,13 @@ void mux(fmux mux,int in){
 
 }
 
-float power_at(fmux mux,int index){
+double power_at(fmux mux,int index){
   if(index>=mux->num_segs){
     return -1;
   }
   return mux->freqs[index];
 }
-int set_power_at(fmux mux,int index, float value){
+int set_power_at(fmux mux,int index, double value){
   if(index>=mux->num_segs){
     return -1;
   }
@@ -127,11 +127,11 @@ int set_power_at(fmux mux,int index, float value){
   return 1;
 }
 
-int demux(fmux mux){
-  float* segs=mux->freqs;
+double demux(fmux mux){
+  double* segs=mux->freqs;
   int size=mux->num_segs;
 
-  int ret=0;
+  double ret=0;
   for(int i=0;i<size;i++){
     if(i==0){
       ret=*segs;

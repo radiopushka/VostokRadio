@@ -3,7 +3,8 @@
 
 float gain=1;
 
-float gain_max=8;
+float gain_max=20;
+float gain_max_half=20;
 int dtime=0;
 float avg_error=0;
 float avg_audio=0;
@@ -18,15 +19,18 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val,f
 
     return sin(input/20860)*32760;
   }
-  float absv=fabs(trace_val);
+  float absv=fabs(trace_val)*gain;
 
   avg_audio=avg_audio/2+absv/2;
-  if(avg_audio<thresh){
+  if(absv<thresh){
 
       target = avg_audio;      
 
   }
-  
+  if(gain>gain_max_half){
+    release=release/(gain_max-(gain_max-gain));
+  }
+
     float cur_val=avg_audio;
     float error=target-cur_val;
     if(dtime==0){
@@ -53,20 +57,22 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val,f
     if(release!=0 && avg_error > 0){
 
       gain=gain+sin(avg_error/20860)*release;
-    }else{
+      //gain=gain*(1+release);
+    }else if (avg_error<0){
       gain=gain+sin(avg_error/20860)*sens;
+      //gain=gain*(1-sens);
     }
     
   }
   //
-  if(release != 0){
+  /*if(release != 0){
   if(cur_val>target){
     gain = gain*(1-sens);
   }else if(cur_val<target){
     gain = gain*(1+release);
       
   }
-  }
+  }*/
   if(gain>gain_max){
     gain=gain_max;
   }
@@ -74,6 +80,7 @@ float apply_agc(float input,float target,float sens,int thresh,float trace_val,f
     gain=1;
   }
 
+  //return sin((input*gain)/20860)*target;
   return input*gain;
   /*
   //printf("%g\n",gain);

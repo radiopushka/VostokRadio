@@ -1,13 +1,13 @@
 
-void amplify_stereo_plex(float* buffer, float* buffer_end,float gain){
+void amplify_stereo_plex(double* buffer, double* buffer_end,float gain){
 int pcount=0;
-float cgain=gain*2;
+double cgain=gain*2;
 if(gain<1){
     cgain=gain/2;
   }
 
 
-  for(float* ittr=buffer;ittr<buffer_end;ittr=ittr+2){
+  for(double* ittr=buffer;ittr<buffer_end;ittr=ittr+2){
     if(pcount!=0){
       double L=*ittr;
       double R=*ittr+1;

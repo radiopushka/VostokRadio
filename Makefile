@@ -7,7 +7,7 @@ ALSA=alsa_pipe/main.c
 LIMITER=./lookahead_limiter/lookaheadlim.c
 MPX=./MPX/generator.c
 
-FLAGS=-O2 -g -march=native
+FLAGS=-O2 -g -march=native 
 
 
 all:

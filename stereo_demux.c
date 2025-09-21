@@ -2,19 +2,20 @@
 
 
 
-void demux_mono(float* buffer, float* buffer_end){
+void demux_mono(double* buffer, double* buffer_end){
 int pcount=0;
-float* pptr;
+double* pptr;
 
 
 
-  for(float* ittr=buffer;ittr<buffer_end;ittr++){
+  for(double* ittr=buffer;ittr<buffer_end;ittr++){
     if(pcount!=0){
-      int cur=*ittr;
-      int prev=*pptr;
+      double cur=*ittr;
+      double prev=*pptr;
     
-
-      int sum=fast_half(cur+prev);
+    
+      
+      double sum=(cur+prev)/2;
 
       *pptr=sum;
       *ittr=sum;

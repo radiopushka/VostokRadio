@@ -6,15 +6,15 @@ int fdef[]={190,600,3000,7000,16000}; //multiband compression filters
 int fdef_size=5;
 
 float mix_stereo[]={0           ,0              ,0          ,0          ,0     };
-float def_attack[]={ 0.000000002      ,0.0000001       ,0.0000001     ,0.000012   ,0.00002};//multiband compression attack
-float def_release[]={0.00000000000001  ,0.000000001  ,0.00000001   ,0.000002   ,0.00001}; //multiband compression release
-float def_target[]={5000,15500,15600,15700,9000}; //multiband compression target volume 
-float def_m_gain[]={1,1,1.5,1.7,2}; //make up gain
-float pre_amp[]={0.7,1,1,2,30}; //multiband compressor pre compression gain
+float def_attack[]={ 0.0000001        ,0.000000004     ,0.00001       ,0.0003   ,0.000015};//multiband compression attack
+float def_release[]={0.0000000000001  ,0.00000000004  ,0.00000001   ,0.000002   ,0.00001}; //multiband compression release
+float def_target[]={9000,18500,19600,20700,9000}; //multiband compression target volume 
+float def_m_gain[]={1.2,1.1,1.1,1.2,2.6}; //make up gain
+float pre_amp[]={1,1,1,2,23}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.9,1,1,1,1}; // band compression post amplification
-float effect[]={0.5,0.6,0.4,0.4,0.7};//ratio, 1 being strongest
+float post_amp[]={0.8,1,1,1,1}; // band compression post amplification
+float effect[]={0.8,0.7,0.7,0.7,1};//ratio, 1 being strongest
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -62,13 +62,13 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
 
-#define AGC_TARG 8000 //input AGC baseline target
+#define AGC_TARG 17000 //input AGC baseline target
 
-#define AGC_SPEED 0.000001 //response coefficient
+#define AGC_SPEED 0.000002 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.000003 //response coefficient
-#define AGC_GATE 0
+#define AGC_GATE 15
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment

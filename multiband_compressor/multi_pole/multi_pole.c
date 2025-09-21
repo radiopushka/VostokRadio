@@ -15,7 +15,7 @@ struct a_f* poled_f(int rate, int freq, int poles,int direction){
   return mpoled;
 }
 
-float run_f(struct a_f* lpf,float input){
+float run_f(struct a_f* lpf,double input){
 
   rc_filter_info** startptr=lpf->filters;
   rc_filter_info** endptr=lpf->endptr;

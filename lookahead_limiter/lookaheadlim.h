@@ -3,8 +3,10 @@
 #define LOOKAHEAD_LIMITER
 
 struct limiter{
-  float* ring_buffer;
-  float local_gain;
+  double* ring_buffer;
+  double* ring_buffer_helper;
+  double max_cache;
+  double local_gain;
   int size;
 
 };
@@ -12,7 +14,7 @@ struct limiter{
 typedef struct limiter* Limiter;
 
 Limiter create_limiter(int size);
-float run_limiter(Limiter limiter,float input,float limit,float release);
+double run_limiter(Limiter limiter,double input,double limit,double release);
 void free_limiter(Limiter limiter);
 
 

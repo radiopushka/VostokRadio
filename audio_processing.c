@@ -30,7 +30,7 @@ void set_compressor_defaults(Multiband mbt){
 
 void gained(fmux muxf){
   for(int i=0; i<fdef_size;i++){
-   float val = power_at(muxf,i);
+   double val = power_at(muxf,i);
    set_power_at(muxf,i,val*pre_amp[i]);
   }
 }
@@ -38,12 +38,12 @@ void gained(fmux muxf){
 fmux lmux;
 fmux rmux;
 //for mono compression in stereo audio
-float* pvals;
-float* gains;
-float h_compressor_left(float signal,float gain,int location){
+double* pvals;
+double* gains;
+double h_compressor_left(float signal,float gain,int location){
 
   gains[location]=gain;
-  float amplitude=power_at(lmux,location);
+  double amplitude=power_at(lmux,location);
   pvals[location]=signal*gain;
   if(mix_stereo[location]==1){
 
@@ -72,11 +72,11 @@ int main(){
   printf("starting rates: input: %d, output: %d\n",rate1, rate2);
   
   short buffer_t[i_buffer_size];//input buffer
-  float buffer_tf[i_buffer_size];//input buffer
+  double buffer_tf[i_buffer_size];//input buffer
   int helper_buffer[i_buffer_size];
   int* helper_buffer_end=helper_buffer+i_buffer_size;
   short* buffer_end=buffer_t+i_buffer_size;
-  float* buffer_endf=buffer_tf+i_buffer_size;
+  double* buffer_endf=buffer_tf+i_buffer_size;
   int* o_buffer_end=buffer_o+buffer_size;
   memset(buffer_t,0,i_buffer_size<<1);
   //frequency splitter and combiner
@@ -138,7 +138,7 @@ int main(){
   float sin_clip_c1=get_sin_clip_coeff(32760);
 
   int time_off=0;
-  int is_silence=200000;
+  int is_silence=2000000;
 
   int avg_post_agc=0;
   int avg_pre_agc=0;
@@ -149,22 +149,22 @@ int main(){
 
   float stereo_gain=STEREO_GAIN;
 
-  float agc_targ=AGC_TARG;
-  float agc_speed=AGC_SPEED;
-  float agc_thresh=AGC_GATE;
+  double agc_targ=AGC_TARG;
+  double agc_speed=AGC_SPEED;
+  double agc_thresh=AGC_GATE;
 
   int stereo_on=STEREO;
 
-  float local_right=0;
+  double local_right=0;
   int taken_sample=0;
 
-  float dc_removal_l=0;
-  float dc_removal_l2=0;
-  float dc_removal_r=0;
-  float dc_removal_r2=0;
+  double dc_removal_l=0;
+  double dc_removal_l2=0;
+  double dc_removal_r=0;
+  double dc_removal_r2=0;
 
-  gains=malloc(sizeof(float)*fdef_size);
-  pvals=malloc(sizeof(float)*fdef_size);
+  gains=malloc(sizeof(double)*fdef_size);
+  pvals=malloc(sizeof(double)*fdef_size);
 
 
   while(c!='q' && c!=CTRLC){
@@ -172,7 +172,7 @@ int main(){
     if(get_audio(buffer_t,i_buffer_size)!=-1){
     //printf("buffer1_out\n");
        //convert to float
-      float* ittr=buffer_tf;
+      double* ittr=buffer_tf;
       for(short* pl=buffer_t;pl<buffer_end;pl++){
         *ittr=*pl;
         ittr++;
@@ -188,7 +188,7 @@ int main(){
         demux_mono(buffer_tf,buffer_endf);
       #endif /* ifndef BYPASS */
 
-      float buffer;
+      double buffer;
       int count=0;
       float ch_nobass;
       avg_pre_agc=0;
@@ -199,7 +199,7 @@ int main(){
       
 
       int* helper_dr=helper_buffer;
-      for(float* start=buffer_tf;start<buffer_endf;start++){
+      for(double* start=buffer_tf;start<buffer_endf;start++){
         #ifndef BYPASS
         
         if(*start==0){
@@ -281,7 +281,7 @@ int main(){
              gained(lmux);
 
             #ifdef MONO_COMPRESSION
-              float value=(local_right+buffer)/2.0;
+              double value=(local_right+buffer)/2.0;
              
                mux(mmux,value);
                gained(mmux);
@@ -307,7 +307,7 @@ int main(){
                        
           
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(hidari,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=run_limiter(hidari,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
             #endif 
@@ -317,7 +317,7 @@ int main(){
               buffer=run_f(lbassc2,buffer);
             #endif /* ifdef MACRO */
            #ifdef FINAL_CLIP 
-              buffer=run_limiter(hidari_h,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -361,7 +361,7 @@ int main(){
             }
          
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(migi,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=run_limiter(migi,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
             #endif 
@@ -371,7 +371,7 @@ int main(){
               buffer=run_f(rbassc2,buffer);
             #endif /* ifdef MACRO */
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(migi_h,buffer*FINAL_AMP,32760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
             #endif
 
             if(avg_post_clip<abs(buffer)){

@@ -3,11 +3,11 @@
 
 #define PI 3.141592653589793
 
-struct rc_filter_info* create_rc_filter(float frequency,int rate, int direction){
+struct rc_filter_info* create_rc_filter(double frequency,int rate, int direction){
 
   struct rc_filter_info* rcfilter=malloc(sizeof(struct rc_filter_info));
-  float RC=1.0/(frequency*2*PI);
-  float dt=1.0/rate;
+  double RC=1.0/(frequency*2*PI);
+  double dt=1.0/rate;
 
   if(direction==0){
     rcfilter->alpha=dt/(RC+dt);
@@ -22,9 +22,9 @@ struct rc_filter_info* create_rc_filter(float frequency,int rate, int direction)
   return rcfilter;
 }
 
-float do_rc_filter(struct rc_filter_info* rcf,float in){
+double do_rc_filter(struct rc_filter_info* rcf,double in){
 
-  float val;
+  double val;
   if(rcf->direction==0){
     val=rcf->prev + rcf->alpha * (in - rcf->prev);
   }else{
