@@ -16,6 +16,8 @@ double sigmoidal_clipper_tanh(double input,double limit,double ratio,double* aut
   double dist_thresh=limit-1000;
   if(fabs(result) > dist_thresh){
     *autoratio=*autoratio+0.01;
+    result= tanh(input/(limit * (ratio + *autoratio))) * limit;
+
   }else{
     *autoratio=*autoratio-0.00005;
     if(*autoratio<0){
