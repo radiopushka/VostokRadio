@@ -13,7 +13,7 @@ double sigmoidal_clipper_tanh(double input,double limit,double ratio,double* aut
   
   double result= tanh(input/(limit * (ratio + *autoratio))) * limit;
   //distortion threshold:
-  double dist_thresh=limit-2000;
+  double dist_thresh=limit-4000;
   if(fabs(result) > dist_thresh){
     *autoratio=*autoratio+0.1;
     result= tanh(input/(limit * (ratio + *autoratio))) * limit;
