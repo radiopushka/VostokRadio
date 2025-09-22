@@ -1,4 +1,4 @@
-
+//Evan Niktin 2025
 void amplify_stereo_plex(double* buffer, double* buffer_end,float gain){
 int pcount=0;
 double cgain=gain*2;

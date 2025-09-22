@@ -1,5 +1,5 @@
 #ifndef LOOKAHEAD_LIMITER
-
+//Evan Niktin 2025
 #define LOOKAHEAD_LIMITER
 
 struct limiter{

@@ -2,6 +2,7 @@
 #include "agc/agc.c"
 #include "stereo_demux.c"
 #include "./clippers/sin_clip.c"
+#include "./clippers/sigmoidal.c"
 #include "./stereo/stereo_amp.c"
 #include "./multiband_compressor/mbc.h"
 #include "./lookahead_limiter/lookaheadlim.h"
@@ -9,20 +10,23 @@
 #include "ui.c"
 #include "DEFAULTS.h"
 
+//Evan Nikitin 2025
 
 void set_compressor_defaults(Multiband mbt){
 
     int size=fdef_size;
     for(int i=0;i<size;i++){
-      set_attack(mbt,i,def_attack[i]);
-      set_release(mbt,i,def_release[i]);
+      //convert attack and release based on rate
+      set_attack(mbt,i,def_attack[i]/48000.0);
+      set_release(mbt,i,def_release[i]/48000.0);
       set_target(mbt,i,def_target[i]);
       set_gate(mbt,i,def_gate[i]);
       set_max_gain(mbt,i,def_m_gain[i]);
       set_post_amp(mbt,i,post_amp[i]);
       set_bypass(mbt,i,bypass[i]);
       set_type(mbt,i,types[i]);
-      set_ratio(mbt,i,effect[i]);
+      set_ratio(mbt,i,1.0-(1.0/effect[i]));
+      set_knee(mbt,i,knee[i]);
       
     }
 }
@@ -40,7 +44,7 @@ fmux rmux;
 //for mono compression in stereo audio
 double* pvals;
 double* gains;
-double h_compressor_left(float signal,float gain,int location){
+double h_compressor_left(double signal,double gain,int location){
 
   gains[location]=gain;
   double amplitude=power_at(lmux,location);
@@ -111,11 +115,11 @@ int main(){
 
 
   //final limiter
-  Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
+  /*Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter migi_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
-
+*/
   //MPX
   init_mpx(rate2,PERCENT_PILOT,2147483640);
 
@@ -162,6 +166,9 @@ int main(){
   double dc_removal_l2=0;
   double dc_removal_r=0;
   double dc_removal_r2=0;
+
+  double clip_tracker1=0;
+  double clip_tracker2=0;
 
   gains=malloc(sizeof(double)*fdef_size);
   pvals=malloc(sizeof(double)*fdef_size);
@@ -307,7 +314,9 @@ int main(){
                        
           
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(hidari,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=run_limiter(hidari,buffer*FINAL_AMP,30000,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
+
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
             #endif 
@@ -317,7 +326,8 @@ int main(){
               buffer=run_f(lbassc2,buffer);
             #endif /* ifdef MACRO */
            #ifdef FINAL_CLIP 
-              buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker1);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -361,7 +371,8 @@ int main(){
             }
          
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(migi,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=run_limiter(migi,buffer*FINAL_AMP,30000,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
             #else
               buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
             #endif 
@@ -371,7 +382,8 @@ int main(){
               buffer=run_f(rbassc2,buffer);
             #endif /* ifdef MACRO */
             #ifdef FINAL_CLIP 
-              buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              //buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
+              buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker2);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -437,10 +449,10 @@ int main(){
   free_f(rbassc3);
   free_f(lbassc3);
 
-  free_limiter(migi);
+  /*free_limiter(migi);
   free_limiter(hidari);
   free_limiter(migi_h);
-  free_limiter(hidari_h);
+  free_limiter(hidari_h);*/
 
   free(gains);
   free(pvals);

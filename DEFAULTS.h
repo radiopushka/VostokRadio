@@ -1,21 +1,23 @@
 #ifndef DEFAULTS
 #define DEFAULTS
 
+//Evan Nikitin 2025
 
-int fdef[]={190,600,3000,7000,16000}; //multiband compression filters
-int fdef_size=5;
+int fdef[]={60,250,500,2000,6000,16000}; //multiband compression filters
+int fdef_size=6;
 
-float mix_stereo[]={0           ,0              ,0          ,0          ,0     };
-float def_attack[]={ 0.0000001        ,0.000000004     ,0.00001       ,0.0003   ,0.000015};//multiband compression attack
-float def_release[]={0.0000000000001  ,0.00000000004  ,0.00000001   ,0.000002   ,0.000012}; //multiband compression release
-float def_target[]={9000,18500,19600,20700,9000}; //multiband compression target volume 
-float def_m_gain[]={1.2,1.1,1.1,1.2,2}; //make up gain
-float pre_amp[]={1,1,1,2,23}; //multiband compressor pre compression gain
-float def_gate[]={0,0,0,0,0}; //multi band compressor gate
-int bypass[]={0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.8,1,1,1,1}; // band compression post amplification
-float effect[]={0.8,0.7,0.7,0.7,1};//ratio, 1 being strongest
-int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
+float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
+float def_attack[]={ 0.100   ,0.005  ,0.003 ,0.010  ,0.010   ,0.020};//multiband compression attack
+float def_release[]={ 0.300  ,0.200  ,0.150 ,0.100  ,0.075   ,0.050}; //multiband compression release
+float def_target[]={10000,8000,5000,5000,7700,9000}; //multiband compression target volume 
+float def_m_gain[]={1,1.5,1.1,1.1,1.5,2}; //make up gain
+float pre_amp[]={6,2,0.4,0.4,1,20}; //multiband compressor pre compression gain
+float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
+int bypass[]={0,0,0,0,0,0}; //band compression bypass
+float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
+float effect[]={3,2.5,6.0,6.0,6.0,8.0};//ratio
+float knee[]={3,3,2,1.5,1,1};//ratio
+int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
 //#define MONO_COMPRESSION //turns the compressor from stereo to mono
@@ -35,19 +37,20 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 0.8 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
-#define FINAL_CLIP_LOOKAHEAD 100 //samples
-#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
+//#define FINAL_CLIP_LOOKAHEAD 100 //samples
+//#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
+#define SIGMOIDAL_CO 5
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
 //poor bass response in FM transmitters is caused by the milivolts of change even after filtering, from the power supply's rectifier circuit (PLL VCOs are more sensitive than you think)
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
-#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
+//#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 15 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.01
+#define DC_REMOVAL_COEFF 0.003
 
 
 //alsa configuration
@@ -62,12 +65,12 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
 
-#define AGC_TARG 17000 //input AGC baseline target
+#define AGC_TARG 20000 //input AGC baseline target
 
 #define AGC_SPEED 0.000002 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.000003 //response coefficient
+#define AGC_RELEASE 0.000006 //response coefficient
 #define AGC_GATE 15
 
 // set to 1 to show the levels in real time, 0 to keep silent
@@ -78,8 +81,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression co
 //#define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
-#define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 0.88 // percent of the signal devoted to mono audio
+#define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
+#define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
 #define PERCENT_STEREO 0.70// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 

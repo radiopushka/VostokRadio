@@ -9,20 +9,20 @@ Multiband create_mbt(fmux freq_mux){
   Compressor* cmp=malloc(sizeof(Compressor)*num_comps);
   Compressor* cmpend=cmp+num_comps;
 
-  float* attacks=malloc(sizeof(float)*num_comps);
-  float* release=malloc(sizeof(float)*num_comps);
-  float* targets=malloc(sizeof(float)*num_comps);
-  float* gate=malloc(sizeof(float)*num_comps);
-  float* max_gain=malloc(sizeof(float)*num_comps);
-  float* post_gain=malloc(sizeof(float)*num_comps);
+  double* attacks=malloc(sizeof(double)*num_comps);
+  double* release=malloc(sizeof(double)*num_comps);
+  double* targets=malloc(sizeof(double)*num_comps);
+  double* gate=malloc(sizeof(double)*num_comps);
+  double* max_gain=malloc(sizeof(double)*num_comps);
+  double* post_gain=malloc(sizeof(double)*num_comps);
   int* bypass=malloc(sizeof(int)*num_comps);
 
-  memset(attacks,0,sizeof(float)*num_comps);
-  memset(release,0,sizeof(float)*num_comps);
-  memset(targets,0,sizeof(float)*num_comps);
-  memset(gate,0,sizeof(float)*num_comps);
-  memset(max_gain,0,sizeof(float)*num_comps);
-  memset(post_gain,0,sizeof(float)*num_comps);
+  memset(attacks,0,sizeof(double)*num_comps);
+  memset(release,0,sizeof(double)*num_comps);
+  memset(targets,0,sizeof(double)*num_comps);
+  memset(gate,0,sizeof(double)*num_comps);
+  memset(max_gain,0,sizeof(double)*num_comps);
+  memset(post_gain,0,sizeof(double)*num_comps);
   memset(bypass,0,sizeof(int)*num_comps);
 
   mbt->size=num_comps;
@@ -82,6 +82,9 @@ void set_type(Multiband mbt,int index,int type){
 void set_ratio(Multiband mbt,int index,float ratio){
   mbt->compressors[index]->ratio=ratio;
 } 
+void set_knee(Multiband mbt,int index,float knee){
+  mbt->compressors[index]->knee=1/knee;
+} 
 
 
 
@@ -91,30 +94,30 @@ float get_amplitude_at(Multiband mbt,int index){
   return power_at(mbt->freq_mux,index);
 }
 
-float default_on_gain_value(float signal,float gain,int location){
+double default_on_gain_value(double signal,double gain,int location){
   return signal*gain;
 }
 
-void run_compressors_advanced(Multiband mbt,float (*on_gain_value)(float,float,int)){
+void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,double,int)){
 
     Compressor* ptrstart=mbt->compressors;
     Compressor* ptrend=mbt->end_ptr;
     fmux mux=mbt->freq_mux;
 
-    float* targs=mbt->targets;
-    float* attacks=mbt->attacks;
-    float* release=mbt->release;
-    float* gate=mbt->gate;
-    float* mgn=mbt->max_gain;
+    double* targs=mbt->targets;
+    double* attacks=mbt->attacks;
+    double* release=mbt->release;
+    double* gate=mbt->gate;
+    double* mgn=mbt->max_gain;
     int* bypass=mbt->bypass;
-    float* post_gain=mbt->post_amp;
+    double* post_gain=mbt->post_amp;
 
     int locs=0;
     for(Compressor* citr=ptrstart;citr<ptrend;citr++){
       
-          float amplitude=power_at(mux,locs);
-          float val=amplitude;
-          float cmpd;
+          double amplitude=power_at(mux,locs);
+          double val=amplitude;
+          double cmpd;
 
           if(*bypass!=1){
 

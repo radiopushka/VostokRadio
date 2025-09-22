@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "../multiband_compressor/mbc.h"
-
+//Evan Nikitin 2025
 
 int intialize_timings=0;
 float clip_value=0;
@@ -16,8 +16,8 @@ const int over_sample_co=128;
 const int buffer_size=192000;
 
 //most sound cards require this to generate the MPX signal propperly
-double ANALOG_BIAS=2000;
-double HF_BIAS=300;
+double ANALOG_BIAS=0;
+double HF_BIAS=0;
 
 //the measured amplitude of the 2nd harmonic of the 19khz signal
 double P2nd_DAC_HARMONIC=0.00006;
@@ -29,7 +29,7 @@ double st_lowpass=0;
 double st_lowpass2=0;
 double m_lowpass=0;
 double m_lowpass2=0;
-const double mult_new=0.73333;
+const double mult_new=0.8;
 double mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop
@@ -154,12 +154,12 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
   //having it at some baseline reduces distortion
   //apparently in order for stereo MPX signal to be generated propperly, sound cards need some kind of bias
   
-  if(fabs(stereo)<ANALOG_BIAS){
+  /*if(fabs(stereo)<ANALOG_BIAS){
     if(stereo<0)
       stereo=-ANALOG_BIAS;
     else
       stereo=ANALOG_BIAS;
-  }
+  }*/
   stereo=stereo-HF_BIAS;
   st_lowpass2=(st_lowpass2*mult_pr+stereo*mult_new);
   st_lowpass=(st_lowpass*mult_pr+st_lowpass2*mult_new);

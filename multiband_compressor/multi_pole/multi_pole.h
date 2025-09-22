@@ -13,7 +13,7 @@ typedef struct a_f* afilter;
 
 struct a_f* poled_f(int rate, int freq, int poles,int direction);
 
-float run_f(struct a_f* f,double input);
+double run_f(struct a_f* f,double input);
 
 void free_f(struct a_f* lpf);
 

@@ -1,17 +1,17 @@
 #include <math.h>
 #include<stdlib.h>
 
-float gain=1;
+double gain=10;
 
-float gain_max=20;
-float gain_max_half=20;
+double gain_max=40;
+double gain_max_half=15;
 int dtime=0;
-float avg_error=0;
-float avg_audio=0;
+double avg_error=0;
+double avg_audio=0;
 
 #define PIHALF 1.570796327
 
-float apply_agc(float input,float target,float sens,int thresh,float trace_val,float release){
+double apply_agc(double input,float target,float sens,int thresh,float trace_val,float release){
  /* if(sens<0){
     return input;
   }*/

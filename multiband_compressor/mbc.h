@@ -10,13 +10,13 @@ struct Multiband{
 
   int size;
 
-  float* attacks;
-  float* release;
-  float* targets;
-  float* gate;
-  float* max_gain;
+  double* attacks;
+  double* release;
+  double* targets;
+  double* gate;
+  double* max_gain;
   int* bypass;
-  float* post_amp;
+  double* post_amp;
 
   fmux freq_mux;
 };
@@ -40,6 +40,7 @@ void set_post_amp(Multiband mbt,int index, float gain);
 void set_bypass(Multiband mbt,int index,int bypass);
 void set_type(Multiband mbt,int index,int type);
 void set_ratio(Multiband mbt,int index,float ratio);
+void set_knee(Multiband mbt,int index,float knee);
 
 
 //get the amplitude for visual rendering:
@@ -47,7 +48,7 @@ float get_amplitude_at(Multiband mbt,int index);
 
 //run after the frequency muxer
 void run_compressors(Multiband mbt);
-void run_compressors_advanced(Multiband mbt,float (*on_gain_value)(float,float,int));
+void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,double,int));
 
 //free memory
 void free_multiband(Multiband mbc);

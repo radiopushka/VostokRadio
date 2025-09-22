@@ -1,13 +1,14 @@
 
 #ifndef COMPRESSOR
 #define COMPRESSOR
-
+//Evan Nikitin 2025
 struct Compressor{
-  float avg;
-  float prev_val;
-  float prevprev_val;
-  float gain;
-  float ratio;
+  double avg;
+  double prev_val;
+  double prevprev_val;
+  double gain;
+  double knee;
+  double ratio;
   int method;
 };
 
@@ -19,6 +20,6 @@ typedef struct Compressor* Compressor;
 //method: 1=peak detector 0=RMS
 Compressor create_compressor(int method);
 
-float run_comp(Compressor comp,float release, float attack, float target,float input,float gate,float max_gain);
+double run_comp(Compressor comp,double release, double attack, double target,double input,double gate,double max_gain);
 
 #endif // !COMPRESSOR
