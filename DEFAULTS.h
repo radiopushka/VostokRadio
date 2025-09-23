@@ -7,9 +7,9 @@ int fdef[]={60,250,500,2000,6000,16000}; //multiband compression filters
 int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-float def_attack[]={ 0.500   ,0.005  ,0.003 ,0.001  ,0.004   ,0.020};//multiband compression attack
-float def_release[]={ 0.500  ,0.200  ,0.550 ,0.500  ,0.500   ,0.050}; //multiband compression release
-float def_target[]={19000,6000,4000,4000,5000,12000}; //multiband compression target volume 
+float def_attack[]={ 0.500   ,0.005  ,0.001 ,0.001  ,0.004   ,0.020};//multiband compression attack
+float def_release[]={ 0.500  ,0.200  ,0.650 ,0.600  ,0.500   ,0.050}; //multiband compression release
+float def_target[]={25000,6000,4000,4000,5000,12000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.5,1.1,1.1,1.5,2}; //make up gain
 float pre_amp[]={6,2,0.4,0.4,1,20}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
@@ -42,6 +42,10 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 5
+#define SIGMOIDAL_ATTACK 0.1
+#define SIGMOIDAL_RELEASE 0.01
+#define SIGMOIDAL_BUFFER 50
+#define SIGMOIDAL_DRANGE 6000
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -50,7 +54,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 
 //#define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 15 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.0005
+#define DC_REMOVAL_COEFF 0.005
 
 
 //alsa configuration

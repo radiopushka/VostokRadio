@@ -113,6 +113,8 @@ int main(){
   Multiband rmbt=create_mbt(rmux);
   Multiband mmbt=create_mbt(mmux);//mono
 
+  SLim sigmoidal1 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31760,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+  SLim sigmoidal2 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31760,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
 
   //final limiter
   /*Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
@@ -327,7 +329,8 @@ int main(){
             #endif /* ifdef MACRO */
            #ifdef FINAL_CLIP 
               //buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker1);
+              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker1);
+              buffer=apply_sigmoidal(sigmoidal1,buffer*FINAL_AMP);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -383,7 +386,8 @@ int main(){
             #endif /* ifdef MACRO */
             #ifdef FINAL_CLIP 
               //buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker2);
+              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker2);
+              buffer=apply_sigmoidal(sigmoidal2,buffer*FINAL_AMP);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -449,6 +453,8 @@ int main(){
   free_f(rbassc3);
   free_f(lbassc3);
 
+  free_sigmoidal(sigmoidal1);
+  free_sigmoidal(sigmoidal2);
   /*free_limiter(migi);
   free_limiter(hidari);
   free_limiter(migi_h);
