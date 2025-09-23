@@ -46,6 +46,9 @@ double* pvals;
 double* gains;
 double h_compressor_left(double signal,double gain,int location){
 
+  #ifndef MONO_COMPRESSION
+    return gain;
+  #endif /* ifdef MONO_COMPRESSION */
   gains[location]=gain;
   double amplitude=power_at(lmux,location);
   pvals[location]=signal*gain;
@@ -113,8 +116,8 @@ int main(){
   Multiband rmbt=create_mbt(rmux);
   Multiband mmbt=create_mbt(mmux);//mono
 
-  SLim sigmoidal1 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31760,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
-  SLim sigmoidal2 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31760,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+  SLim sigmoidal1 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+  SLim sigmoidal2 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
 
   //final limiter
   /*Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
@@ -183,7 +186,7 @@ int main(){
        //convert to float
       double* ittr=buffer_tf;
       for(short* pl=buffer_t;pl<buffer_end;pl++){
-        *ittr=*pl;
+        *ittr=(*pl * 1.0 );
         ittr++;
       }
 
@@ -224,10 +227,10 @@ int main(){
             
             if(count%2==0){
             
-             #ifdef HIGH_PASS
 
 		    dc_removal_l2 = dc_removal_l2 + (buffer- dc_removal_l2)*DC_REMOVAL_COEFF;
               buffer=buffer - dc_removal_l2;
+             #ifdef HIGH_PASS
 
               ch_nobass=run_f(lbassc3,buffer);
               ch_nobass=run_f(lbassc,ch_nobass);
@@ -240,11 +243,11 @@ int main(){
             
               
             }else{
-             #ifdef HIGH_PASS
 
 		    dc_removal_r2 = dc_removal_r2 + (buffer- dc_removal_r2)*DC_REMOVAL_COEFF;
               buffer=buffer - dc_removal_r2;
 
+             #ifdef HIGH_PASS
 
               ch_nobass=run_f(rbassc3,buffer);
               ch_nobass=run_f(rbassc,ch_nobass);
@@ -281,8 +284,10 @@ int main(){
             
             buffer=dynamic_compressor(buffer,1);
             #endif /* ifdef DYNAMIC_COMPRESSOR */
+            buffer = buffer * POST_AGC_GAIN;
           }else{
-            buffer=0;
+            buffer=*start;
+            buffer = buffer * POST_AGC_GAIN;
           }
           if(count==0){
             #ifdef MULTIBAND_COMPRESSION
@@ -306,7 +311,7 @@ int main(){
 
 
             #endif /* ifdef MACRO */
-            buffer=demux(lmux);
+            buffer=demux(lmux) * FINAL_AMP;
                       
 
             #endif
@@ -320,7 +325,7 @@ int main(){
               //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
 
             #else
-              buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt1);
+              buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt1);
             #endif 
 
             buffer=run_f(lpassfinal,buffer);
@@ -330,7 +335,7 @@ int main(){
            #ifdef FINAL_CLIP 
               //buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
               //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker1);
-              buffer=apply_sigmoidal(sigmoidal1,buffer*FINAL_AMP);
+              buffer=apply_sigmoidal(sigmoidal1,buffer);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -366,7 +371,7 @@ int main(){
             #endif /* ifdef MONO_COMPRESSION */
             
 
-            buffer=demux(rmux);
+            buffer=demux(rmux) * FINAL_AMP;
 
             #endif /* ifdef MULTIBAND_COMPRESSION */
              if(avg_pre_clip<abs(buffer)){
@@ -377,7 +382,7 @@ int main(){
               //buffer=run_limiter(migi,buffer*FINAL_AMP,30000,FINAL_CLIP_LOOKAHEAD_RELEASE );
               //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
             #else
-              buffer=sin_clip_bouncy(buffer * FINAL_AMP,sin_clip_c1,32767,&mt2);
+              buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt2);
             #endif 
 
             buffer=run_f(rpassfinal,buffer);
@@ -387,7 +392,7 @@ int main(){
             #ifdef FINAL_CLIP 
               //buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
               //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker2);
-              buffer=apply_sigmoidal(sigmoidal2,buffer*FINAL_AMP);
+              buffer=apply_sigmoidal(sigmoidal2,buffer);
             #endif
 
             if(avg_post_clip<abs(buffer)){
@@ -401,9 +406,12 @@ int main(){
         #else
 
           buffer=(*start);
+          buffer=apply_sigmoidal(sigmoidal1,buffer);
        
         #endif /* ifdef BYPASS */
-        *helper_dr=buffer*65538.0;
+        buffer = buffer * 65538.0;
+        *helper_dr=buffer;
+        //*helper_dr=buffer*65200.0;
         helper_dr++;
         count=~count;
       }

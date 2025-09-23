@@ -11,7 +11,7 @@ struct a_f{
 typedef struct a_f* afilter;
 
 
-struct a_f* poled_f(int rate, int freq, int poles,int direction);
+struct a_f* poled_f(int rate, double freq, int poles,int direction);
 
 double run_f(struct a_f* f,double input);
 

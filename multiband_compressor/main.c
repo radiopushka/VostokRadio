@@ -89,13 +89,13 @@ void set_knee(Multiband mbt,int index,float knee){
 
 
 
-float get_amplitude_at(Multiband mbt,int index){
+double get_amplitude_at(Multiband mbt,int index){
 
   return power_at(mbt->freq_mux,index);
 }
 
 double default_on_gain_value(double signal,double gain,int location){
-  return signal*gain;
+  return gain;
 }
 
 void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,double,int)){
@@ -119,15 +119,10 @@ void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,doubl
           double val=amplitude;
           double cmpd;
 
-          if(*bypass!=1){
 
-            cmpd=run_comp(*citr,*release,*attacks,*targs,amplitude,*gate,*mgn);
+            cmpd=run_comp(*citr,*release,*attacks,*targs,amplitude,*gate,*mgn, *bypass);
             //val=amplitude*cmpd;
             val=(*on_gain_value)(amplitude,cmpd*(*post_gain),locs);
-          }else{
-            val=(*on_gain_value)(amplitude,(*post_gain),locs);
-          }
-    
           
           set_power_at(mux,locs, val);
 

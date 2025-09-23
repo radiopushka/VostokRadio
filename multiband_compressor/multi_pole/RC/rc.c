@@ -25,6 +25,12 @@ struct rc_filter_info* create_rc_filter(double frequency,int rate, int direction
 double do_rc_filter(struct rc_filter_info* rcf,double in){
 
   double val;
+  /*if(rcf->direction==0){
+    val=rcf->prev * (1 - rcf->alpha) + rcf->alpha * (in - rcf->prev);
+  }else{
+    val=rcf->prev * (1 - rcf-> alpha) + (rcf->alpha * in);
+
+  }*/
   if(rcf->direction==0){
     val=rcf->prev + rcf->alpha * (in - rcf->prev);
   }else{

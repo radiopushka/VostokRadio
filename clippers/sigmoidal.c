@@ -67,6 +67,11 @@ double sigmoidal_clipper_tanh(double input,double limit,double ratio,double* aut
 
 double tanh_func(double input, double ratio,double limit){
   return tanh(input/(limit * ratio)) * limit;
+  //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
+}
+double mimic_tanh(double input,double ratio, double limit){
+
+  return (input/(limit * ratio)) * limit;
 }
 
 double apply_sigmoidal(SLim limiter, double input){
@@ -82,8 +87,10 @@ double apply_sigmoidal(SLim limiter, double input){
 
   memmove(ring_buffer,aux_buffer,limiter->bsize_pre);
 
-  double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
+  //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
   double mstart = fabs(return_val);
+  double mimic = mimic_tanh(return_val,limiter->ratio + limiter->dynamic_ratio,limiter->limit);
+  double scopy = fabs(mimic);
   double attarashi_v = return_val;
 
 
@@ -96,18 +103,24 @@ double apply_sigmoidal(SLim limiter, double input){
       attarashi_v = *bwalk;
     }
   }
-  double rstart = fabs(tanh_func(attarashi_v , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
+  double rstart = fabs(mimic_tanh(attarashi_v , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
   if(rstart > limiter->limit - limiter->range){
-    limiter->dynamic_ratio=limiter->dynamic_ratio  + limiter->attack;
+    double diff=1-(((limiter->limit - limiter->range)/rstart)*0.9);
+    limiter->dynamic_ratio=limiter->dynamic_ratio  + (limiter->attack * diff);
 
   }else{
-    limiter->dynamic_ratio=limiter->dynamic_ratio - limiter->release;
+    double diff=1-((rstart/(limiter->limit - limiter->range))*0.9);
+    limiter->dynamic_ratio=limiter->dynamic_ratio - (limiter->release * diff);
     if(limiter->dynamic_ratio<0){
       limiter->dynamic_ratio = 0;
     }
   }
 
+  if(scopy < limiter->limit/2){
+    return mimic;
+  }
+  double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
 
 
   return mval;

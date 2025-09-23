@@ -2,6 +2,7 @@
 #include "compressor.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Evan Nikitin 2025
 Compressor create_compressor(int method){
@@ -13,11 +14,37 @@ Compressor create_compressor(int method){
   comp->ratio=1;
   comp->knee=0.3;
   comp->method=method;
+  memset(comp->ring,0,sizeof(double)*15);
   return comp;
 }
 
-double run_comp(Compressor comp,double release, double attack, double target, double input,double gate,double max_gain){
-  if(fabs(input)<gate){
+double run_comp(Compressor comp,double release, double attack, double target, double input,double gate,double max_gain,int bypass){
+
+  
+
+  double helper[15];
+  double excluded = comp->ring[14];
+
+  memmove(helper + 1,comp->ring,sizeof(double)*14);
+  helper[0]=input;
+  memmove(comp->ring,helper,sizeof(double)*15);
+
+  if(bypass == 1)
+    return excluded;
+
+  double max = fabs(excluded);
+  for(int i=0;i<15;i++){
+    double pull = comp->ring[i];
+    if(comp->method != COMP_PEAK){
+      max = (max + fabs(pull))/2;
+    }else if(fabs(pull) > max){
+      max = pull;
+    }
+  }
+
+  input = max;
+
+  if(input<gate){
     if(comp->gain < 1)
       comp->gain=comp->gain*(1+release);
     if(comp->gain > 1)
@@ -26,34 +53,31 @@ double run_comp(Compressor comp,double release, double attack, double target, do
     
 
     
-    return ((comp->gain)*(comp->ratio))+(1-comp->ratio);
+    return (((comp->gain)*(comp->ratio))+(1-comp->ratio)) * excluded;
   }
   int method=comp->method;
     
-  float slope2=fabs(input)*comp->gain;
+  float slope2=input*comp->gain;
 
 
   if(method==COMP_PEAK){
     
-    //detect the peak
-    float slope=comp->prevprev_val;
-    float center=comp->prev_val;
-    //if peak
-    if(center>slope && center>slope2){
-      if(center>target){
-        double diff=1-((target/center)*comp->knee);
+      input = input * comp->gain;
+      if(input>target){
+        double diff=1-((target/input)*comp->knee);
         comp->gain=comp->gain+((attack*diff));
         //comp->gain=comp->gain-attack;
       }
-      if(target>center){
+      if(target>input){
 
-        double diff=1-((center/target)*comp->knee);
+        double diff=1-((input/target)*comp->knee);
         comp->gain=comp->gain-((release*diff));
         //comp->gain=comp->gain+release;
       }
-    }
+    
   }else{
-    comp->avg=(comp->avg+fabs(input)*comp->gain)/2;
+    input = input * comp->gain;
+    comp->avg = (comp->avg + input)/2;
     if(comp->avg<target){
         double diff=1-((comp->avg/target)*comp->knee);
         comp->gain=comp->gain+((release*diff));
@@ -71,12 +95,9 @@ double run_comp(Compressor comp,double release, double attack, double target, do
   if(comp->gain>max_gain){
     comp->gain=max_gain;
   }
-if(comp->gain<release/2){
-    comp->gain=release/2;
-  }
 
   comp->prevprev_val=comp->prev_val;
   comp->prev_val=slope2;
-  return ((comp->gain)*(comp->ratio))+(1-comp->ratio);
+  return (((comp->gain)*(comp->ratio))+(1-comp->ratio)) * excluded;
 }
 

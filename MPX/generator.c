@@ -29,7 +29,7 @@ double st_lowpass=0;
 double st_lowpass2=0;
 double m_lowpass=0;
 double m_lowpass2=0;
-const double mult_new=0.95;
+const double mult_new=1;
 double mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop

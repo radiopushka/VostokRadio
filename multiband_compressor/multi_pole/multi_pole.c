@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include <stdio.h>
 
-struct a_f* poled_f(int rate, int freq, int poles,int direction){
+struct a_f* poled_f(int rate, double freq, int poles,int direction){
   struct a_f* mpoled=malloc(sizeof(struct a_f));
   rc_filter_info** lstr=malloc(sizeof(rc_filter_info*)*(poles));
   rc_filter_info** endptr=lstr+poles;

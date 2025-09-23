@@ -44,7 +44,7 @@ void set_knee(Multiband mbt,int index,float knee);
 
 
 //get the amplitude for visual rendering:
-float get_amplitude_at(Multiband mbt,int index);
+double get_amplitude_at(Multiband mbt,int index);
 
 //run after the frequency muxer
 void run_compressors(Multiband mbt);

@@ -40,8 +40,12 @@ double apply_agc(double input,float target,float sens,int thresh,float trace_val
       avg_error=(avg_error+error)/2;
     }
   
-  if(cur_val>32767){//handle clipping
-    avg_error=avg_error/2+(target-cur_val);
+
+  if(avg_error > 32767){
+    avg_error = 32767;
+  }else if(avg_audio < -32767){
+
+    avg_error = -32767;
   }
   
   //roll down slow roll up quickyl

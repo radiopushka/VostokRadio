@@ -9,6 +9,7 @@ struct Compressor{
   double gain;
   double knee;
   double ratio;
+  double ring[15];
   int method;
 };
 
@@ -20,6 +21,6 @@ typedef struct Compressor* Compressor;
 //method: 1=peak detector 0=RMS
 Compressor create_compressor(int method);
 
-double run_comp(Compressor comp,double release, double attack, double target,double input,double gate,double max_gain);
+double run_comp(Compressor comp,double release, double attack, double target,double input,double gate,double max_gain,int bypass);
 
 #endif // !COMPRESSOR
