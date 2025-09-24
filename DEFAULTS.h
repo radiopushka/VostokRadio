@@ -15,7 +15,7 @@ float pre_amp[]={12,1,0.4,0.4,1,20}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
-float effect[]={9,2.5,6.0,6.0,6.0,8.0};//ratio
+float effect[]={4,2.5,6.0,6.0,6.0,8.0};//ratio
 float knee[]={3,3,2,1.5,1,1};//ratio
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
                   
@@ -37,7 +37,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1.2 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -58,8 +58,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 
 
 //alsa configuration
-#define RECORDING_IFACE "default"
-#define PLAYBACK_IFACE "default"
+#define RECORDING_IFACE "hw:1,1,0"
+#define PLAYBACK_IFACE "hw:0,0"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 
@@ -82,7 +82,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
 
 //FM radio setings, only apply if the output sampling rate is 96khz or higher
-//#define MPX_ENABLE //uncomment to enable
+#define MPX_ENABLE //uncomment to enable
 //#define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
