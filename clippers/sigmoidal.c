@@ -34,6 +34,7 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->bsize_pre=sizeof(double)*buffersize;
 
   memset(limiter->ring,0,sizeof(double)*buffersize);
+  memset(limiter->helper,0,sizeof(double)*buffersize);
 
   return limiter;
 }
@@ -89,12 +90,11 @@ double apply_sigmoidal(SLim limiter, double input){
 
   //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
   double mstart = fabs(return_val);
-  double mimic = mimic_tanh(return_val,limiter->ratio + limiter->dynamic_ratio,limiter->limit);
-  double scopy = fabs(mimic);
   double attarashi_v = return_val;
 
 
-  for(double* bwalk=ring_buffer; bwalk < ring_buffer + limiter->bsize_pre; bwalk++){
+  ring_buffer=limiter->ring;
+  for(double* bwalk=ring_buffer; bwalk < ring_buffer + limiter->size; bwalk++){
     double absval = fabs(*bwalk);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
 
@@ -117,9 +117,6 @@ double apply_sigmoidal(SLim limiter, double input){
     }
   }
 
-  if(scopy < limiter->limit/2){
-    return mimic;
-  }
   double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
 
 

@@ -69,8 +69,22 @@ int main(){
   int rate1=48000;
   int rate2=RATE;
   int buffer_size=50000;
+
+  #ifdef MPX_ENABLE
+    init_mpx(rate2,PERCENT_PILOT,2147483640);
+  #endif 
+
+  int gen_rate=rate2;
   if(setup_alsa_pipe(RECORDING_IFACE,PLAYBACK_IFACE,&ch1,&ch2,&rate1,&rate2,buffer_size)==-1){
     return -1;
+  }
+  
+  if(gen_rate!=rate2){
+
+    #ifdef MPX_ENABLE
+    
+        init_mpx(rate2,PERCENT_PILOT,2147483640);
+    #endif 
   }
   int input_buffer_prop = rate2/rate1;
   int i_buffer_size = buffer_size/input_buffer_prop;
@@ -78,11 +92,11 @@ int main(){
 
   printf("starting rates: input: %d, output: %d\n",rate1, rate2);
   
-  short buffer_t[i_buffer_size];//input buffer
+  int buffer_t[i_buffer_size];//input buffer
   double buffer_tf[i_buffer_size];//input buffer
   int helper_buffer[i_buffer_size];
   int* helper_buffer_end=helper_buffer+i_buffer_size;
-  short* buffer_end=buffer_t+i_buffer_size;
+  int* buffer_end=buffer_t+i_buffer_size;
   double* buffer_endf=buffer_tf+i_buffer_size;
   int* o_buffer_end=buffer_o+buffer_size;
   memset(buffer_t,0,i_buffer_size<<1);
@@ -125,8 +139,6 @@ int main(){
   Limiter migi_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
   Limiter hidari_h = create_limiter(FINAL_CLIP_LOOKAHEAD);
 */
-  //MPX
-  init_mpx(rate2,PERCENT_PILOT,2147483640);
 
   //composite_clipper
   Limiter Composite_clip = NULL;
@@ -167,13 +179,7 @@ int main(){
   double local_right=0;
   int taken_sample=0;
 
-  double dc_removal_l=0;
-  double dc_removal_l2=0;
-  double dc_removal_r=0;
-  double dc_removal_r2=0;
 
-  double clip_tracker1=0;
-  double clip_tracker2=0;
 
   gains=malloc(sizeof(double)*fdef_size);
   pvals=malloc(sizeof(double)*fdef_size);
@@ -185,8 +191,8 @@ int main(){
     //printf("buffer1_out\n");
        //convert to float
       double* ittr=buffer_tf;
-      for(short* pl=buffer_t;pl<buffer_end;pl++){
-        *ittr=(*pl * 1.0 );
+      for(int* pl=buffer_t;pl<buffer_end;pl++){
+        *ittr=(((double)*pl) / 65538.0 );
         ittr++;
       }
 
@@ -228,12 +234,12 @@ int main(){
             if(count%2==0){
             
 
-		    dc_removal_l2 = dc_removal_l2 + (buffer- dc_removal_l2)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_l2;
+		    /*dc_removal_l2 = dc_removal_l2 + (buffer- dc_removal_l2)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_l2;*/
              #ifdef HIGH_PASS
 
-              ch_nobass=run_f(lbassc3,buffer);
-              ch_nobass=run_f(lbassc,ch_nobass);
+              buffer=run_f(lbassc3,buffer);
+              ch_nobass=run_f(lbassc,buffer);
 
 
               #else
@@ -244,13 +250,13 @@ int main(){
               
             }else{
 
-		    dc_removal_r2 = dc_removal_r2 + (buffer- dc_removal_r2)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_r2;
+		    /*dc_removal_r2 = dc_removal_r2 + (buffer- dc_removal_r2)*DC_REMOVAL_COEFF;
+              buffer=buffer - dc_removal_r2;*/
 
              #ifdef HIGH_PASS
 
-              ch_nobass=run_f(rbassc3,buffer);
-              ch_nobass=run_f(rbassc,ch_nobass);
+              buffer=run_f(rbassc3,buffer);
+              ch_nobass=run_f(rbassc,buffer);
 
 
              #else
@@ -270,14 +276,15 @@ int main(){
               avg_post_agc=abs(buffer);
             }
 
-            if(count%2==0){
+            /*if(count%2==0){
             //remove the AGC artifacts
+            dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
             dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
               buffer=buffer - dc_removal_l;
             }else{
             dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*DC_REMOVAL_COEFF;
               buffer=buffer - dc_removal_r;
-            }
+            }*/
 
             //this value is the maximum value the clipper can reach
             #ifdef DYNAMIC_COMPRESSOR

@@ -98,7 +98,7 @@ int forward_audio(){
     }
   }
   //buffer underflow
-  if((data_in_buff<step_back && sink_state==0)||(data_in_buff<sink_back && sink_state==1)){
+  if((data_in_buff<step_back && sink_state==0)||(data_in_buff>sink_back && sink_state==1)){
   
     
     pthread_mutex_unlock(&write_access);
@@ -171,8 +171,15 @@ int queue_audio(int* data){
 
   if(start_point==0){
 
+    pthread_mutex_unlock(&write_access);
     usleep(forward_buffer_size*((1.0/((float) rate))*1000000));
+    //usleep(7000000);
+    pthread_mutex_lock(&write_access);
+	  //snd_pcm_drain(output);
+	  //snd_pcm_prepare(output);
+    //usleep(7000000);
   }
+  //printf("%d %d\n",start_point,forward_buffer_size*SINK_BACK);
   /*if(synced==1){
     synced=0;
     printf("synced\n");
@@ -197,7 +204,7 @@ int queue_audio(int* data){
   return 1;
 }
 
-int get_audio(short* data,int local_buffer_size){
+int get_audio(int* data,int local_buffer_size){
   if(input==NULL)
     return -1;
 
@@ -246,7 +253,7 @@ int setup_alsa_pipe(char* recording_iface, char* playback_iface, int* channels_i
     printf("play config failed \n");
 		return -1;
 	}
-	if(configure_sound_card(input,forward_buffer_size*STEP_BACK,(unsigned int*)input_rate,channels_in,SND_PCM_FORMAT_S16_LE)<0){
+	if(configure_sound_card(input,forward_buffer_size*STEP_BACK,(unsigned int*)input_rate,channels_in,SND_PCM_FORMAT_S32_LE)<0){
     printf("record config failed \n");
 		return -1;
 	}
