@@ -106,18 +106,18 @@ double apply_sigmoidal(SLim limiter, double input){
   double rstart = fabs(mimic_tanh(attarashi_v , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
   if(rstart > limiter->limit - limiter->range){
-    double diff=1-(((limiter->limit - limiter->range)/rstart)*0.9);
+    double diff=1-(((limiter->limit - limiter->range)/rstart)*0.2);
     limiter->dynamic_ratio=limiter->dynamic_ratio  + (limiter->attack * diff);
 
   }else{
-    double diff=1-((rstart/(limiter->limit - limiter->range))*0.9);
+    double diff=1-((rstart/(limiter->limit - limiter->range))*0.1);
     limiter->dynamic_ratio=limiter->dynamic_ratio - (limiter->release * diff);
     if(limiter->dynamic_ratio<0){
       limiter->dynamic_ratio = 0;
     }
   }
 
-  double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
+  double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio*0.4 , limiter->limit);
 
 
   return mval;
