@@ -3,20 +3,20 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,500,3000,6000,16000}; //multiband compression filters
+int fdef[]={60,250,350,3000,6000,16000}; //multiband compression filters
 int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-float def_attack[]={ 0.100   ,0.005  ,0.040 ,0.000001  ,0.0000005   ,0.001};//multiband compression attack
-float def_release[]={ 0.500  ,0.200  ,0.550 ,0.001450  ,0.001445   ,0.010}; //multiband compression release
-float def_target[]={12000,5000,5000,850,1500,18000}; //multiband compression target volume 
-float def_m_gain[]={1.6,1.5,1.1,1.1,1.5,2}; //make up gain
-float pre_amp[]={12,1,0.4,0.2,0.3,20}; //multiband compressor pre compression gain
+float def_attack[]={ 0.100   ,0.005  ,0.00001 ,0.0000001  ,0.0000005   ,0.0000001};//multiband compression attack
+float def_release[]={ 0.500  ,0.500  ,0.750 ,0.505450  ,0.505445   ,0.0000010}; //multiband compression release
+float def_target[]={12000,5000,3000,3000,3000,18000}; //multiband compression target volume 
+float def_m_gain[]={1.6,1.5,1,1,1,2}; //make up gain
+float pre_amp[]={12,1,0.4,0.1,0.2,20}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,1,0.1,0.05,1}; // band compression post amplification
-float effect[]={4,2.5,6.0,12.0,12.0,8.0};//ratio
-float knee[]={3,3,2,1.5,1,1};//ratio
+float post_amp[]={1,1,0.1,0.000000000025,0.0000000005,1}; // band compression post amplification
+float effect[]={4,2.5,6.0,6.0,6.0,8.0};//ratio
+float knee[]={3,3,2,2,2,1};//ratio
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -29,6 +29,11 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
+#define EXPANDER_RATIO 0.7
+#define EXPANDER_ATTACK 0.0001
+#define EXPANDER_RELEASE 0.001
+#define EXPANDER_GAIN 0.00001
+#define EXPANDER_THRESHOLD 5000
 
 /* Not yet implemented
 #define GATE
@@ -42,10 +47,10 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 5
-#define SIGMOIDAL_ATTACK  0.05
-#define SIGMOIDAL_RELEASE 0.001
+#define SIGMOIDAL_ATTACK  0.0005
+#define SIGMOIDAL_RELEASE 0.00001
 #define SIGMOIDAL_BUFFER 50
-#define SIGMOIDAL_DRANGE 4000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE 8000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -58,8 +63,8 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 
 
 //alsa configuration
-#define RECORDING_IFACE "hw:1,1,0"
-#define PLAYBACK_IFACE "hw:0,0"
+#define RECORDING_IFACE "default"
+#define PLAYBACK_IFACE "default"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 

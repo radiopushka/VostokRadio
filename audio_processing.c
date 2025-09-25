@@ -7,6 +7,7 @@
 #include "./multiband_compressor/mbc.h"
 #include "./lookahead_limiter/lookaheadlim.h"
 #include "./MPX/generator.h"
+#include "./downward_expander/dxpander.h"
 #include "ui.c"
 #include "DEFAULTS.h"
 
@@ -122,6 +123,11 @@ int main(){
   afilter rbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   afilter lbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   
+
+  //downward expander
+  Dexpander dxr = create_downward_expander(EXPANDER_ATTACK,EXPANDER_RELEASE,EXPANDER_RATIO,EXPANDER_THRESHOLD);
+  Dexpander dxl = create_downward_expander(EXPANDER_ATTACK,EXPANDER_RELEASE,EXPANDER_RATIO,EXPANDER_THRESHOLD);
+
 
   //multiband compression
 
@@ -298,6 +304,7 @@ int main(){
           }
           if(count==0){
             #ifdef MULTIBAND_COMPRESSION
+             buffer = apply_expander(dxr,buffer,EXPANDER_GAIN);
              mux(lmux,buffer);
              gained(lmux);
 
@@ -353,6 +360,7 @@ int main(){
           }else{
             #ifdef MULTIBAND_COMPRESSION
             
+            buffer = apply_expander(dxl,buffer,EXPANDER_GAIN);
             //migi
             mux(rmux,buffer);
             gained(rmux);
@@ -475,6 +483,9 @@ int main(){
   free_limiter(migi_h);
   free_limiter(hidari_h);*/
 
+  free(dxr);
+  free(dxl);
+  
   free(gains);
   free(pvals);
 

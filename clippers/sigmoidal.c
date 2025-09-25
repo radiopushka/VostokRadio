@@ -70,6 +70,10 @@ double tanh_func(double input, double ratio,double limit){
   return tanh(input/(limit * ratio)) * limit;
   //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
 }
+double atan_func(double input, double ratio,double limit){
+  return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
+  //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
+}
 double mimic_tanh(double input,double ratio, double limit){
 
   return (input/(limit * ratio)) * limit;
