@@ -8,7 +8,7 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 float def_attack[]={ 0.070   ,0.0005  ,0.0008 ,0.00011  ,0.00015   ,0.00000010};//multiband compression attack
-float def_release[]={ 0.500  ,0.0600  ,0.0650 ,0.0800  ,0.0400   ,0.00001000}; //multiband compression release
+float def_release[]={ 0.500  ,0.600  ,0.650 ,0.800  ,0.400   ,0.00001000}; //multiband compression release
 float def_target[]={5000,4000,4000,4000,5000,5000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.5,1.1,1.1,1.1,2}; //make up gain
 float pre_amp[]={8,1,0.4,0.1,0.2,20}; //multiband compressor pre compression gain
