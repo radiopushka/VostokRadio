@@ -7,14 +7,14 @@ int fdef[]={60,250,350,3000,6000,16000}; //multiband compression filters
 int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-float def_attack[]={ 0.070   ,0.0005  ,0.0008 ,0.0011  ,0.0015   ,0.00000010};//multiband compression attack
+float def_attack[]={ 0.070   ,0.0005  ,0.0008 ,0.00011  ,0.00015   ,0.00000010};//multiband compression attack
 float def_release[]={ 0.500  ,0.0600  ,0.0650 ,0.0800  ,0.0400   ,0.00001000}; //multiband compression release
 float def_target[]={5000,4000,4000,4000,5000,5000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.5,1.1,1.1,1.1,2}; //make up gain
 float pre_amp[]={8,1,0.4,0.1,0.2,20}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,0.3,0.4,0.4,0.5,1}; // band compression post amplification
+float post_amp[]={1,0.3,0.4,0.5,0.6,1}; // band compression post amplification
 float effect[]={4,8,8.0,8.0,8.0,12.0};//ratio
 float knee[]={3,3,3,4,5,1};//ratio
 int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK};//band compression compressor types
