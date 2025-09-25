@@ -65,13 +65,13 @@ double run_comp(Compressor comp,double release, double attack, double target, do
       input = input * comp->gain;
       if(input>target){
         double diff=1-((target/input)*comp->knee);
-        comp->gain=comp->gain+((attack*diff));
+        comp->gain=comp->gain*(1-(attack*diff));
         //comp->gain=comp->gain-attack;
       }
       if(target>input){
 
         double diff=1-((input/target)*comp->knee);
-        comp->gain=comp->gain-((release*diff));
+        comp->gain=comp->gain*(1+(release*diff));
         //comp->gain=comp->gain+release;
       }
     
