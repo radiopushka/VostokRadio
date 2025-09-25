@@ -30,10 +30,10 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 
 
 #define EXPANDER_RATIO 0.7
-#define EXPANDER_ATTACK 0.00015
-#define EXPANDER_RELEASE 0.0001
+#define EXPANDER_ATTACK 0.000015
+#define EXPANDER_RELEASE 0.00001
 #define EXPANDER_GAIN 0.00001
-#define EXPANDER_THRESHOLD 5000
+#define EXPANDER_THRESHOLD 10000
 
 /* Not yet implemented
 #define GATE
@@ -42,7 +42,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS,COMP_RMS};//band compr
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 1.2 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples

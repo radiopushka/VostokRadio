@@ -21,19 +21,21 @@ double apply_expander(Dexpander expander,double input,double min_att){
 
    double precalc = fabs(input);
 
-   if(precalc > expander->threshold){
-    gain = gain * (1 + expander->release);
-    if(gain>1){
-      gain = 1;
+  if(precalc > 0){ // ignore off time
+    if(precalc > expander->threshold){
+      gain = gain * (1 + expander->release);
+      if(gain>1){
+        gain = 1;
+      }
+    }else if(precalc < expander->threshold){
+      gain = gain * (1 - expander->attack);
     }
-  }else if(precalc < expander->threshold){
-    gain = gain * (1 - expander->attack);
-  }
 
-  if(gain<min_att){
-    gain = min_att;
+    if(gain<min_att){
+      gain = min_att;
+    }
+    expander->gain = gain;
   }
-  expander->gain = gain;
 
   return (gain*expander->ratio + (1 - expander->ratio) ) * input;
 
