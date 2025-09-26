@@ -64,14 +64,20 @@ double run_comp(Compressor comp,double release, double attack, double target, do
     
       input = input * comp->gain;
       if(input>target){
-        double diff=1-((target/input)*comp->knee);
-        comp->gain=comp->gain*(1-(attack*diff));
+        double diff=((target/input)*comp->knee);
+        double nattack=(attack/diff);
+        if(nattack>attack)
+          nattack=attack;
+        comp->gain=comp->gain*(1-(nattack));
         //comp->gain=comp->gain-attack;
       }
       if(target>input){
 
-        double diff=1-((input/target)*comp->knee);
-        comp->gain=comp->gain*(1+(release*diff));
+        double diff=((input/target)*comp->knee);
+        double nrelease=(release/diff);
+        if(nrelease>release)
+          nrelease=release;
+        comp->gain=comp->gain*(1+(nrelease));
         //comp->gain=comp->gain+release;
       }
     
@@ -79,13 +85,23 @@ double run_comp(Compressor comp,double release, double attack, double target, do
     input = input * comp->gain;
     comp->avg = (comp->avg + input)/2;
     if(comp->avg<target){
-        double diff=1-((comp->avg/target)*comp->knee);
-        comp->gain=comp->gain*(1+(release*diff));
+    
+
+        double diff=((comp->avg/target)*comp->knee);
+        double nrelease=(release/diff);
+        if(nrelease>release)
+          nrelease=release;
+
+        comp->gain=comp->gain*(1+(nrelease));
         //comp->gain=comp->gain+release;
     }
    if(comp->avg>target){
-        double diff=1-((target/comp->avg)*comp->knee);
-        comp->gain=comp->gain*(1-(attack*diff));
+        double diff=((target/comp->avg)*comp->knee);
+        double nattack=(attack/diff);
+        if(nattack>attack)
+          nattack=attack;
+
+        comp->gain=comp->gain*(1-(nattack));
         //comp->gain=comp->gain-attack;
 
     }
