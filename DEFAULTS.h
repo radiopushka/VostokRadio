@@ -9,16 +9,16 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 100   ,17  ,  15  ,15  , 15   ,3};//multiband compression attack
-float def_release[]={ 600 , 300  ,250 ,150 ,40   ,10}; //multiband compression release
-float def_target[]={26000,18000,19000,20000,19000,29000}; //multiband compression target volume 
+float def_attack[]={ 100   ,17  ,  15  ,5  , 15   ,1};//multiband compression attack
+float def_release[]={ 600 , 300  ,250 ,150 ,40   ,5}; //multiband compression release
+float def_target[]={26000,18000,19000,20000,19000,26000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,2}; //make up gain
 float pre_amp[]={4,1,1,1,1,16}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={2,1,1,1,1,2}; // band compression post amplification
-float effect[]={4,8,8.0,8.0,8.0,8.0};//ratio
-float knee[]={1000,4000,4000,4000,4000,1000};//knee
+float effect[]={4,6,6.0,6.0,6.0,8.0};//ratio
+float knee[]={4000,10000,10000,10000,10000,4000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -75,14 +75,14 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
-#define POST_AGC_GAIN 2.5
+#define POST_AGC_GAIN 1
 
-#define AGC_TARG 15000 //input AGC baseline target
+#define AGC_TARG 8000 //input AGC baseline target
 
-#define AGC_SPEED 0.005 //response coefficient
+#define AGC_SPEED 0.000001 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.00008 //response coefficient
+#define AGC_RELEASE 0.000003 //response coefficient
 #define AGC_GATE 15
 
 // set to 1 to show the levels in real time, 0 to keep silent
