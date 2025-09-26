@@ -13,11 +13,11 @@ float def_attack[]={ 100   ,17  ,  15  ,5  , 5   ,0.1};//multiband compression a
 float def_release[]={ 600 , 300  ,100 ,20 ,20   ,1}; //multiband compression release
 float def_target[]={26000,18000,19000,20000,19000,29000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,2}; //make up gain
-float pre_amp[]={4,1,1,1,1,8}; //multiband compressor pre compression gain
+float pre_amp[]={4,1,1,1,1,16}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={2,1,1,1,1,4}; // band compression post amplification
-float effect[]={4,12,30.0,30.0,30.0,22.0};//ratio
+float post_amp[]={2,1,1,1,1,2}; // band compression post amplification
+float effect[]={4,8,8.0,8.0,8.0,8.0};//ratio
 float knee[]={1000,10000,9000,8000,8000,1000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
