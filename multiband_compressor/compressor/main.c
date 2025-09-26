@@ -32,6 +32,7 @@ double run_comp(Compressor comp,double release, double attack, double target, do
   int size = comp->ring_size;
   double excluded = comp->ring[size-1];
 
+  double* end_ptr = comp->ring + size;
   memmove(comp->ring + 1,comp->ring,sizeof(double)*(size-1));
   comp->ring[0]=input;
 
@@ -41,8 +42,38 @@ double run_comp(Compressor comp,double release, double attack, double target, do
   double max = fabs(excluded);
   if(comp->method == COMP_PEAK){
 
-    for(int i=0;i<size;i++)
-      max = fmax(comp->ring[i],max);
+    if(size % 4 == 0){
+     for(double* pt=comp->ring;pt<end_ptr;pt++){
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+      }
+
+    
+    }else if(size % 3 == 0){
+     for(double* pt=comp->ring;pt<end_ptr;pt++){
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+      }
+
+    }else if(size % 2 == 0){
+     for(double* pt=comp->ring;pt<end_ptr;pt++){
+        max = fmax(*pt,max);
+        pt++;
+        max = fmax(*pt,max);
+      }
+
+    }else{
+      for(double* pt=comp->ring;pt<end_ptr;pt++)
+        max = fmax(*pt,max);
+    }
     
   }else{
       max = fabs(input); 

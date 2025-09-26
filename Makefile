@@ -8,7 +8,7 @@ LIMITER=./lookahead_limiter/lookaheadlim.c
 DEXPANDER=./downward_expander/dxpander.c
 MPX=./MPX/generator.c
 
-FLAGS=-O1 -g -march=native 
+FLAGS=-O3 -fno-fast-math -march=native 
 
 
 all:
