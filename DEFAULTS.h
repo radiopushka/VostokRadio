@@ -9,16 +9,16 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={58 ,  56 , 54, 52 ,50, 54}; // will affect phase
-float def_attack[]={ 300   ,0.0001  ,  0.004    ,0.007  , 0.35   ,0.000000000000005};//multiband compression attack
-float def_release[]={ 600 , 77  ,65 ,35  ,10   ,0.001000}; //multiband compression release
-float def_target[]={24000,10000,9000,10000,16000,24000}; //multiband compression target volume 
+float def_attack[]={ 300   ,0.0001  ,  0.004    ,0.007  , 0.35   ,0.0001};//multiband compression attack
+float def_release[]={ 600 , 77  ,65 ,35  ,10   ,0.0005000}; //multiband compression release
+float def_target[]={24000,10000,9000,10000,16000,26000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,6}; //make up gain
 float pre_amp[]={1,1,0.2,0.4,0.6,1}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,0.05,0.05,0.2,0.6,1}; // band compression post amplification
-float effect[]={4,12,12.0,12.0,12.0,22.0};//ratio
-float knee[]={5000,4000,8000,8000,8000,100};//knee
+float post_amp[]={1,0.1,0.05,0.1,0.6,4}; // band compression post amplification
+float effect[]={4,12,30.0,30.0,30.0,22.0};//ratio
+float knee[]={5000,8000,8000,8000,8000,100};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
