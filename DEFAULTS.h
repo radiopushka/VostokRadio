@@ -8,15 +8,15 @@ int fdef_size=6;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-int   lookaheads[]={58 ,  56 , 54, 52 ,50, 54}; // will affect phase
-float def_attack[]={ 300   ,0.0001  ,  0.004    ,0.007  , 0.35   ,0.0001};//multiband compression attack
+int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
+float def_attack[]={ 300   ,10  ,  40  ,17  , 9.5   ,0.001};//multiband compression attack
 float def_release[]={ 600 , 77  ,65 ,35  ,10   ,0.0005000}; //multiband compression release
-float def_target[]={24000,10000,9000,10000,16000,26000}; //multiband compression target volume 
-float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,6}; //make up gain
-float pre_amp[]={1,1,0.2,0.4,0.6,1}; //multiband compressor pre compression gain
+float def_target[]={26000,18000,19000,20000,20000,26000}; //multiband compression target volume 
+float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,12}; //make up gain
+float pre_amp[]={4,1,1,1,1,2}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,0.1,0.05,0.1,0.6,4}; // band compression post amplification
+float post_amp[]={1,1,1,1,6,20}; // band compression post amplification
 float effect[]={4,12,30.0,30.0,30.0,22.0};//ratio
 float knee[]={5000,8000,8000,8000,8000,100};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
@@ -44,11 +44,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 8 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 2
+#define SIGMOIDAL_CO 3
 #define SIGMOIDAL_ATTACK  0.001
 #define SIGMOIDAL_RELEASE 0.001
 #define SIGMOIDAL_BUFFER 200

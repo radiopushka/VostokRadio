@@ -4,10 +4,12 @@
 double gain=10;
 
 double gain_max=40;
-double gain_max_half=30;
+double gain_max_half=15;
 int dtime=0;
 double avg_error=0;
 double avg_audio=0;
+
+
 
 #define PIHALF 1.570796327
 

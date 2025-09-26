@@ -106,6 +106,7 @@ void mux(fmux mux,double in){
       break;
     }
     ft++;
+    audio=run_f(*ft,audio);
     *dptr=audio;
     dptr++;
   }
@@ -139,7 +140,7 @@ double demux(fmux mux){
     if(i==0){
       ret=pull;
     }else{
-      ret=ret+pull;
+      ret=(ret+pull);
      }
     filters++;
   }
