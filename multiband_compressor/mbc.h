@@ -18,6 +18,7 @@ struct Multiband{
   int* bypass;
   double* post_amp;
 
+
   fmux freq_mux;
 };
 
@@ -25,7 +26,7 @@ typedef struct Multiband* Multiband;
 
 
 //create the multiband compressor object
-Multiband create_mbt(fmux freq_mux);
+Multiband create_mbt(fmux freq_mux,int* lookaheads);
 //get the number of mutliband compressors present
 int get_size(Multiband mbt);
 

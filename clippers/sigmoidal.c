@@ -82,15 +82,13 @@ double mimic_tanh(double input,double ratio, double limit){
 double apply_sigmoidal(SLim limiter, double input){
 
   double* ring_buffer=limiter->ring;
-  double* aux_buffer=limiter->helper;
 
   double return_val = *(ring_buffer + limiter->size - 1);
 
 
-  memmove(aux_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
-  *aux_buffer = input;
+  memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
+  *ring_buffer = input;
 
-  memmove(ring_buffer,aux_buffer,limiter->bsize_pre);
 
   //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
   double mstart = fabs(return_val);

@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-Multiband create_mbt(fmux freq_mux){
+Multiband create_mbt(fmux freq_mux,int* compressor_lookahead){
   Multiband mbt=malloc(sizeof(struct Multiband));
   int num_comps=freq_mux->num_segs;
 
@@ -37,11 +37,15 @@ Multiband create_mbt(fmux freq_mux){
   mbt->post_amp=post_gain;
   mbt->bypass=bypass;
 
+  //mbt->lookahead = malloc(sizeof(double)*lookahead);
+  //mbt->lookahead_size = lookahead;
+
   mbt->freq_mux=freq_mux;
 
 
   for(Compressor* cit=cmp;cit<cmpend;cit++){
-    *cit=create_compressor(COMP_RMS);
+    *cit=create_compressor(COMP_RMS,*compressor_lookahead);//peak detection buffer
+    compressor_lookahead++;
   }
 
   return mbt;
@@ -145,7 +149,7 @@ void free_multiband(Multiband mbc){
   Compressor* ptrstart=mbc->compressors;
   Compressor* end=mbc->end_ptr;
   for(Compressor* cc=ptrstart;cc<end;cc++){
-    free(*cc);
+    free_compressor(*cc);
   }
   free(ptrstart);
   free(mbc->attacks);

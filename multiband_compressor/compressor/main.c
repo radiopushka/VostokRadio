@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
 //Evan Nikitin 2025
-Compressor create_compressor(int method){
+Compressor create_compressor(int method,int lookahead){
   Compressor comp=malloc(sizeof(struct Compressor));
   comp->avg=16000;//large value to prevent startup distortion
   comp->prev_val=0;
@@ -13,33 +15,37 @@ Compressor create_compressor(int method){
   comp->gain=1;
   comp->ratio=1;
   comp->knee=0.3;
+  comp->ring_size=lookahead;
+  comp->ring=malloc(sizeof(double)*lookahead);
   comp->method=method;
-  memset(comp->ring,0,sizeof(double)*15);
+  memset(comp->ring,0,sizeof(double)*lookahead);
   return comp;
 }
 
+void free_compressor(Compressor comp){
+  free(comp->ring);
+  free(comp);
+}
 double run_comp(Compressor comp,double release, double attack, double target, double input,double gate,double max_gain,int bypass){
 
   
+  int size = comp->ring_size;
+  double excluded = comp->ring[size-1];
 
-  double helper[15];
-  double excluded = comp->ring[14];
-
-  memmove(helper + 1,comp->ring,sizeof(double)*14);
-  helper[0]=input;
-  memmove(comp->ring,helper,sizeof(double)*15);
+  memmove(comp->ring + 1,comp->ring,sizeof(double)*(size-1));
+  comp->ring[0]=input;
 
   if(bypass == 1)
     return excluded;
 
   double max = fabs(excluded);
-  for(int i=0;i<15;i++){
-    double pull = comp->ring[i];
-    if(comp->method != COMP_PEAK){
-      max = (max + fabs(pull))/2;
-    }else if(fabs(pull) > max){
-      max = pull;
-    }
+  if(comp->method == COMP_PEAK){
+
+    for(int i=0;i<size;i++)
+      max = fmax(comp->ring[i],max);
+    
+  }else{
+      max = fabs(input); 
   }
 
   input = max;

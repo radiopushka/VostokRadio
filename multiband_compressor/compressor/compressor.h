@@ -2,6 +2,7 @@
 #ifndef COMPRESSOR
 #define COMPRESSOR
 //Evan Nikitin 2025
+//
 struct Compressor{
   double avg;
   double prev_val;
@@ -9,7 +10,8 @@ struct Compressor{
   double gain;
   double knee;
   double ratio;
-  double ring[15];
+  int ring_size;
+  double* ring;
   int method;
 };
 
@@ -19,8 +21,9 @@ struct Compressor{
 typedef struct Compressor* Compressor;
 
 //method: 1=peak detector 0=RMS
-Compressor create_compressor(int method);
+Compressor create_compressor(int method,int ring_size);
 
 double run_comp(Compressor comp,double release, double attack, double target,double input,double gate,double max_gain,int bypass);
 
+void free_compressor(Compressor comp);
 #endif // !COMPRESSOR

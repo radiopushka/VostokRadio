@@ -132,9 +132,9 @@ int main(){
   //multiband compression
 
 
-  Multiband lmbt=create_mbt(lmux);
-  Multiband rmbt=create_mbt(rmux);
-  Multiband mmbt=create_mbt(mmux);//mono
+  Multiband lmbt=create_mbt(lmux,lookaheads);
+  Multiband rmbt=create_mbt(rmux,lookaheads);
+  Multiband mmbt=create_mbt(mmux,lookaheads);//mono
 
   SLim sigmoidal1 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
   SLim sigmoidal2 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
