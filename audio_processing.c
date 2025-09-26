@@ -51,7 +51,7 @@ double h_compressor_left(double signal,double gain,int location){
     return gain;
   #endif /* ifdef MONO_COMPRESSION */
   gains[location]=gain;
-  double amplitude=power_at(lmux,location);
+  double amplitude=power_at(lmux,location)/2;
   pvals[location]=signal*gain;
   if(mix_stereo[location]==1){
 
