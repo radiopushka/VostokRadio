@@ -9,7 +9,7 @@ int fdef_size=6;
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 float def_attack[]={ 0.340   ,0.000001  ,  0.000004    ,0.000071  , 0.000035   ,0.0005};//multiband compression attack
 float def_release[]={ 1.000 , 0.7700  ,0.6500 ,0.3500  ,0.2000   ,0.01000}; //multiband compression release
-float def_target[]={21000,21000,19000,19000,21500,23000}; //multiband compression target volume 
+float def_target[]={21000,21000,15000,15000,21500,23000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.6,1.15,1.15,1.6,2}; //make up gain
 float pre_amp[]={1,1,0.2,0.4,0.6,1}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
@@ -73,11 +73,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band co
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
-#define POST_AGC_GAIN 1
+#define POST_AGC_GAIN 2
 
-#define AGC_TARG 18000 //input AGC baseline target
+#define AGC_TARG 24000 //input AGC baseline target
 
-#define AGC_SPEED 0.00008 //response coefficient
+#define AGC_SPEED 0.008 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00008 //response coefficient
