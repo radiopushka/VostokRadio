@@ -16,7 +16,7 @@ float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,0.1,0.05,0.2,1,1}; // band compression post amplification
 float effect[]={4,12,12.0,12.0,12.0,22.0};//ratio
-float knee[]={5000,9000,10000,10000,9000,2000};//knee
+float knee[]={5000,4000,4000,4000,4000,2000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
