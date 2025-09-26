@@ -44,35 +44,35 @@ double run_comp(Compressor comp,double release, double attack, double target, do
 
     if(size % 4 == 0){
      for(double* pt=comp->ring;pt<end_ptr;pt++){
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
       }
 
     
     }else if(size % 3 == 0){
      for(double* pt=comp->ring;pt<end_ptr;pt++){
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
       }
 
     }else if(size % 2 == 0){
      for(double* pt=comp->ring;pt<end_ptr;pt++){
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
         pt++;
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
       }
 
     }else{
       for(double* pt=comp->ring;pt<end_ptr;pt++)
-        max = fmax(*pt,max);
+        max = fmax(fabs(*pt),max);
     }
     
   }else{
