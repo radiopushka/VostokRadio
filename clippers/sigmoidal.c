@@ -110,7 +110,7 @@ double apply_sigmoidal(SLim limiter, double input){
   double rstart = fabs(mimic_tanh(attarashi_v , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
   if(rstart > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstart)*10000);
+    double diff=(((limiter->limit - limiter->range)/rstart)*7000);
     limiter->dynamic_ratio=limiter->dynamic_ratio  + (limiter->attack / diff);
    if(limiter->dynamic_ratio>10){
       limiter->dynamic_ratio = 10;
