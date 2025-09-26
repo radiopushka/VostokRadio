@@ -47,8 +47,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band co
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.0001
-#define SIGMOIDAL_RELEASE 0.0001
+#define SIGMOIDAL_ATTACK  0.01
+#define SIGMOIDAL_RELEASE 0.01
 #define SIGMOIDAL_BUFFER 50
 #define SIGMOIDAL_DRANGE 2000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
