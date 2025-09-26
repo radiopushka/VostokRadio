@@ -13,7 +13,7 @@ float def_attack[]={ 300   ,100  ,  30  ,20  , 15   ,6};//multiband compression 
 float def_release[]={ 600 , 300  ,250 ,150 ,100   ,10}; //multiband compression release
 float def_target[]={26000,18000,19000,20000,19000,26000}; //multiband compression target volume 
 float def_m_gain[]={1.3,1.15,1.15,1.15,1.6,2}; //make up gain
-float pre_amp[]={4,1,1,1,1,20}; //multiband compressor pre compression gain
+float pre_amp[]={4,1,1,1,1,15}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={2,1,1,1,1,2}; // band compression post amplification
@@ -35,7 +35,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define EXPANDER_ATTACK 0.0001
 #define EXPANDER_RELEASE 0.005
 #define EXPANDER_GAIN 0.000001
-#define EXPANDER_THRESHOLD 10000
+#define EXPANDER_THRESHOLD 6000
 
 /* Not yet implemented
 #define GATE
@@ -49,7 +49,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.005
+#define SIGMOIDAL_ATTACK  0.01
 #define SIGMOIDAL_RELEASE 0.005
 #define SIGMOIDAL_BUFFER 200
 #define SIGMOIDAL_DRANGE 2000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
@@ -77,7 +77,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 			 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 6000 //input AGC baseline target
+#define AGC_TARG 8000 //input AGC baseline target
 
 #define AGC_SPEED 0.000001 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
