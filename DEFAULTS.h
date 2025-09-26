@@ -9,9 +9,9 @@ int fdef_size=6;
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 float def_attack[]={ 0.640   ,0.01  ,0.04 ,0.071  ,0.035   ,0.0000000010};//multiband compression attack
 float def_release[]={ 1.000  ,17.0  ,6.50 ,3.50  ,0.50   ,0.0001000}; //multiband compression release
-float def_target[]={5000,2000,3000,4000,5000,5000}; //multiband compression target volume 
+float def_target[]={6000,2000,3000,4000,5000,5000}; //multiband compression target volume 
 float def_m_gain[]={1.3,1,1.15,1.3,1.6,2}; //make up gain
-float pre_amp[]={9,1,0.1,0.2,0.3,14}; //multiband compressor pre compression gain
+float pre_amp[]={6,1,0.1,0.2,0.3,14}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,0.3,0.4,0.5,0.6,1}; // band compression post amplification
@@ -47,8 +47,8 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.000005
-#define SIGMOIDAL_RELEASE 0.0000001
+#define SIGMOIDAL_ATTACK  0.0000005
+#define SIGMOIDAL_RELEASE 0.00000001
 #define SIGMOIDAL_BUFFER 50
 #define SIGMOIDAL_DRANGE 8000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
