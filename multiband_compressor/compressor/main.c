@@ -112,6 +112,10 @@ double run_comp(Compressor comp,double release, double attack, double target, do
     comp->gain=max_gain;
   }
 
+  if(comp->gain < 0.0000001){
+    comp->gain = 0.0000001;
+  }
+
   comp->prevprev_val=comp->prev_val;
   comp->prev_val=slope2;
   return (((comp->gain)*(comp->ratio))+(1-comp->ratio)) * excluded;
