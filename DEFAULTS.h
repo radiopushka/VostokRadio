@@ -9,14 +9,14 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 600   ,300  ,  150  ,40  , 15   ,1};//multiband compression attack
-float def_release[]={ 100 , 17  ,15 ,5  ,1   ,0.001000}; //multiband compression release
+float def_attack[]={ 100   ,17  ,  15  ,5  , 5   ,0.5};//multiband compression attack
+float def_release[]={ 600 , 300  ,100 ,20 ,20   ,1}; //multiband compression release
 float def_target[]={26000,18000,19000,20000,19000,29000}; //multiband compression target volume 
-float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,8}; //make up gain
+float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,4}; //make up gain
 float pre_amp[]={4,1,1,1,1,8}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={2,1,1,1,1,8}; // band compression post amplification
+float post_amp[]={2,1,1,1,1,4}; // band compression post amplification
 float effect[]={4,12,30.0,30.0,30.0,22.0};//ratio
 float knee[]={1000,10000,9000,8000,8000,1000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
@@ -44,11 +44,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 2 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.5 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 3
+#define SIGMOIDAL_CO 2
 #define SIGMOIDAL_ATTACK  0.005
 #define SIGMOIDAL_RELEASE 0.005
 #define SIGMOIDAL_BUFFER 200
@@ -77,7 +77,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 			 
 #define POST_AGC_GAIN 2.5
 
-#define AGC_TARG 27000 //input AGC baseline target
+#define AGC_TARG 15000 //input AGC baseline target
 
 #define AGC_SPEED 0.01 //response coefficient
 //#define AGC_SPEED 0 //response coefficient

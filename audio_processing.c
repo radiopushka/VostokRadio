@@ -18,8 +18,8 @@ void set_compressor_defaults(Multiband mbt){
     int size=fdef_size;
     for(int i=0;i<size;i++){
       //convert attack and release based on rate
-      set_attack(mbt,i,def_attack[i]/48000.0);
-      set_release(mbt,i,def_release[i]/48000.0);
+      set_attack(mbt,i,48000.0/(def_attack[i]*48000000.0));
+      set_release(mbt,i,48000.0/(def_release[i]*48000000.0));
       set_target(mbt,i,def_target[i]);
       set_gate(mbt,i,def_gate[i]);
       set_max_gain(mbt,i,def_m_gain[i]);
