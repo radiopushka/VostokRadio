@@ -9,8 +9,8 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 100   ,17  ,  15  ,5  , 5   ,0.1};//multiband compression attack
-float def_release[]={ 600 , 300  ,100 ,20 ,20   ,1}; //multiband compression release
+float def_attack[]={ 100   ,17  ,  15  ,15  , 15   ,3};//multiband compression attack
+float def_release[]={ 600 , 300  ,100 ,45 ,40   ,10}; //multiband compression release
 float def_target[]={26000,18000,19000,20000,19000,29000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.15,1.15,1.15,1.6,2}; //make up gain
 float pre_amp[]={4,1,1,1,1,16}; //multiband compressor pre compression gain
@@ -52,7 +52,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define SIGMOIDAL_ATTACK  0.005
 #define SIGMOIDAL_RELEASE 0.005
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_DRANGE 6000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE 4000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
