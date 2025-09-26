@@ -7,11 +7,11 @@ int fdef[]={60,250,350,3000,6000,16000}; //multiband compression filters
 int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-float def_attack[]={ 0.140   ,0.000001  ,  0.000004    ,0.000071  , 0.000035   ,0.0005};//multiband compression attack
+float def_attack[]={ 0.340   ,0.000001  ,  0.000004    ,0.000071  , 0.000035   ,0.0005};//multiband compression attack
 float def_release[]={ 1.000 , 0.7700  ,0.6500 ,0.3500  ,0.2000   ,0.01000}; //multiband compression release
 float def_target[]={21000,21000,19000,19000,23000,23000}; //multiband compression target volume 
 float def_m_gain[]={1.6,1.6,1.15,1.15,1.6,2}; //make up gain
-float pre_amp[]={0.8,1,0.2,0.4,0.6,1}; //multiband compressor pre compression gain
+float pre_amp[]={1,1,0.2,0.4,0.6,1}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,0.1,0.05,0.2,1,1}; // band compression post amplification
@@ -42,7 +42,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK};//band co
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 8 // can change the global gain after the multiband compressor
+#define FINAL_AMP 7 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
