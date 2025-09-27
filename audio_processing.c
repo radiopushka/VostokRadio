@@ -190,6 +190,7 @@ int main(){
   gains=malloc(sizeof(double)*fdef_size);
   pvals=malloc(sizeof(double)*fdef_size);
 
+  int process_zeros=-1;
 
   while(c!='q' && c!=CTRLC){
     //printf("buffer1\n");
@@ -233,7 +234,7 @@ int main(){
         }else{
           time_off=0;
         }
-        if(time_off<is_silence){
+        if(time_off<is_silence && !(process_zeros==-1 && *start ==0)){
           if(*start!=0){
             buffer = *start;
             
