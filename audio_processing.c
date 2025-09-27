@@ -108,8 +108,8 @@ int main(){
 
   //final low pass (this is the setting for AM 15khz)
   //pretty soon FM MPX will be supported
-  afilter lpassfinal=poled_f(rate1,15000,5,0);
-  afilter rpassfinal=poled_f(rate1,15000,5,0);
+  afilter lpassfinal=poled_f(rate1,17000,5,0);
+  afilter rpassfinal=poled_f(rate1,17000,5,0);
 
 
   //pre agc bass filter
