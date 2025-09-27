@@ -165,7 +165,7 @@ int main(){
   float sin_clip_c1=get_sin_clip_coeff(32760);
 
   int time_off=0;
-  int is_silence=2000000;
+  int is_silence=20000;
 
   int avg_post_agc=0;
   int avg_pre_agc=0;
@@ -190,7 +190,7 @@ int main(){
   gains=malloc(sizeof(double)*fdef_size);
   pvals=malloc(sizeof(double)*fdef_size);
 
-  int process_zeros=-1;
+  int process_zeros=1;
 
   while(c!='q' && c!=CTRLC){
     //printf("buffer1\n");
