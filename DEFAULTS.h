@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 4 // can change the global gain after the multiband compressor
+#define FINAL_AMP 3.7 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -77,7 +77,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 			 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 12000 //input AGC baseline target
+#define AGC_TARG 13000 //input AGC baseline target
 
 #define AGC_SPEED 0.000001 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
