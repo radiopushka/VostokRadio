@@ -134,12 +134,11 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
   double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
 
-  double st_c = tanh_func(ma2 , ratios , limit);
-  double mono_cap = limit + limit - st_c;
-  double mono_c = tanh_func(ma1 , ratiom , mono_cap);
+  double mono_c = tanh_func(ma1 , ratiom , limit + limit);
   double stereo_cap = limit + limit - mono_c;
+  double st_c = tanh_func(ma2 , ratios , stereo_cap );
 
-  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,mono_cap);
+  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit + limit);
   double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,stereo_cap);
 
   if(rstartm > limiter->limit - limiter->range){
@@ -174,19 +173,10 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
   ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
 
-  st_c = tanh_func(retst , ratios , limit);
-  mono_cap = limit + limit - fabs(st_c);
-  mono_c = tanh_func(retmono , ratiom , mono_cap);
-  // handle mono clip overdrive
-  if(fabs(mono_c) > mono_cap * 0.75){
-    mono_cap = limit + limit;
-    mono_c = tanh_func(retmono , ratiom , mono_cap);
-  }
+  mono_c = tanh_func(retmono , ratiom , limit + limit);
   stereo_cap = limit + limit - fabs(mono_c);
   st_c = tanh_func(retst , ratios , stereo_cap);
 
-  limiter-> limit_b2 = stereo_cap;
-  limiter-> limit_b  = mono_cap;
 
   *input1 = mono_c;
   *input2 = st_c;
