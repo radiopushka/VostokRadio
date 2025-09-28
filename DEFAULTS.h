@@ -12,8 +12,8 @@ int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 600   ,250  ,  150  ,80  , 30  ,2};//multiband compression attack
 float def_release[]={ 5000 , 3300  ,2000 ,1000 ,750   ,3}; //multiband compression release
 float def_target[]={36000,6000,8000,8000,8000,30000}; //multiband compression target volume 
-float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,2}; //make up gain
-float pre_amp[]={4,1,1,1,1,20}; //multiband compressor pre compression gain
+float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,4}; //make up gain
+float pre_amp[]={4,1,1,1,1,15}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 3.5 // can change the global gain after the multiband compressor
+#define FINAL_AMP 4 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
