@@ -75,31 +75,31 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
     release=release/(agc->gain - agc->gain_avg + 1);
   }
 
-    float cur_val=agc->avg_audio;
-    float error=target-cur_val;
+    double cur_val=agc->avg_audio;
+    double error2=target-cur_val;
     if(agc->dtime==0){
-      agc->avg_error=error;
+      agc->avg_error=error2;
       agc->dtime=1;
     }else{
-      agc->avg_error=(agc->avg_error+error)/2;
+      agc->avg_error=(agc->avg_error+error2)/2;
     }
   
 
-  if(agc->avg_error > 32767){
-    agc->avg_error = 32767;
-    if(agc->gain > agc->gain_avg)
-      agc->gain = agc->gain_avg;
-  }else if(agc->avg_audio < -32767){
+  double mult=1;
+  double error=agc->avg_error;
+  if(error > 32767){
+    for(;error>32767;error=error - 32767)
+      mult=mult+1;
+   }else if(error < -32767){
+    for(;error<-32767;error=error + 32767)
+      mult=mult+1;
 
-    if(agc->gain > agc->gain_avg)
-      agc->gain = agc->gain_avg;
-
-    agc->avg_error = -32767;
+   
   }
   
   //roll down slow roll up quickyl
   if(agc->avg_audio<thresh){
-    float vcalc=sin(agc->avg_error/20860);
+    float vcalc=sin(error/20860)*mult;
     if(vcalc<0){
       vcalc=-(1+vcalc);
     }else{
@@ -107,12 +107,12 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
     }
     agc->gain=agc->gain*(1+vcalc*sens);
   }else{
-    if(release!=0 && agc->avg_error > 0){
+    if(release!=0 && error > 0){
 
-      agc->gain=agc->gain*(1+sin(agc->avg_error/20860)*release);
+      agc->gain=agc->gain*(1+sin(error/20860)*release*mult);
       //gain=gain*(1+release);
-    }else if (agc->avg_error<0){
-      agc->gain=agc->gain*(1-sin(agc->avg_error/20860)*sens);
+    }else if (error<0){
+      agc->gain=agc->gain*(1-sin(error/20860)*sens*mult);
       //gain=gain*(1-sens);
     }
     
