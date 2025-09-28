@@ -175,8 +175,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   mono_c = tanh_func(retmono , ratiom , limit + limit);
   stereo_cap = limit + limit - fabs(mono_c);
-  double attenuation = (limit + limit)/stereo_cap;// softer clipping
-  st_c = tanh_func(retst/attenuation , ratios , stereo_cap);
+  double attenuation = (limit + limit)/stereo_cap - 1;// softer clipping
+  st_c = tanh_func(retst , ratios + attenuation , stereo_cap);
 
 
   *input1 = mono_c;
