@@ -152,4 +152,8 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 This software is intended for educational and experimental purposes. Ensure compliance with local regulations when transmitting radio signals.
 
 <img width="1628" height="1091" alt="2025-09-24_10-55" src="https://github.com/user-attachments/assets/22844413-17af-4eae-ae71-2a6e21b36332" />
+with these settings:
+<img width="1867" height="790" alt="2025-09-27_23-45" src="https://github.com/user-attachments/assets/193cc903-ca14-4493-b557-b86169f94058" />
+<img width="841" height="318" alt="2025-09-27_23-46" src="https://github.com/user-attachments/assets/846420e5-182f-4814-8d9f-c03e5f9aab91" />
+
 
