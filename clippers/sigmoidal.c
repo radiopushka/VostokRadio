@@ -4,7 +4,8 @@
 
 //Evan Nikitin 2025
 struct sigmoidal_lookahead{
-  double dynamic_ratio;
+  double dynamic_ratio_m;
+  double dynamic_ratio_s;
   double* ring;
   double* limit_b;
   double* limit_b2;
@@ -31,7 +32,8 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->limit_b2= malloc(sizeof(double)*buffersize);
   limiter->ratio=ratio;
   limiter->limit=limit;
-  limiter->dynamic_ratio=0;
+  limiter->dynamic_ratio_s=0;
+  limiter->dynamic_ratio_m=0;
   limiter->range=range;
   limiter->size=buffersize;
   limiter->limiter_half = limit * 1.5;
@@ -110,45 +112,66 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
   //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
-  double ma1 = fabs(retmono + retst);
+  double ma1 = fabs(retmono);
 
+  double ma2 = fabs(retst);
 
 
   ring_buffer=limiter->ring;
   for(double* bwalk=ring_buffer; bwalk < ring_buffer + limiter->size; bwalk++){
-    double absval = fabs(*bwalk + *ring_buffer2);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
+    double absval = fabs(*bwalk);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
+    double absval2 = fabs(*ring_buffer2);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
 
     ring_buffer2++;
     if(absval > ma1){
       ma1 = absval;
     }
+    if(absval2 > ma2){
+      ma2 = absval2;
+    }
 
   }
-  double rstart = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio , limiter->limit,limiter->limiter_half);
+  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limiter->limiter_half);
+  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limiter->limiter_half);
 
-  if(rstart > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstart)*50);
-    limiter->dynamic_ratio=limiter->dynamic_ratio  + (limiter->attack / diff);
-   if(limiter->dynamic_ratio>10){
-      limiter->dynamic_ratio = 10;
+  if(rstartm > limiter->limit - limiter->range){
+    double diff=(((limiter->limit - limiter->range)/rstartm)*50);
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m  + (limiter->attack / diff);
+   if(limiter->dynamic_ratio_m>10){
+      limiter->dynamic_ratio_m = 10;
     }
 
   }else{
-    double diff=((rstart/(limiter->limit - limiter->range))*50);
-    limiter->dynamic_ratio=limiter->dynamic_ratio - (limiter->release / diff);
-    if(limiter->dynamic_ratio<0){
-      limiter->dynamic_ratio = 0;
+    double diff=((rstartm/(limiter->limit - limiter->range))*50);
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m - (limiter->release / diff);
+    if(limiter->dynamic_ratio_m<0){
+      limiter->dynamic_ratio_m = 0;
     }
   }
 
+  if(rstarts > limiter->limit - limiter->range){
+    double diff=(((limiter->limit - limiter->range)/rstartm)*50);
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s  + (limiter->attack / diff);
+   if(limiter->dynamic_ratio_s>10){
+      limiter->dynamic_ratio_s = 10;
+    }
+
+  }else{
+    double diff=((rstartm/(limiter->limit - limiter->range))*50);
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s - (limiter->release / diff);
+    if(limiter->dynamic_ratio_s<0){
+      limiter->dynamic_ratio_s = 0;
+    }
+  }
   double limit = limiter->limit;
-  double ratio = limiter->ratio + limiter->dynamic_ratio*0.4;
-  double st_c = tanh_func(retst , ratio , limit);
+  double ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
+  double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
+  double st_c = tanh_func(retst , ratios , limit);
   double mono_cap = limit + limit - fabs(st_c);
-  double mono_c = tanh_func(retmono , ratio , mono_cap);
+  double mono_c = tanh_func(retmono , ratiom , mono_cap);
   double stereo_cap = limit + limit - fabs(mono_c);
-  st_c = tanh_func(retst , ratio , stereo_cap);
+  st_c = tanh_func(retst , ratios , stereo_cap);
 
 
   *input1 = mono_c;
