@@ -2,7 +2,7 @@
 #include "agc/agc.c"
 #include "stereo_demux.c"
 #include "./clippers/sin_clip.c"
-#include "./clippers/sigmoidal.c"
+#include "./sigmoidal_composite.c"
 #include "./stereo/stereo_amp.c"
 #include "./multiband_compressor/mbc.h"
 #include "./lookahead_limiter/lookaheadlim.h"
@@ -63,8 +63,6 @@ double h_compressor_left(double signal,double gain,int location){
 }
 
 int main(){
-  float mt1,mt2;
-  mt1 = 32767; mt2 = 32767; 
   int ch1=2;
   int ch2=2;
   int rate1=48000;
@@ -95,8 +93,8 @@ int main(){
   
   int buffer_t[i_buffer_size];//input buffer
   double buffer_tf[i_buffer_size];//input buffer
-  int helper_buffer[i_buffer_size];
-  int* helper_buffer_end=helper_buffer+i_buffer_size;
+  double helper_buffer[i_buffer_size];
+  double* helper_buffer_end=helper_buffer+i_buffer_size;
   int* buffer_end=buffer_t+i_buffer_size;
   double* buffer_endf=buffer_tf+i_buffer_size;
   int* o_buffer_end=buffer_o+buffer_size;
@@ -136,8 +134,9 @@ int main(){
   Multiband rmbt=create_mbt(rmux,lookaheads);
   Multiband mmbt=create_mbt(mmux,lookaheads);//mono
 
-  SLim sigmoidal1 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
-  SLim sigmoidal2 = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+
+
 
   //final limiter
   /*Limiter migi = create_limiter(FINAL_CLIP_LOOKAHEAD);
@@ -162,7 +161,6 @@ int main(){
 
   //clipper coefficient
   //this value is the maximum expected input value
-  float sin_clip_c1=get_sin_clip_coeff(32760);
 
   int time_off=0;
   int is_silence=20000;
@@ -223,7 +221,7 @@ int main(){
       avg_pre_clip=0;
       
 
-      int* helper_dr=helper_buffer;
+      double* helper_dr=helper_buffer;
       for(double* start=buffer_tf;start<buffer_endf;start++){
         #ifndef BYPASS
         
@@ -241,8 +239,6 @@ int main(){
             if(count%2==0){
             
 
-		    /*dc_removal_l2 = dc_removal_l2 + (buffer- dc_removal_l2)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_l2;*/
              #ifdef HIGH_PASS
 
               buffer=run_f(lbassc3,buffer);
@@ -257,8 +253,6 @@ int main(){
               
             }else{
 
-		    /*dc_removal_r2 = dc_removal_r2 + (buffer- dc_removal_r2)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_r2;*/
 
              #ifdef HIGH_PASS
 
@@ -282,17 +276,6 @@ int main(){
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
             }
-
-            /*if(count%2==0){
-            //remove the AGC artifacts
-            dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
-            dc_removal_l = dc_removal_l + (buffer- dc_removal_l)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_l;
-            }else{
-            dc_removal_r = dc_removal_r + (buffer- dc_removal_r)*DC_REMOVAL_COEFF;
-              buffer=buffer - dc_removal_r;
-            }*/
-
             //this value is the maximum value the clipper can reach
             #ifdef DYNAMIC_COMPRESSOR
             
@@ -335,23 +318,11 @@ int main(){
             }
                        
           
-            #ifdef FINAL_CLIP 
-              //buffer=run_limiter(hidari,buffer*FINAL_AMP,30000,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
-
-            #else
-              buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt1);
-            #endif 
-
-            buffer=run_f(lpassfinal,buffer);
+              buffer=run_f(lpassfinal,buffer);
             #ifdef HIGH_PASS
               buffer=run_f(lbassc2,buffer);
             #endif /* ifdef MACRO */
-           #ifdef FINAL_CLIP 
-              //buffer=run_limiter(hidari_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker1);
-              buffer=apply_sigmoidal(sigmoidal1,buffer);
-            #endif
+         
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -394,22 +365,13 @@ int main(){
               avg_pre_clip=abs(buffer);
             }
          
-            #ifdef FINAL_CLIP 
-              //buffer=run_limiter(migi,buffer*FINAL_AMP,30000,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31000,SIGMOIDAL_CO);
-            #else
-              buffer=sin_clip_bouncy(buffer,sin_clip_c1,32767,&mt2);
-            #endif 
+          
 
             buffer=run_f(rpassfinal,buffer);
-           #ifdef HIGH_PASS
+            #ifdef HIGH_PASS
               buffer=run_f(rbassc2,buffer);
             #endif /* ifdef MACRO */
-            #ifdef FINAL_CLIP 
-              //buffer=run_limiter(migi_h,buffer*FINAL_AMP,31760,FINAL_CLIP_LOOKAHEAD_RELEASE );
-              //buffer=sigmoidal_clipper_tanh(buffer*FINAL_AMP,31760,SIGMOIDAL_CO,&clip_tracker2);
-              buffer=apply_sigmoidal(sigmoidal2,buffer);
-            #endif
+           
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -422,39 +384,45 @@ int main(){
         #else
 
           buffer=(*start);
-          buffer=apply_sigmoidal(sigmoidal1,buffer);
        
         #endif /* ifdef BYPASS */
-        buffer = buffer * 65538.0;
+        buffer = buffer;
         *helper_dr=buffer;
         //*helper_dr=buffer*65200.0;
         helper_dr++;
         count=~count;
       }
    
-      resample_up_stereo(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);
       #ifdef MPX_ENABLE
+        to_mpx(helper_buffer,helper_buffer_end);
+
+        #ifdef FINAL_CLIP
+          mpx_clip(sigmoidal,helper_buffer,helper_buffer_end,31767 );
+        #endif /* ifdef FINAL_CLIP */
+        gain_array(helper_buffer,helper_buffer_end,32769);
+        resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop,PERCENT_STEREO,PERCENT_MONO);
         if(rate2 == 96000||rate2 == 192000){
-	  int* right;
+	        int* right;
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             right=loop+1;
             
          
-            double mpx=get_mpx_next_value(*loop,*right,PERCENT_STEREO,PERCENT_MONO);
+            double mpx=get_mpx_next_value(*loop,*right);
 
-		#ifdef RIGHT_MPX
+		        #ifdef RIGHT_MPX
             		*right=mpx;
-		#else
-	    		*right=0;
-		#endif
-		#ifdef LEFT_MPX
+		        #else
+	    		      *right=*loop;
+		        #endif
+		        #ifdef LEFT_MPX
             		*loop=mpx;
-		#else
-	    		*loop=0;
-		#endif
+		        #else
+	    		      *loop=*loop;
+		        #endif
           }
-      }
-      
+        }
+      #else
+        resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop,1,1);
       #endif /* ifdef MPX_ENABLE */
       queue_audio(buffer_o);
       if(GUI==1){
@@ -477,8 +445,8 @@ int main(){
   free_f(rbassc3);
   free_f(lbassc3);
 
-  free_sigmoidal(sigmoidal1);
-  free_sigmoidal(sigmoidal2);
+  free_sigmoidal(sigmoidal);
+
   /*free_limiter(migi);
   free_limiter(hidari);
   free_limiter(migi_h);

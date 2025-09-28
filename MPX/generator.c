@@ -98,7 +98,7 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
             counter_secondary=counter_secondary+1;
           }
           counter=counter+1;
-          *s19=(v19/over_sampling);
+          *s19=(v19/over_sampling)*_pilot;
           *s38=(v38/over_sampling);
           s38++;
       }
@@ -109,15 +109,16 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
 
 void init_mpx(int ratekhz,float percent_pilot,float max){
-      init_mpx_cache(ratekhz,over_sample_co); 
       clip_value=(1.0-percent_pilot)*max;
       _pilot=percent_pilot*max;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
       st_bias_offset=percent_pilot*P2nd_DAC_HARMONIC;
+      init_mpx_cache(ratekhz,over_sample_co); 
 
 }
 
-double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
+//double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
+double get_mpx_next_value(double mono,double stereo){
 
 
   
@@ -125,9 +126,9 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
 
    
    //100percent: 32760
-  double mono = ((left+right)/2.0)*percent_mono;
-  double stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
-
+  //double mono = ((left+right)/2.0)*percent_mono;
+  //double stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
+ 
 
   //virtualy no need in adding this limiter
   /*
@@ -145,9 +146,6 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
   double k19=0;
   double k38=0;
 
-  m_lowpass2=(m_lowpass2*mult_pr+mono*mult_new);
-  m_lowpass=(m_lowpass*mult_pr+m_lowpass2*mult_new);
-  mono=m_lowpass;
 
 
   //sometimes it is better to just cut off this signal if there is not enough range to produce a more or less accurate waveform
@@ -161,8 +159,6 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
       stereo=ANALOG_BIAS;
   }*/
   stereo=stereo-HF_BIAS;
-  st_lowpass2=(st_lowpass2*mult_pr+stereo*mult_new);
-  st_lowpass=(st_lowpass*mult_pr+st_lowpass2*mult_new);
 
 
 
@@ -173,8 +169,8 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
           itterator=0;
   }
 
-	double val_pilot = _pilot*o19;
-	double val_audio = (st_lowpass)*o38;
+	double val_pilot = o19;
+	double val_audio = (stereo)*o38;
 
 		k19=val_pilot;
 		k38=val_audio;
@@ -183,20 +179,23 @@ double get_mpx_next_value(double left,double right,double percent_stereo,double 
 
 
 
-  return k38+k19+mono;
+  return k19+(k38+mono);
 
 
 
 }
 
-void resample_up_stereo(int* input,int* output,int* input_end,int ratio){
+void resample_up_stereo_mpx(double* input,int* output,double* input_end,int ratio,double percent_mono,double percent_stereo){
   
-  for(int* loop=input;loop<input_end;loop=loop+2){
-    int* right = loop + 1;
+  for(double* loop=input;loop<input_end;loop=loop+2){
+    double stereo = (*(loop + 1))*percent_mono;
+    double mono  = (*loop)*(percent_stereo - st_bias_offset);
     for(int i=0;i<ratio;i++){
-      *output=*loop;
+      //*output=*loop;
+      *output=mono;
       output++;
-      *output=*right;
+      //*output=*right;
+      *output=stereo;
       output++;
     }
 
