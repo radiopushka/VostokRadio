@@ -19,6 +19,7 @@ struct agc_info{
   int dtime;
   double avg_error;
   double avg_audio;
+  double gain_avg;
   double* ring_buffer;
   int buffer_size;
   size_t copy_size;
@@ -37,6 +38,7 @@ AGC create_agc(double gain_max,double gain_start,double gain_cut, int lookahead)
   agc->dtime=0;
   agc->avg_audio = 0;
   agc->avg_error = 0;
+  agc->gain_avg = gain_start;
 
   agc->ring_buffer = malloc(sizeof(double)*lookahead);
   memset(agc->ring_buffer,0,sizeof(double)*lookahead);
@@ -85,7 +87,12 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
 
   if(agc->avg_error > 32767){
     agc->avg_error = 32767;
+    if(agc->gain > agc->gain_avg)
+      agc->gain = agc->gain_avg;
   }else if(agc->avg_audio < -32767){
+
+    if(agc->gain > agc->gain_avg)
+      agc->gain = agc->gain_avg;
 
     agc->avg_error = -32767;
   }
@@ -126,6 +133,7 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
     agc->gain=1;
   }
 
+  agc->gain_avg = (agc->gain_avg + agc->gain)/2;
   //return sin((input*gain)/20860)*target;
   return output * agc->gain;
   /*
