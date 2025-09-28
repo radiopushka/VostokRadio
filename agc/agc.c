@@ -129,8 +129,8 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   if(agc->gain>agc->gain_max){
     agc->gain=agc->gain_max;
   }
-  if(agc->gain<1){
-    agc->gain=1;
+  if(agc->gain<0.000001){
+    agc->gain=0.000001;
   }
 
   agc->gain_avg = (agc->gain_avg + agc->gain)/2;
