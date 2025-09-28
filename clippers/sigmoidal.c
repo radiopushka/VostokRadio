@@ -128,8 +128,18 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     }
 
   }
-  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limiter->limit_b);
-  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limiter->limit_b2);
+
+  double limit = limiter->limit;
+  double ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
+  double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
+
+  double st_c = tanh_func(ma2 , ratios , limit);
+  double mono_cap = limit + limit - fabs(st_c);
+  double mono_c = tanh_func(ma1 , ratiom , mono_cap);
+  double stereo_cap = limit + limit - fabs(mono_c);
+
+  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,mono_cap);
+  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,stereo_cap);
 
   if(rstartm > limiter->limit - limiter->range){
     double diff=(((limiter->limit - limiter->range)/rstartm)*50);
@@ -160,13 +170,13 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       limiter->dynamic_ratio_s = 0;
     }
   }
-  double limit = limiter->limit;
-  double ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
-  double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
-  double st_c = tanh_func(retst , ratios , limit);
-  double mono_cap = limit + limit - fabs(st_c);
-  double mono_c = tanh_func(retmono , ratiom , mono_cap);
-  double stereo_cap = limit + limit - fabs(mono_c);
+  ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
+  ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
+
+  st_c = tanh_func(retst , ratios , limit);
+  mono_cap = limit + limit - fabs(st_c);
+  mono_c = tanh_func(retmono , ratiom , mono_cap);
+  stereo_cap = limit + limit - fabs(mono_c);
   st_c = tanh_func(retst , ratios , stereo_cap);
 
   limiter-> limit_b2 = stereo_cap;
