@@ -177,6 +177,11 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   st_c = tanh_func(retst , ratios , limit);
   mono_cap = limit + limit - fabs(st_c);
   mono_c = tanh_func(retmono , ratiom , mono_cap);
+  // handle mono clip overdrive
+  if(fabs(mono_c) > mono_cap - 2000){
+    mono_cap = limit + limit;
+    mono_c = tanh_func(retmono , ratiom , mono_cap);
+  }
   stereo_cap = limit + limit - fabs(mono_c);
   st_c = tanh_func(retst , ratios , stereo_cap);
 
