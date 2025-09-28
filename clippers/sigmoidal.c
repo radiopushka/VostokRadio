@@ -1,7 +1,7 @@
 #include<math.h>
 #include <string.h>
 
-double LIM_knee=500;
+double LIM_knee=3000;
 
 //Evan Nikitin 2025
 struct sigmoidal_lookahead{
