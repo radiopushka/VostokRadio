@@ -79,7 +79,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 #define AGC_TARG 10000 //input AGC baseline target
 
-#define AGC_SPEED 0.000001 //response coefficient
+#define AGC_SPEED 0.000002 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.000003 //response coefficient
