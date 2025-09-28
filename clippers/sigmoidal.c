@@ -134,9 +134,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
 
   double st_c = tanh_func(ma2 , ratios , limit);
-  double mono_cap = limit + limit - fabs(st_c);
+  double mono_cap = limit + limit - st_c;
   double mono_c = tanh_func(ma1 , ratiom , mono_cap);
-  double stereo_cap = limit + limit - fabs(mono_c);
+  double stereo_cap = limit + limit - mono_c;
 
   double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,mono_cap);
   double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,stereo_cap);
