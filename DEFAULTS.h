@@ -9,7 +9,7 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 600   ,350  ,  150  ,40  , 10  ,1};//multiband compression attack
+float def_attack[]={ 600   ,350  ,  150  ,80  , 30  ,1};//multiband compression attack
 float def_release[]={ 5000 , 2300  ,850 ,700 ,450   ,3}; //multiband compression release
 float def_target[]={36000,17000,18000,19000,20000,30000}; //multiband compression target volume 
 float def_m_gain[]={1.3,1.3,1.2,1.3,1.5,1.4}; //make up gain
