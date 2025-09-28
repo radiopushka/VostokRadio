@@ -111,8 +111,8 @@ int main(){
 
 
   //pre agc bass filter
-  afilter rbassc=poled_f(rate1,200,1,1);
-  afilter lbassc=poled_f(rate1,200,1,1);
+  afilter rbassc=poled_f(rate1,50,1,1);
+  afilter lbassc=poled_f(rate1,50,1,1);
 
 
   afilter rbassc2=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);

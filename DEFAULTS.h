@@ -11,7 +11,7 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0    
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 600   ,250  ,  150  ,80  , 30  ,1.5};//multiband compression attack
 float def_release[]={ 5000 , 3300  ,2000 ,1000 ,750   ,3}; //multiband compression release
-float def_target[]={36000,6000,8000,8000,8000,25000}; //multiband compression target volume 
+float def_target[]={36000,12000,14000,16000,19000,25000}; //multiband compression target volume 
 float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,4}; //make up gain
 float pre_amp[]={4,1,1,1,1,15}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
@@ -49,10 +49,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.0026666
+#define SIGMOIDAL_ATTACK  0.0013333
 #define SIGMOIDAL_RELEASE 0.0013333
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_DRANGE 13191 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE 6191 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -79,10 +79,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 #define AGC_TARG 9000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.00003 //response coefficient
+#define AGC_SPEED 0.0003 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.00003 //response coefficient
+#define AGC_RELEASE 0.0003 //response coefficient
 #define AGC_GATE 15
 
 // set to 1 to show the levels in real time, 0 to keep silent
