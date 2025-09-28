@@ -1,6 +1,7 @@
 #include<math.h>
 #include <string.h>
 
+double LIM_knee=1000;
 
 //Evan Nikitin 2025
 struct sigmoidal_lookahead{
@@ -142,14 +143,14 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,stereo_cap);
 
   if(rstartm > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstartm)*50);
+    double diff=(((limiter->limit - limiter->range)/rstartm)*LIM_knee);
     limiter->dynamic_ratio_m=limiter->dynamic_ratio_m  + (limiter->attack / diff);
    if(limiter->dynamic_ratio_m>10){
       limiter->dynamic_ratio_m = 10;
     }
 
   }else{
-    double diff=((rstartm/(limiter->limit - limiter->range))*50);
+    double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
     limiter->dynamic_ratio_m=limiter->dynamic_ratio_m - (limiter->release / diff);
     if(limiter->dynamic_ratio_m<0){
       limiter->dynamic_ratio_m = 0;
@@ -157,14 +158,14 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   }
 
   if(rstarts > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstartm)*50);
+    double diff=(((limiter->limit - limiter->range)/rstartm)*LIM_knee);
     limiter->dynamic_ratio_s=limiter->dynamic_ratio_s  + (limiter->attack / diff);
    if(limiter->dynamic_ratio_s>10){
       limiter->dynamic_ratio_s = 10;
     }
 
   }else{
-    double diff=((rstartm/(limiter->limit - limiter->range))*50);
+    double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
     limiter->dynamic_ratio_s=limiter->dynamic_ratio_s - (limiter->release / diff);
     if(limiter->dynamic_ratio_s<0){
       limiter->dynamic_ratio_s = 0;
