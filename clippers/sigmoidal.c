@@ -149,7 +149,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       limiter->dynamic_ratio_m = 10;
     }
 
-  }else{
+  }else if(rstartm < limiter->limit - limiter->range){
     double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
     limiter->dynamic_ratio_m=limiter->dynamic_ratio_m - (limiter->release / diff);
     if(limiter->dynamic_ratio_m<0){
@@ -164,7 +164,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       limiter->dynamic_ratio_s = 10;
     }
 
-  }else{
+  }else if(rstarts < limiter->limit - limiter->range){
     double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
     limiter->dynamic_ratio_s=limiter->dynamic_ratio_s - (limiter->release / diff);
     if(limiter->dynamic_ratio_s<0){
