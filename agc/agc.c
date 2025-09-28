@@ -1,6 +1,8 @@
 #include <math.h>
 #include<stdlib.h>
+#include<string.h>
 
+/* 
 double gain=10;
 
 double gain_max=40;
@@ -8,64 +10,102 @@ double gain_max_half=15;
 int dtime=0;
 double avg_error=0;
 double avg_audio=0;
+*/
 
+struct agc_info{
+  double gain;
+  double gain_max;
+  double gain_max_half;
+  int dtime;
+  double avg_error;
+  double avg_audio;
+  double* ring_buffer;
+  int buffer_size;
+  size_t copy_size;
+};
 
 
 #define PIHALF 1.570796327
 
-double apply_agc(double input,float target,float sens,int thresh,float trace_val,float release){
+typedef struct agc_info* AGC;
+AGC create_agc(double gain_max,double gain_start,double gain_cut, int lookahead){
+ 
+  AGC agc = malloc(sizeof(struct agc_info));
+  agc->gain = gain_start;
+  agc->gain_max = gain_max;
+  agc->gain_max_half = gain_cut;
+  agc->dtime=0;
+  agc->avg_audio = 0;
+  agc->avg_error = 0;
+
+  agc->ring_buffer = malloc(sizeof(double)*lookahead);
+  memset(agc->ring_buffer,0,sizeof(double)*lookahead);
+  agc->buffer_size = lookahead;
+  agc->copy_size = sizeof(double)*(lookahead - 1);
+  return agc;
+}
+void free_agc(AGC agc){
+  free(agc->ring_buffer);
+  free(agc);
+}
+
+double apply_agc(AGC agc,double input,float target,float sens,int thresh,float trace_val,float release){
  /* if(sens<0){
     return input;
   }*/
+  double* ring_buffer = agc->ring_buffer;
+  double output = *(ring_buffer + agc->buffer_size - 1);
+  memmove(ring_buffer + 1,ring_buffer,agc->copy_size);
+  *ring_buffer = input;
   if(sens == 0){
 
     return sin(input/20860)*32760;
   }
-  float absv=fabs(trace_val)*gain;
+  float absv=fabs(trace_val)*agc->gain;
 
-  avg_audio=avg_audio/2+absv/2;
+  agc->avg_audio=agc->avg_audio/2+absv/2;
   if(absv<thresh){
 
-      target = avg_audio;      
+      target = agc->avg_audio;      
 
   }
-  if(gain>gain_max_half){
-    release=release/(gain_max-(gain_max-gain));
+  if(agc->gain>agc->gain_max_half){
+    release=release/(agc->gain_max-(agc->gain_max-agc->gain));
   }
 
-    float cur_val=avg_audio;
+    float cur_val=agc->avg_audio;
     float error=target-cur_val;
-    if(dtime==0){
-      avg_error=error;
-      dtime=1;
+    if(agc->dtime==0){
+      agc->avg_error=error;
+      agc->dtime=1;
     }else{
-      avg_error=(avg_error+error)/2;
+      agc->avg_error=(agc->avg_error+error)/2;
     }
   
 
-  if(avg_error > 32767){
-    avg_error = 32767;
-  }else if(avg_audio < -32767){
+  if(agc->avg_error > 32767){
+    agc->avg_error = 32767;
+  }else if(agc->avg_audio < -32767){
 
-    avg_error = -32767;
+    agc->avg_error = -32767;
   }
   
   //roll down slow roll up quickyl
-  if(avg_audio<thresh){
-    float vcalc=sin(avg_error/20860);
+  if(agc->avg_audio<thresh){
+    float vcalc=sin(agc->avg_error/20860);
     if(vcalc<0){
       vcalc=-(1+vcalc);
     }else{
       vcalc=1-vcalc;
     }
-    gain=gain+vcalc*sens;
+    agc->gain=agc->gain+vcalc*sens;
   }else{
-    if(release!=0 && avg_error > 0){
+    if(release!=0 && agc->avg_error > 0){
 
-      gain=gain+sin(avg_error/20860)*release;
+      agc->gain=agc->gain+sin(agc->avg_error/20860)*release;
       //gain=gain*(1+release);
-    }else if (avg_error<0){
-      gain=gain+sin(avg_error/20860)*sens;
+    }else if (agc->avg_error<0){
+      agc->gain=agc->gain+sin(agc->avg_error/20860)*sens;
       //gain=gain*(1-sens);
     }
     
@@ -79,15 +119,15 @@ double apply_agc(double input,float target,float sens,int thresh,float trace_val
       
   }
   }*/
-  if(gain>gain_max){
-    gain=gain_max;
+  if(agc->gain>agc->gain_max){
+    agc->gain=agc->gain_max;
   }
-  if(gain<1){
-    gain=1;
+  if(agc->gain<1){
+    agc->gain=1;
   }
 
   //return sin((input*gain)/20860)*target;
-  return input*gain;
+  return output * agc->gain;
   /*
   //printf("%g\n",gain);
   if(abs(input) < thresh){

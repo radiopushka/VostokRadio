@@ -121,6 +121,8 @@ int main(){
   afilter rbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   afilter lbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   
+  AGC agc_left = create_agc(40,10,15,AGC_LOOKAHEAD);
+  AGC agc_right = create_agc(40,10,15,AGC_LOOKAHEAD);
 
   //downward expander
   Dexpander dxr = create_downward_expander(EXPANDER_ATTACK,EXPANDER_RELEASE,EXPANDER_RATIO,EXPANDER_THRESHOLD);
@@ -235,7 +237,10 @@ int main(){
         if(time_off<is_silence && !(process_zeros==-1 && *start ==0)){
           if(*start!=0){
             buffer = *start;
-            
+            if(avg_pre_agc<abs(*start)){
+              avg_pre_agc=abs(*start);
+            }
+
             if(count%2==0){
             
 
@@ -251,6 +256,7 @@ int main(){
              #endif /* ifdef MACRO */
             
               
+             buffer=apply_agc(agc_right,buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
             }else{
 
 
@@ -264,15 +270,12 @@ int main(){
               ch_nobass=run_f(rbassc,buffer);
              #endif /* ifdef MACRO */
 
+              buffer=apply_agc(agc_left,buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
             }
 
 
           
-            if(avg_pre_agc<abs(*start)){
-              avg_pre_agc=abs(*start);
-            }
-            buffer=apply_agc(buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
-            
+                      
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
             }
@@ -447,6 +450,8 @@ int main(){
 
   free_sigmoidal(sigmoidal);
 
+  free_agc(agc_left);
+  free_agc(agc_right);
   /*free_limiter(migi);
   free_limiter(hidari);
   free_limiter(migi_h);
