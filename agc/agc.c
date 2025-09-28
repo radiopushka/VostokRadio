@@ -105,14 +105,14 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
     }else{
       vcalc=1-vcalc;
     }
-    agc->gain=agc->gain+vcalc*sens;
+    agc->gain=agc->gain*(1+vcalc*sens);
   }else{
     if(release!=0 && agc->avg_error > 0){
 
-      agc->gain=agc->gain+sin(agc->avg_error/20860)*release;
+      agc->gain=agc->gain*(1+sin(agc->avg_error/20860)*release);
       //gain=gain*(1+release);
     }else if (agc->avg_error<0){
-      agc->gain=agc->gain+sin(agc->avg_error/20860)*sens;
+      agc->gain=agc->gain*(1-sin(agc->avg_error/20860)*sens);
       //gain=gain*(1-sens);
     }
     
