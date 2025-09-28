@@ -7,8 +7,8 @@ struct sigmoidal_lookahead{
   double dynamic_ratio_m;
   double dynamic_ratio_s;
   double* ring;
-  double* limit_b;
-  double* limit_b2;
+  double  limit_b;
+  double  limit_b2;
   double* helper;
   double limit;
   double ratio;
@@ -28,8 +28,8 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   SLim limiter = malloc(sizeof(struct sigmoidal_lookahead));
   limiter->ring = malloc(sizeof(double)*buffersize);
   limiter->helper = malloc(sizeof(double)*buffersize);
-  limiter->limit_b = malloc(sizeof(double)*buffersize);
-  limiter->limit_b2= malloc(sizeof(double)*buffersize);
+  limiter->limit_b = limit * 1.5;
+  limiter->limit_b2= limit * 1.5;
   limiter->ratio=ratio;
   limiter->limit=limit;
   limiter->dynamic_ratio_s=0;
@@ -44,10 +44,6 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   memset(limiter->ring,0,sizeof(double)*buffersize);
   memset(limiter->helper,0,sizeof(double)*buffersize);
 
-  for(int i =0;i<buffersize;i++){
-    limiter->limit_b[i] = limit;
-    limiter->limit_b2[i] = limit;
-  }
   
   return limiter;
 }
@@ -132,8 +128,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     }
 
   }
-  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limiter->limiter_half);
-  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limiter->limiter_half);
+  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limiter->limit_b);
+  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limiter->limit_b2);
 
   if(rstartm > limiter->limit - limiter->range){
     double diff=(((limiter->limit - limiter->range)/rstartm)*50);
@@ -173,6 +169,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double stereo_cap = limit + limit - fabs(mono_c);
   st_c = tanh_func(retst , ratios , stereo_cap);
 
+  limiter-> limit_b2 = stereo_cap;
+  limiter-> limit_b  = mono_cap;
 
   *input1 = mono_c;
   *input2 = st_c;
@@ -184,7 +182,5 @@ void free_sigmoidal(SLim lim){
 
   free(lim->ring);
   free(lim->helper);
-  free(lim->limit_b);
-  free(lim->limit_b2);
   free(lim);
 }
