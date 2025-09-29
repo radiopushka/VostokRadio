@@ -189,7 +189,7 @@ void resample_up_stereo_mpx(double* input,int* output,double* input_end,int rati
   
   for(double* loop=input;loop<input_end;loop=loop+2){
     double stereo = (*(loop + 1))*percent_mono;
-    double mono  = (*loop)*(percent_stereo - st_bias_offset);
+    double mono  = (*loop)*(percent_stereo);
     for(int i=0;i<ratio;i++){
       //*output=*loop;
       *output=mono;
