@@ -257,6 +257,7 @@ int main(){
             
               
              buffer=apply_agc(agc_right,buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
+             buffer = apply_expander(dxl,buffer,EXPANDER_GAIN);
             }else{
 
 
@@ -271,6 +272,7 @@ int main(){
              #endif /* ifdef MACRO */
 
               buffer=apply_agc(agc_left,buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
+              buffer = apply_expander(dxr,buffer,EXPANDER_GAIN);
             }
 
 
@@ -291,7 +293,6 @@ int main(){
           }
           if(count==0){
             #ifdef MULTIBAND_COMPRESSION
-             buffer = apply_expander(dxr,buffer,EXPANDER_GAIN);
              mux(lmux,buffer);
              gained(lmux);
 
@@ -335,7 +336,6 @@ int main(){
           }else{
             #ifdef MULTIBAND_COMPRESSION
             
-            buffer = apply_expander(dxl,buffer,EXPANDER_GAIN);
             //migi
             mux(rmux,buffer);
             gained(rmux);
