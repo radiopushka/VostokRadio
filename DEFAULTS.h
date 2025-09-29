@@ -16,7 +16,7 @@ float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,1}; //make up gain
 float pre_amp[]={4,1,1,1,1,40}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
+float post_amp[]={1,1,1,1,1,2}; // band compression post amplification
 float effect[]={8,9,9.0,9.0,8.0,6.0};//ratio
 float knee[]={10000,10000,10000,10000,10000,2000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
@@ -75,14 +75,14 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
-#define POST_AGC_GAIN 0.3
+#define POST_AGC_GAIN 0.4
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.00003 //response coefficient
+#define AGC_SPEED 0.00006 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.00003 //response coefficient
+#define AGC_RELEASE 0.00006 //response coefficient
 #define AGC_GATE 15
 
 // set to 1 to show the levels in real time, 0 to keep silent

@@ -105,13 +105,13 @@ double mimic_tanh(double input,double ratio, double limit,double limit_scale){
   return (input/(limit_scale * ratio)) * limit;
 }
 
-double calculate_interpolation(double* l3list){
+double calculate_interpolation(double* l3list){//basically a low pass filter at 16khz
   double side1 = l3list[0]; 
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
   double weight_side=1;
-  double weight_center=5;
+  double weight_center=1;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -129,6 +129,9 @@ int is_within(double d1,double d2,double pogreshnost){
     d1 = fabs(d1);
     d2 = fabs(d2);
 
+    if(d1 < pogreshnost || d2 < pogreshnost)
+      return -1;
+
     if(d1 == d2)
       return 1;
 
@@ -138,36 +141,50 @@ int is_within(double d1,double d2,double pogreshnost){
 
     return -1;
 }
+
+double minimal_difference(double i1, double i2){
+  i1 = fabs(i1);
+  i2 = fabs(i2);
+  if(i2 > i1)
+    return i2 - i1;
+  return i1 - i2;
+}
 //attempts to remove square waves
 void harmonic_reduction(double* l3list, double limit){
   double side1 = l3list[0]; 
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
-  double level = 600;
+
+
+  double level = 1000;
 
 
   if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference(center,side1);
       if(side1<0)
-        l3list[0] = side1 + level;
+        l3list[0] = side1 + (level - difference1);
       else
-        l3list[0] = side1 - level;
+        l3list[0] = side1 - (level - difference1);
 
+      double difference2 = minimal_difference(center,side2);;
       if(side2<0)
-        l3list[2] = side2 + level;
+        l3list[2] = side2 + (level - difference2);
       else
-        l3list[2] = side2 - level;
+        l3list[2] = side2 - (level - difference2);
   }else if (is_within(side1,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference(center,side1);
       if(side1<0)
-        l3list[0] = side1 + level;
+        l3list[0] = side1 + (level - difference1);
       else
-        l3list[0] = side1 - level;
+        l3list[0] = side1 - (level - difference1);
 
   }else if (is_within(side2,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference2 = minimal_difference(center,side2);;
       if(side2<0)
-        l3list[2] = side2 + level;
+        l3list[2] = side2 + (level - difference2);
       else
-        l3list[2] = side2 - level;
+        l3list[2] = side2 - (level - difference2);
 
   }
 
