@@ -111,11 +111,60 @@ double calculate_interpolation(double* l3list){
   double side2 = l3list[2]; 
 
   double weight_side=1;
-  double weight_center=2;
+  double weight_center=4;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
   return average/(weight_side+weight_side+weight_center);
+
+}
+
+int is_within(double d1,double d2,double pogreshnost){
+
+    d1 = fabs(d1);
+    d2 = fabs(d2);
+
+    if(d1 == d2)
+      return 1;
+
+    if( fabs(d1 - d2) < pogreshnost)
+      return 1;
+
+
+    return -1;
+}
+//attempts to remove square waves
+void harmonic_reduction(double* l3list, double limit){
+  double side1 = l3list[0]; 
+  double center = l3list[1]; 
+  double side2 = l3list[2]; 
+
+  double level = 2000;
+
+
+  if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1 && is_within(center,limit,level) == 1){
+      if(side1<0)
+        l3list[0] = side1 + level;
+      else
+        l3list[0] = side1 - level;
+
+      if(side2<0)
+        l3list[2] = side2 + level;
+      else
+        l3list[2] = side2 - level;
+  }else if (is_within(side1,center,level) == 1 && is_within(center,limit,level) == 1){
+      if(side1<0)
+        l3list[0] = side1 + level;
+      else
+        l3list[0] = side1 - level;
+
+  }else if (is_within(side2,center,level) == 1 && is_within(center,limit,level) == 1){
+      if(side2<0)
+        l3list[2] = side2 + level;
+      else
+        l3list[2] = side2 - level;
+
+  }
 
 }
 
@@ -212,10 +261,13 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
+  harmonic_reduction(interp_mono , limit + limit);
+
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
   *interp_stereo = st_c;
 
+  harmonic_reduction(interp_stereo, stereo_cap);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;
