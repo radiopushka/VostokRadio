@@ -12,13 +12,13 @@ int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 40   ,30  ,  25  ,20  , 9  ,4.8};//multiband compression attack
 float def_release[]={ 100 , 100  ,100 ,100 ,80   ,12}; //multiband compression release
 float def_target[]={27000,14000,14000,13000,12000,29000}; //multiband compression target volume 
-float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,1.3}; //make up gain
-float pre_amp[]={2,1,1,1,1,34}; //multiband compressor pre compression gain
+float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,2}; //make up gain
+float pre_amp[]={2,1,1,1,1,68}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
 float effect[]={6,6,6.0,7.0,8.0,9.0};//ratio
-float knee[]={10000,10000,10000,10000,10000,2000};//knee
+float knee[]={10000,10000,10000,10000,10000,20000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
