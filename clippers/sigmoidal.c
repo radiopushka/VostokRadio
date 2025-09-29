@@ -144,7 +144,7 @@ void harmonic_reduction(double* l3list, double limit){
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
-  double level = 100;
+  double level = 200;
 
 
   if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
