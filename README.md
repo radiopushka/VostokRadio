@@ -10,6 +10,8 @@ A high-performance, low-latency AM/FM audio processor and MPX encoder written in
 - **High Efficiency**: ~10-16% CPU usage on Intel i5 12th gen at 192kHz
 - **ALSA Support**: Native Linux audio support
 - **Lookahead Clipping**: Advanced clipping prevention algorithm
+- **FM Composite Clipping**: boosts loudness by sacrificing stereo information for less distortion and louder sound
+- **Advanced Clipper**: Instead of genrating square waves, clipping reflects the clipped waveform back onto the audio spectrum starting at 16khz. (All the clipped audio is LSB modulated at 16khz) 16khz is the cutoff frequency for all audio.
 
 ## Installation & Compilation
 
