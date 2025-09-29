@@ -18,6 +18,13 @@ struct sigmoidal_lookahead{
   double limiter_half;
   double release;
   size_t bsize_pre;
+
+  //anti-aliasing
+  double intrp_mono[3];
+  double intrp_st[3];
+  size_t intrp_size;
+  size_t intrp_cp_size;
+
   int size;
 
 
@@ -41,6 +48,12 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->attack=attack;
   limiter->release=release;
   limiter->bsize_pre=sizeof(double)*buffersize;
+
+  memset(limiter->intrp_mono,0,sizeof(double)*3);
+  memset(limiter->intrp_st,0,sizeof(double)*3);
+
+  limiter->intrp_size = sizeof(double)*3;
+  limiter->intrp_cp_size = sizeof(double)*2;
 
   memset(limiter->ring,0,sizeof(double)*buffersize);
   memset(limiter->helper,0,sizeof(double)*buffersize);
@@ -90,6 +103,20 @@ double atan_func(double input, double ratio,double limit){
 double mimic_tanh(double input,double ratio, double limit,double limit_scale){
 
   return (input/(limit_scale * ratio)) * limit;
+}
+
+double calculate_interpolation(double* l3list){
+  double side1 = l3list[0]; 
+  double center = l3list[1]; 
+  double side2 = l3list[2]; 
+
+  double weight_side=1;
+  double weight_center=2;
+
+  double average = side1*weight_side + center*weight_center + side2*weight_side;
+
+  return average/(weight_side+weight_side+weight_center);
+
 }
 
 void apply_sigmoidal(SLim limiter, double* input1, double* input2){
@@ -179,8 +206,20 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   st_c = tanh_func(retst , ratios + attenuation*limiter->ratio , stereo_cap);
 
 
-  *input1 = mono_c;
-  *input2 = st_c;
+  //before outputing the signal, it has to be passed through an anti-aliasing filter to prevent distortion
+
+  double* interp_mono = limiter->intrp_mono;
+  memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
+  *interp_mono=mono_c;
+
+  double* interp_stereo = limiter->intrp_st;
+  memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
+  *interp_stereo = st_c;
+
+  //*input1 = mono_c;
+  *input1 = calculate_interpolation(interp_mono);
+  //*input2 = st_c;
+  *input2 = calculate_interpolation(interp_stereo);
 
 
 }
