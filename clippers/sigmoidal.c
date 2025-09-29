@@ -111,7 +111,7 @@ double calculate_interpolation(double* l3list){
   double side2 = l3list[2]; 
 
   double weight_side=1;
-  double weight_center=8;
+  double weight_center=5;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -144,7 +144,7 @@ void harmonic_reduction(double* l3list, double limit){
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
-  double level = 200;
+  double level = 600;
 
 
   if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
