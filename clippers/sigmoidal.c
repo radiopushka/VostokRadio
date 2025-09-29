@@ -111,7 +111,7 @@ double calculate_interpolation(double* l3list){
   double side2 = l3list[2]; 
 
   double weight_side=1;
-  double weight_center=4;
+  double weight_center=8;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
