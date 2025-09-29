@@ -120,7 +120,12 @@ double calculate_interpolation(double* l3list){
 }
 
 int is_within(double d1,double d2,double pogreshnost){
-
+    if(d1 < 0 && d2 > 0)
+      return -1;
+    
+    if(d2 < 0 && d1 > 0)
+      return -1;
+  
     d1 = fabs(d1);
     d2 = fabs(d2);
 
