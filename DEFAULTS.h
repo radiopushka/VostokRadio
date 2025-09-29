@@ -17,7 +17,7 @@ float pre_amp[]={4,1,1,1,1,40}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,2}; // band compression post amplification
-float effect[]={8,9,9.0,9.0,8.0,6.0};//ratio
+float effect[]={8,9,6.0,6.0,6.0,6.0};//ratio
 float knee[]={10000,10000,10000,10000,10000,2000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
@@ -75,7 +75,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
-#define POST_AGC_GAIN 0.4
+#define POST_AGC_GAIN 0.6
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
