@@ -45,8 +45,8 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->range=range;
   limiter->size=buffersize;
   limiter->limiter_half = limit * 1.5;
-  limiter->attack=attack;
-  limiter->release=release;
+  limiter->attack=attack * ratio;
+  limiter->release=release * ratio;
   limiter->bsize_pre=sizeof(double)*buffersize;
 
   memset(limiter->intrp_mono,0,sizeof(double)*3);
