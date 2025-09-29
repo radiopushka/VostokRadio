@@ -236,9 +236,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
-  double st_c = tanh_func(ma2 , ratios , limit + limit);
   double mono_c = tanh_func(ma1 , ratiom , limit + limit);
-  double stereo_cap = limit + limit - mono_c;
+  double stereo_cap = limit + limit - fabs(mono_c);
   double attenuation = (limit + limit)/stereo_cap;// softer clipping
 
   double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit + limit);
@@ -276,12 +275,11 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
+  double st_c = 0;
   mono_c = tanh_func(retmono , ratiom , limit + limit);
   stereo_cap = limit + limit - fabs(mono_c);
   attenuation = (limit + limit)/stereo_cap;// softer clipping
-  if(attenuation == 0){
-    st_c = 0;
-  }else{
+  if(attenuation > 0){
     st_c = tanh_func(retst/attenuation , ratios , stereo_cap);
   }
 
