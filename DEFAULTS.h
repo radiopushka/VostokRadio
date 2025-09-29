@@ -9,7 +9,7 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 100   ,100  ,  50  ,20  , 9  ,6};//multiband compression attack
+float def_attack[]={ 100   ,100  ,  50  ,20  , 9  ,3};//multiband compression attack
 float def_release[]={ 600 , 300  ,200 ,150 ,80   ,12}; //multiband compression release
 float def_target[]={20000,12000,12000,12000,13000,27000}; //multiband compression target volume 
 float def_m_gain[]={1.3,1.1,1.2,1.3,1.5,1}; //make up gain
@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 1.5 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples

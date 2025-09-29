@@ -233,8 +233,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   }
 
   double limit = limiter->limit;
-  double ratiom = limiter->ratio + limiter->dynamic_ratio_m*0.4;
-  double ratios = limiter->ratio + limiter->dynamic_ratio_s*0.4;
+  double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
+  double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
   double st_c = tanh_func(ma2 , ratios , limit + limit);
   double mono_c = tanh_func(ma1 , ratiom , limit + limit);
