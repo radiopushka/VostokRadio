@@ -144,10 +144,10 @@ void harmonic_reduction(double* l3list, double limit){
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
-  double level = 2000;
+  double level = 100;
 
 
-  if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1 && is_within(center,limit,level) == 1){
+  if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
       if(side1<0)
         l3list[0] = side1 + level;
       else
@@ -157,13 +157,13 @@ void harmonic_reduction(double* l3list, double limit){
         l3list[2] = side2 + level;
       else
         l3list[2] = side2 - level;
-  }else if (is_within(side1,center,level) == 1 && is_within(center,limit,level) == 1){
+  }else if (is_within(side1,center,level) == 1){// && is_within(center,limit,level) == 1){
       if(side1<0)
         l3list[0] = side1 + level;
       else
         l3list[0] = side1 - level;
 
-  }else if (is_within(side2,center,level) == 1 && is_within(center,limit,level) == 1){
+  }else if (is_within(side2,center,level) == 1){// && is_within(center,limit,level) == 1){
       if(side2<0)
         l3list[2] = side2 + level;
       else
