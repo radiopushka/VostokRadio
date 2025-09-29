@@ -88,11 +88,9 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   double mult=1;
   double error=agc->avg_error;
   if(error > 32767){
-    for(;error>32767;error=error - 32767)
-      mult=mult+1;
+    mult = error / 32767.0;
    }else if(error < -32767){
-    for(;error<-32767;error=error + 32767)
-      mult=mult+1;
+    mult = error / -32767.0;
 
    
   }
