@@ -129,8 +129,8 @@ int is_within(double d1,double d2,double pogreshnost){
     d1 = fabs(d1);
     d2 = fabs(d2);
 
-    if(d1 < pogreshnost || d2 < pogreshnost)
-      return -1;
+    /*if(d1 < pogreshnost || d2 < pogreshnost)
+      return -1;*/
 
     if(d1 == d2)
       return 1;
@@ -155,9 +155,13 @@ void harmonic_reduction(double* l3list, double limit){
   double center = l3list[1]; 
   double side2 = l3list[2]; 
 
-
+  double max = fmax(fabs(side1),fabs(side2));
+  max = fmax(fabs(center),fabs(max));
 
   double level = 1000;
+  if(max<level){
+    level = max;
+  }
 
 
   if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
