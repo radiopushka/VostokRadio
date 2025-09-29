@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 4 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -75,7 +75,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams) 
 			 
-#define POST_AGC_GAIN 0.15
+#define POST_AGC_GAIN 0.3
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
