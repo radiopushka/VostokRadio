@@ -9,15 +9,15 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
-float def_attack[]={ 140   ,15  ,  15  ,6  , 3  ,1};//multiband compression attack
+float def_attack[]={ 140   ,15  ,  15  ,6  , 3  ,2};//multiband compression attack
 float def_release[]={ 600 , 250  ,130 ,50 ,25   ,6}; //multiband compression release
-float def_target[]={20000,16000,13000,13000,16000,30000}; //multiband compression target volume 
-float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,2}; //make up gain
-float pre_amp[]={3,1,1,1,1,250}; //multiband compressor pre compression gain
+float def_target[]={20000,16000,13000,13000,16000,25000}; //multiband compression target volume 
+float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1}; //make up gain
+float pre_amp[]={3,1,1,1,1,375}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
-float effect[]={4,6,6.0,6.0,8.0,12.0};//ratio
+float effect[]={4,6,6.0,6.0,8.0,8.0};//ratio
 float knee[]={5000,3000,3000,3000,10000,5000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
@@ -49,11 +49,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.4
-#define SIGMOIDAL_ATTACK  2
-#define SIGMOIDAL_RELEASE 2
+#define SIGMOIDAL_ATTACK  5
+#define SIGMOIDAL_RELEASE 5
 #define SIGMOIDAL_BUFFER 400
 #define SIGMOIDAL_KNEE 300
-#define SIGMOIDAL_DRANGE -8000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE -16000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
