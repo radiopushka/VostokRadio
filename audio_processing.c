@@ -89,7 +89,7 @@ int main(){
   int i_buffer_size = buffer_size/input_buffer_prop;
   int buffer_o[buffer_size];//output buffer
 
-  printf("starting rates: input: %d, output: %d\n",rate1, rate2);
+  printf("starting rates: input: %d, output: %d\n\n",rate1, rate2);
   
   int buffer_t[i_buffer_size];//input buffer
   double buffer_tf[i_buffer_size];//input buffer
@@ -430,11 +430,11 @@ int main(){
       int clip_count = get_clip_count(sigmoidal);
       double percent_distortion = (clip_count/((double)buffer_size))*100;
       if(percent_distortion > 2){
-        printf("severe distortion: \x1b[31m%g %%\x1b[0m\n",percent_distortion);
+        printf("\033[Asevere distortion: \x1b[31m%g %%\x1b[0m            \n",percent_distortion);
       }else if(percent_distortion > 0.5){
-        printf("noticable distortion: \x1b[33m%g %%\x1b[0m\n",percent_distortion);
+        printf("\033[Anoticable distortion: \x1b[33m%g %%\x1b[0m         \n",percent_distortion);
       }else if(percent_distortion > 0.1){
-        printf("barely noticable distortion: \x1b[32m%g %%\x1b[0m\n",percent_distortion);
+        printf("\033[Abarely noticable distortion: \x1b[32m%g %%\x1b[0m  \n",percent_distortion);
       }
       queue_audio(buffer_o);
       if(GUI==1){
