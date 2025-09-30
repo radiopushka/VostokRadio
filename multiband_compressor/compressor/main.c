@@ -102,6 +102,8 @@ double run_comp(Compressor comp,double release, double attack, double target, do
       input = input * comp->gain;
       if(input>target){
         double diff=((target/input)*comp->knee);
+        if(diff < 1)
+          diff = 1;
         double nattack=(attack/diff);
         if(nattack>attack)
           nattack=attack;
@@ -110,7 +112,9 @@ double run_comp(Compressor comp,double release, double attack, double target, do
       }else if (input < target){
 
         double diff=((input/target)*comp->knee);
-        double nrelease=(release/diff);
+        if(diff < 1)
+          diff = 1;
+        double nrelease=(release/(diff));
         if(nrelease>release)
           nrelease=release;
         comp->gain=comp->gain*(1+(nrelease));
@@ -124,6 +128,8 @@ double run_comp(Compressor comp,double release, double attack, double target, do
     
 
         double diff=((comp->avg/target)*comp->knee);
+        if(diff < 1)
+          diff = 1;
         double nrelease=(release/diff);
         if(nrelease>release)
           nrelease=release;
@@ -132,6 +138,8 @@ double run_comp(Compressor comp,double release, double attack, double target, do
         //comp->gain=comp->gain+release;
     }else if (comp->avg > target){
         double diff=((target/comp->avg)*comp->knee);
+        if(diff < 1)
+          diff = 1;
         double nattack=(attack/diff);
         if(nattack>attack)
           nattack=attack;

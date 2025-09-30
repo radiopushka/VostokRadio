@@ -1,7 +1,7 @@
 #include<math.h>
 #include <string.h>
 
-double LIM_knee=3000;
+//double LIM_knee=3000;
 
 //Evan Nikitin 2025
 struct sigmoidal_lookahead{
@@ -17,7 +17,10 @@ struct sigmoidal_lookahead{
   double attack;
   double limiter_half;
   double release;
+  int clip_count;
+  int clip_count_internal;
   size_t bsize_pre;
+  double knee;
 
   //anti-aliasing
   double intrp_mono[3];
@@ -31,7 +34,7 @@ struct sigmoidal_lookahead{
 };
 typedef struct sigmoidal_lookahead* SLim;
 
-SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double range,double attack, double release){
+SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double range,double attack, double release,double knee){
 
   SLim limiter = malloc(sizeof(struct sigmoidal_lookahead));
   limiter->ring = malloc(sizeof(double)*buffersize);
@@ -49,6 +52,11 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->release=release * ratio;
   limiter->bsize_pre=sizeof(double)*buffersize;
 
+  limiter->knee = knee;
+
+  limiter->clip_count=0;
+  limiter->clip_count_internal=0;
+
   memset(limiter->intrp_mono,0,sizeof(double)*3);
   memset(limiter->intrp_st,0,sizeof(double)*3);
 
@@ -60,6 +68,12 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
 
   
   return limiter;
+}
+
+int get_clip_count(SLim limiter){
+  int clip_count = limiter->clip_count;
+  limiter->clip_count=0;
+  return clip_count;
 }
 
 double sigmoidal_clipper(double input,double limit,double ratio){
@@ -111,7 +125,7 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
   double side2 = l3list[2]; 
 
   double weight_side=1;
-  double weight_center=2;
+  double weight_center=3;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -150,7 +164,7 @@ double minimal_difference(double i1, double i2){
   return i1 - i2;
 }
 //attempts to remove square waves
-void harmonic_reduction(double* l3list, double limit){
+void harmonic_reduction(SLim limiter,double* l3list, double limit){
   double side1 = l3list[0]; 
   double center = l3list[1]; 
   double side2 = l3list[2]; 
@@ -158,7 +172,7 @@ void harmonic_reduction(double* l3list, double limit){
   double max = fmax(fabs(side1),fabs(side2));
   max = fmax(fabs(center),fabs(max));
 
-  double level = 1000;
+  double level = 100;
   if(max<level){
     level = max;
   }
@@ -244,34 +258,59 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double rstarts = mimic_tanh(ma2/attenuation , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,stereo_cap);
 
   if(rstartm > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstartm)*LIM_knee);
-    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m  + (limiter->attack / diff);
+    double diff=(((limiter->limit - limiter->range)/rstartm)*limiter->knee);
+    if(diff< 1)
+      diff = 1;
+
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1+(limiter->attack / diff));
    if(limiter->dynamic_ratio_m>10){
       limiter->dynamic_ratio_m = 10;
     }
 
   }else if(rstartm < limiter->limit - limiter->range){
-    double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
-    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m - (limiter->release / diff);
-    if(limiter->dynamic_ratio_m<0){
-      limiter->dynamic_ratio_m = 0;
+    double diff=((rstartm/(limiter->limit - limiter->range))*limiter->knee);
+    if(diff < 1)
+      diff = 1;
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1 - limiter->release / diff);
+    if(limiter->dynamic_ratio_m<0.00001){
+      limiter->dynamic_ratio_m = 0.00001;
     }
   }
 
   if(rstarts > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstartm)*LIM_knee);
-    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s  + (limiter->attack / diff);
+    double diff=(((limiter->limit - limiter->range)/rstarts)*limiter->knee);
+    if(diff < 1)
+      diff = 1;
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1 + limiter->attack / diff);
    if(limiter->dynamic_ratio_s>10){
       limiter->dynamic_ratio_s = 10;
     }
 
   }else if(rstarts < limiter->limit - limiter->range){
-    double diff=((rstartm/(limiter->limit - limiter->range))*LIM_knee);
-    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s - (limiter->release / diff);
-    if(limiter->dynamic_ratio_s<0){
-      limiter->dynamic_ratio_s = 0;
+    double diff=((rstarts/(limiter->limit - limiter->range))*limiter->knee);
+    if(diff < 1)
+      diff = 1;
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1 - limiter->release / diff);
+    if(limiter->dynamic_ratio_s<0.00001){
+      limiter->dynamic_ratio_s = 0.00001;
     }
   }
+
+  /*if(limiter->clip_count_internal>0){
+    limiter->dynamic_ratio_m = limiter->dynamic_ratio_m+limiter->attack;
+    limiter->dynamic_ratio_s = limiter->dynamic_ratio_s+limiter->attack;
+    limiter->clip_count_internal = 0;
+  }else{
+    limiter->dynamic_ratio_m = limiter->dynamic_ratio_m-limiter->release;
+    limiter->dynamic_ratio_s = limiter->dynamic_ratio_s-limiter->release;
+    if(limiter->dynamic_ratio_m<0)
+      limiter->dynamic_ratio_m = 0;
+    if(limiter->dynamic_ratio_s<0)
+      limiter->dynamic_ratio_s = 0;
+  
+
+  }*/
+
   ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
@@ -283,19 +322,26 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     st_c = tanh_func(retst/attenuation , ratios , stereo_cap);
   }
 
+  if(is_within(fabs(mono_c),limit + limit,limiter->range)==1){
+    limiter->clip_count++;
+    limiter->clip_count_internal++;
+  }
+
   //before outputing the signal, it has to be passed through an anti-aliasing filter to prevent distortion
 
   double* interp_mono = limiter->intrp_mono;
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
-  harmonic_reduction(interp_mono , limit + limit);
+  harmonic_reduction(limiter,interp_mono , limit + limit);
 
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
   *interp_stereo = st_c;
 
-  harmonic_reduction(interp_stereo, stereo_cap);
+  
+  
+  harmonic_reduction(limiter,interp_stereo, stereo_cap);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;
