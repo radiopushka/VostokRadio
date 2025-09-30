@@ -18,7 +18,7 @@ float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,0.7,0.35}; // band compression post amplification
 float effect[]={6,6,6.0,6.0,6.0,6.0};//ratio
-float knee[]={10000,10000,6000,3000,2000,2000};//knee
+float knee[]={10000,10000,6000,3000,2000,200};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -50,7 +50,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1
 #define SIGMOIDAL_ATTACK  2
-#define SIGMOIDAL_RELEASE 2
+#define SIGMOIDAL_RELEASE 1
 #define SIGMOIDAL_BUFFER 200
 #define SIGMOIDAL_KNEE 1200
 #define SIGMOIDAL_DRANGE 100 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
