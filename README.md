@@ -20,7 +20,7 @@ A high-performance, low-latency AM/FM audio processor and MPX encoder written in
 - ALSA development libraries
 - Must be running Linux, no Mac or FreeBSD. Windows is out of question.
 - Linux user must be in audio group
-- Pulseaudio must be off
+- Pulseaudio must be off if you are generating MPX signals (otherwise you can have it on)
 - 192khz S32 capable sound card (most laptop sound cards)
 
 ### Building
