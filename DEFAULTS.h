@@ -10,7 +10,7 @@ int fdef_size=6;
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 40   ,30  ,  25  ,8  , 1  ,0.5};//multiband compression attack
-float def_release[]={ 240 , 180  ,75 ,32 ,6   ,3}; //multiband compression release
+float def_release[]={ 240 , 180  ,180 ,100 ,100   ,6}; //multiband compression release
 float def_target[]={27000,14000,14000,13000,20400,135000}; //multiband compression target volume 
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,2}; //make up gain
 float pre_amp[]={6,1,1,1,1,200}; //multiband compressor pre compression gain
@@ -18,7 +18,7 @@ float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,0.7,0.35}; // band compression post amplification
 float effect[]={6,6,6.0,6.0,6.0,6.0};//ratio
-float knee[]={10000,10000,6000,3000,2000,1000};//knee
+float knee[]={10000,10000,6000,3000,2000,2000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -44,16 +44,16 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 2.5 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.3 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1
-#define SIGMOIDAL_ATTACK  4
-#define SIGMOIDAL_RELEASE 4
+#define SIGMOIDAL_ATTACK  2
+#define SIGMOIDAL_RELEASE 2
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_KNEE 300
-#define SIGMOIDAL_DRANGE 300 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_KNEE 1200
+#define SIGMOIDAL_DRANGE 100 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -66,8 +66,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 
 //alsa configuration
-#define RECORDING_IFACE "default"
-#define PLAYBACK_IFACE "default"
+#define RECORDING_IFACE "hw:1,1,0"
+#define PLAYBACK_IFACE "hw:0,0"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 
