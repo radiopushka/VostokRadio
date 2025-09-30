@@ -4,21 +4,24 @@ A high-performance, low-latency AM/FM audio processor and MPX encoder written in
 
 ## Features
 
-- **Multiband Compression**: 5-band compressor with configurable parameters per band
+- **Multiband Compression**: n-band compressor with configurable parameters per band
 - **Advanced AGC**: Automatic gain control with adjustable target and response
 - **MPX Encoding**: Stereo encoder with pilot tone generation for FM broadcasting
 - **High Efficiency**: ~10-16% CPU usage on Intel i5 12th gen at 192kHz
 - **ALSA Support**: Native Linux audio support
 - **Lookahead Clipping**: Advanced clipping prevention algorithm
-- **FM Composite Clipping**: boosts loudness by sacrificing stereo information for less distortion and louder sound
-- **Advanced Clipper**: Instead of genrating square waves, clipping reflects the clipped waveform back onto the audio spectrum starting at 16khz. (All the clipped audio is LSB modulated at 16khz) 16khz is the cutoff frequency for all audio.
+- **FM Composite Clipping**: boosts loudness by sacrificing stereo information for less distortion and louder sound. Uses hyperbolic waveshaping function tanh.
+- **Advanced Clipper**: fast lookahead limiter works in conjunction with the clipper to minimize distortion
 
 ## Installation & Compilation
 
 ### Prerequisites
 - GCC compiler
 - ALSA development libraries
-- Linux environment (recommended)
+- Must be running Linux, no Mac or FreeBSD. Windows is out of question.
+- Linux user must be in audio group
+- Pulseaudio must be off
+- 192khz S32 capable sound card (most laptop sound cards)
 
 ### Building
 1. Clone the repository:
@@ -46,7 +49,9 @@ A high-performance, low-latency AM/FM audio processor and MPX encoder written in
 
 ## Configuration
 
-All configuration is done by modifying `DEFAULTS.h` and recompiling the program. Here's a detailed explanation of the parameters:
+As of right now, all configuration is done by modifying `DEFAULTS.h` and recompiling the program. 
+The plan is to make a user friendly command line UI eventually.
+Here's a detailed but outdated explanation of the parameters:
 
 ### Multiband Compression
 ```c
@@ -120,11 +125,15 @@ int types[]={COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK}; // Compressor typ
 4. The compressor types can be:
    - `COMP_RMS`: RMS-based compression (smoother)
    - `COMP_PEAK`: Peak-based compression (more aggressive)
+5. The Program already comes pre tuned for Pop music
 
 ## Performance
 
 The processor is highly optimized:
-- ~10-13% CPU usage on one thread of an Intel i5 12th gen
+- ~10-16% CPU usage on one thread of an Intel i5 12th gen
+- ~30-38% CPU usage on one thread of an Intel i5 6200U
+- ~50-65% CPU usage on one thread of an Intel i5 520M and slightly faster on Intel i5 2nd gen
+- 100% CPU usage on one thread of an old Intel Atom notebook processor.
 - Processes audio at 192kHz sample rate
 - Low latency processing suitable for live broadcasting
 
@@ -134,12 +143,15 @@ The processor is highly optimized:
 
 2. If experiencing distortion:
    - Reduce `FINAL_AMP`
-   - Adjust compressor targets (`def_target`)
+   - Adjust compressor settings
    - Check that input levels are appropriate
+   - Play with the pre clip limiter
+   - Use larger lookaheads
 
 3. For CPU usage issues:
    - Reduce `RATE` (if not using MPX)
    - Simplify compression settings
+   - Use smaller lookaheads
 
 ## License
 
