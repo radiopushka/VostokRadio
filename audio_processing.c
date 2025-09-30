@@ -136,7 +136,7 @@ int main(){
   Multiband rmbt=create_mbt(rmux,lookaheads);
   Multiband mmbt=create_mbt(mmux,lookaheads);//mono
 
-  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE);
+  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE,SIGMOIDAL_KNEE);
 
 
 
@@ -427,6 +427,15 @@ int main(){
       #else
         resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop,1,1);
       #endif /* ifdef MPX_ENABLE */
+      int clip_count = get_clip_count(sigmoidal);
+      double percent_distortion = (clip_count/((double)buffer_size))*100;
+      if(percent_distortion > 2){
+        printf("severe distortion: \x1b[31m%g %%\x1b[0m\n",percent_distortion);
+      }else if(percent_distortion > 0.5){
+        printf("noticable distortion: \x1b[33m%g %%\x1b[0m\n",percent_distortion);
+      }else if(percent_distortion > 0.1){
+        printf("barely noticable distortion: \x1b[32m%g %%\x1b[0m\n",percent_distortion);
+      }
       queue_audio(buffer_o);
       if(GUI==1){
         draw_ui(c,&stereo_gain,&stereo_on,abs(avg_post_agc),abs(avg_pre_agc),abs(avg_post_clip),abs(avg_pre_clip),lmbt,rmbt);
