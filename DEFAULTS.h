@@ -11,13 +11,13 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0    
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 40   ,30  ,  25  ,8  , 1  ,1};//multiband compression attack
 float def_release[]={ 240 , 180  ,180 ,100 ,100   ,12}; //multiband compression release
-float def_target[]={27000,14000,14000,13000,20400,135000}; //multiband compression target volume 
+float def_target[]={24000,14000,14000,13000,20400,135000}; //multiband compression target volume 
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1}; //make up gain
-float pre_amp[]={6,1,1,1,1,200}; //multiband compressor pre compression gain
+float pre_amp[]={4,1,1,1,1,200}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,0.5,0.4}; // band compression post amplification
-float effect[]={8,4,4.0,4.0,8.0,4.0};//ratio
+float effect[]={8,6,4.0,4.0,8.0,4.0};//ratio
 float knee[]={5000,10000,6000,3000,2000,10000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
@@ -48,7 +48,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1
+#define SIGMOIDAL_CO 1.3
 #define SIGMOIDAL_ATTACK  2
 #define SIGMOIDAL_RELEASE 1
 #define SIGMOIDAL_BUFFER 200
