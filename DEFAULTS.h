@@ -80,10 +80,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.00012 //response coefficient
+#define AGC_SPEED 0.00024 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.00012 //response coefficient
+#define AGC_RELEASE 0.00024 //response coefficient
 #define AGC_GATE 1
 
 // set to 1 to show the levels in real time, 0 to keep silent
