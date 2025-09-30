@@ -12,13 +12,13 @@ int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 140   ,15  ,  15  ,6  , 3  ,0.2};//multiband compression attack
 float def_release[]={ 600 , 200  ,130 ,50 ,25   ,1.2}; //multiband compression release
 float def_target[]={20000,13000,13000,13000,20400,135000}; //multiband compression target volume 
-float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1.1}; //make up gain
-float pre_amp[]={4,1,1,1,1,300}; //multiband compressor pre compression gain
+float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1.2}; //make up gain
+float pre_amp[]={4,1,1,1,1,150}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,0.6,1,1,0.6}; // band compression post amplification
 float effect[]={4,6,6.0,6.0,8.0,12.0};//ratio
-float knee[]={5000,10000,6000,3000,2000,10000};//knee
+float knee[]={5000,10000,10000,13000,14000,10000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
 //this maximizes loudness, you can comment this out if you are using mono
@@ -50,10 +50,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.5
 #define SIGMOIDAL_ATTACK  2
-#define SIGMOIDAL_RELEASE 1
+#define SIGMOIDAL_RELEASE 2
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_KNEE 3000
-#define SIGMOIDAL_DRANGE 400 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_KNEE 1000
+#define SIGMOIDAL_DRANGE 200 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
