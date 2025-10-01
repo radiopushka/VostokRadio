@@ -11,13 +11,13 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0    
 int   lookaheads[]={40 ,  40 , 40, 40 ,40, 40}; // will affect phase
 float def_attack[]={ 140   ,15  ,  15  ,6  , 3  ,2};//multiband compression attack
 float def_release[]={ 600 , 250  ,130 ,50 ,25   ,6}; //multiband compression release
-float def_target[]={20000,16000,13000,13000,16000,25000}; //multiband compression target volume 
-float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1.01}; //make up gain
+float def_target[]={20000,16000,13000,13000,19000,23000}; //multiband compression target volume 
+float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1.2}; //make up gain
 float pre_amp[]={3,1,1,1,1,125}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
-float effect[]={4,6,6.0,6.0,8.0,8.0};//ratio
+float effect[]={5,6,6.0,6.0,8.0,8.0};//ratio
 float knee[]={5000,3000,3000,3000,10000,5000};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
                   
@@ -52,7 +52,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define SIGMOIDAL_ATTACK  4
 #define SIGMOIDAL_RELEASE 4
 #define SIGMOIDAL_BUFFER 400
-#define SIGMOIDAL_KNEE 500
+#define SIGMOIDAL_KNEE 200
 #define SIGMOIDAL_DRANGE -18000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
