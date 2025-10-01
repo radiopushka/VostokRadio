@@ -44,16 +44,16 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 0.9 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1.4
+#define SIGMOIDAL_CO 1.5
 #define SIGMOIDAL_ATTACK  4
 #define SIGMOIDAL_RELEASE 4
 #define SIGMOIDAL_BUFFER 400
 #define SIGMOIDAL_KNEE 100
-#define SIGMOIDAL_DRANGE -18000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE -30000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
