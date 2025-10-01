@@ -237,12 +237,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
   *ring_buffer = saturator(*input1,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio)*limiter->post_sat_gain;
-  double composite_component = fabs(*ring_buffer);
-  double next_lim = limit2x*limiter->lim_saturate;
-  if(composite_component > next_lim)
-    composite_component = next_lim;
 
-  *ring_buffer2 = saturator(*input2,next_lim - composite_component*limiter->pre_saturation_ratio,limiter->ratio,limiter->pre_saturation_ratio)*limiter->post_sat_gain;
+  *ring_buffer2 = saturator(*input2,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio)*limiter->post_sat_gain;
 
 
 
@@ -337,8 +333,10 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   double st_c = 0;
   mono_c = tanh_func(retmono , ratiom , limit2x);
-  stereo_cap = limit2x - fabs(mono_c);
-  attenuation = (limit2x)/stereo_cap;// softer clipping
+  stereo_cap = limit2x*ratiom - fabs(retmono);
+  if(stereo_cap<0)
+    stereo_cap=0;
+  attenuation = (limit2x * ratiom)/stereo_cap;// softer clipping
   if(attenuation > 0){
     st_c = tanh_func(retst/attenuation , ratios , stereo_cap);
   }
