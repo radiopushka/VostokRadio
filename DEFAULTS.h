@@ -13,7 +13,7 @@ float def_attack[]={ 140   ,15  ,  15  ,6  , 3  ,2};//multiband compression atta
 float def_release[]={ 600 , 250  ,130 ,50 ,25   ,6}; //multiband compression release
 float def_target[]={20000,16000,13000,13000,16000,25000}; //multiband compression target volume 
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.2,1.01}; //make up gain
-float pre_amp[]={3,1,1,1,1,145}; //multiband compressor pre compression gain
+float pre_amp[]={3,1,1,1,1,125}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
@@ -44,13 +44,13 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 
-#define FINAL_AMP 1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 0.95 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.4
-#define SIGMOIDAL_ATTACK  8
-#define SIGMOIDAL_RELEASE 8
+#define SIGMOIDAL_ATTACK  4
+#define SIGMOIDAL_RELEASE 4
 #define SIGMOIDAL_BUFFER 400
 #define SIGMOIDAL_KNEE 500
 #define SIGMOIDAL_DRANGE -18000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
