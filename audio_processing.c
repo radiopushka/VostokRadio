@@ -28,7 +28,7 @@ void set_compressor_defaults(Multiband mbt){
       set_type(mbt,i,types[i]);
       set_ratio(mbt,i,1.0-(1.0/effect[i]));
       set_knee(mbt,i,knee[i]);
-      
+
     }
 }
 
@@ -72,27 +72,27 @@ int main(){
   #ifdef MPX_ENABLE
     printf("generating MPX cache...\n");
     init_mpx(rate2,PERCENT_PILOT,2147483647);
-  #endif 
+  #endif
 
   int gen_rate=rate2;
   if(setup_alsa_pipe(RECORDING_IFACE,PLAYBACK_IFACE,&ch1,&ch2,&rate1,&rate2,buffer_size)==-1){
     return -1;
   }
-  
+
   if(gen_rate!=rate2){
 
     #ifdef MPX_ENABLE
-    
+
         printf("generating MPX cache again due to rate compatibility setting incorrect...\n");
         init_mpx(rate2,PERCENT_PILOT,2147483647);
-    #endif 
+    #endif
   }
   int input_buffer_prop = rate2/rate1;
   int i_buffer_size = buffer_size/input_buffer_prop;
   int buffer_o[buffer_size];//output buffer
 
   printf("starting rates: input: %d, output: %d\n\n",rate1, rate2);
-  
+
   int buffer_t[i_buffer_size];//input buffer
   double buffer_tf[i_buffer_size];//input buffer
   double helper_buffer[i_buffer_size];
@@ -122,7 +122,7 @@ int main(){
 
   afilter rbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
   afilter lbassc3=poled_f(rate1,HIGH_PASS_CUTOFF,4,1);
-  
+
   AGC agc_left = create_agc(40,10,15,AGC_LOOKAHEAD);
   AGC agc_right = create_agc(40,10,15,AGC_LOOKAHEAD);
 
@@ -138,7 +138,7 @@ int main(){
   Multiband rmbt=create_mbt(rmux,lookaheads);
   Multiband mmbt=create_mbt(mmux,lookaheads);//mono
 
-  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE,SIGMOIDAL_KNEE);
+  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE,SIGMOIDAL_KNEE,PRE_CLIP_SATURATION,PRE_CLIP_SATURATION_LIMIT,POST_SAT_GAIN);
 
 
 
@@ -206,7 +206,7 @@ int main(){
       }
 
       #ifndef BYPASS
-           
+
       if(stereo_on==1){
         if(stereo_gain!=1){
           amplify_stereo_plex(buffer_tf,buffer_endf,stereo_gain);
@@ -223,12 +223,12 @@ int main(){
 
       avg_post_clip=0;
       avg_pre_clip=0;
-      
+
 
       double* helper_dr=helper_buffer;
       for(double* start=buffer_tf;start<buffer_endf;start++){
         #ifndef BYPASS
-        
+
         if(*start==0){
           if(time_off<=is_silence){
             time_off++;
@@ -244,7 +244,7 @@ int main(){
             }
 
             if(count%2==0){
-            
+
 
              #ifdef HIGH_PASS
 
@@ -256,8 +256,8 @@ int main(){
              ch_nobass=run_f(lbassc,buffer);
 
              #endif /* ifdef MACRO */
-            
-              
+
+
              buffer=apply_agc(agc_right,buffer,agc_targ,agc_speed,agc_thresh,ch_nobass,AGC_RELEASE);
              buffer = apply_expander(dxl,buffer,EXPANDER_GAIN);
             }else{
@@ -278,14 +278,14 @@ int main(){
             }
 
 
-          
-                      
+
+
             if(avg_post_agc<abs(buffer)){
               avg_post_agc=abs(buffer);
             }
             //this value is the maximum value the clipper can reach
             #ifdef DYNAMIC_COMPRESSOR
-            
+
             buffer=dynamic_compressor(buffer,1);
             #endif /* ifdef DYNAMIC_COMPRESSOR */
             buffer = buffer * POST_AGC_GAIN;
@@ -300,7 +300,7 @@ int main(){
 
             #ifdef MONO_COMPRESSION
               double value=(local_right+buffer)/2.0;
-             
+
                mux(mmux,value);
                gained(mmux);
                run_compressors_advanced(mmbt,h_compressor_left);
@@ -309,26 +309,26 @@ int main(){
               taken_sample=1;
 
             #else
-             
+
               run_compressors(lmbt);
               //printf("%f\n",get_amplitude_at(lmbt,0));
 
 
             #endif /* ifdef MACRO */
             buffer=demux(lmux) * FINAL_AMP;
-                      
+
 
             #endif
             if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
-                       
-          
+
+
               buffer=run_f(lpassfinal,buffer);
             #ifdef HIGH_PASS
               buffer=run_f(lbassc2,buffer);
             #endif /* ifdef MACRO */
-         
+
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -337,7 +337,7 @@ int main(){
 
           }else{
             #ifdef MULTIBAND_COMPRESSION
-            
+
             //migi
             mux(rmux,buffer);
             gained(rmux);
@@ -346,7 +346,7 @@ int main(){
               float copy=buffer;
               if(taken_sample==1){
                   for(int i=0;i<fdef_size;i++){
-                    
+
                     if(mix_stereo[i]==1){
 
                       set_power_at(rmux,i, pvals[i]);
@@ -361,7 +361,7 @@ int main(){
             #else
               run_compressors(rmbt);
             #endif /* ifdef MONO_COMPRESSION */
-            
+
 
             buffer=demux(rmux) * FINAL_AMP;
 
@@ -369,14 +369,14 @@ int main(){
              if(avg_pre_clip<abs(buffer)){
               avg_pre_clip=abs(buffer);
             }
-         
-          
+
+
 
             buffer=run_f(rpassfinal,buffer);
             #ifdef HIGH_PASS
               buffer=run_f(rbassc2,buffer);
             #endif /* ifdef MACRO */
-           
+
 
             if(avg_post_clip<abs(buffer)){
               avg_post_clip=abs(buffer);
@@ -389,7 +389,7 @@ int main(){
         #else
 
           buffer=(*start);
-       
+
         #endif /* ifdef BYPASS */
         buffer = buffer;
         *helper_dr=buffer;
@@ -397,7 +397,7 @@ int main(){
         helper_dr++;
         count=~count;
       }
-   
+
       #ifdef MPX_ENABLE
         to_mpx(helper_buffer,helper_buffer_end);
 
@@ -410,8 +410,8 @@ int main(){
 	        int* right;
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             right=loop+1;
-            
-         
+
+
             double mpx=get_mpx_next_value(*loop,*right);
 
 		        #ifdef RIGHT_MPX
@@ -470,7 +470,7 @@ int main(){
 
   free(dxr);
   free(dxl);
-  
+
   free(gains);
   free(pvals);
 
@@ -484,7 +484,7 @@ int main(){
   free_multiband(lmbt);
   free_multiband(rmbt);
   free_multiband(mmbt);
-  
+
   free_f(lpassfinal);
   free_f(rpassfinal);
 

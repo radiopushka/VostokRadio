@@ -1,5 +1,6 @@
 #include<math.h>
 #include <string.h>
+#include<stdlib.h>
 
 //double LIM_knee=3000;
 
@@ -22,6 +23,10 @@ struct sigmoidal_lookahead{
   size_t bsize_pre;
   double knee;
 
+  double pre_saturation_ratio;
+  double lim_saturate;
+  double post_sat_gain;
+
   //anti-aliasing
   double intrp_mono[3];
   double intrp_st[3];
@@ -34,7 +39,7 @@ struct sigmoidal_lookahead{
 };
 typedef struct sigmoidal_lookahead* SLim;
 
-SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double range,double attack, double release,double knee){
+SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double range,double attack, double release,double knee,double sat_ratio,double lim_prc_sat,double post_gain){
 
   SLim limiter = malloc(sizeof(struct sigmoidal_lookahead));
   limiter->ring = malloc(sizeof(double)*buffersize);
@@ -52,6 +57,10 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->release=release * ratio;
   limiter->bsize_pre=sizeof(double)*buffersize;
 
+  limiter->pre_saturation_ratio=sat_ratio;
+  limiter->lim_saturate=lim_prc_sat;
+  limiter->post_sat_gain=post_gain;
+
   limiter->knee = knee;
 
   limiter->clip_count=0;
@@ -66,7 +75,7 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   memset(limiter->ring,0,sizeof(double)*buffersize);
   memset(limiter->helper,0,sizeof(double)*buffersize);
 
-  
+
   return limiter;
 }
 
@@ -76,16 +85,18 @@ int get_clip_count(SLim limiter){
   return clip_count;
 }
 
+
+
 double sigmoidal_clipper(double input,double limit,double ratio){
 
-  
+
   return (1.0 / (1.0 + pow(1 + 1 / (( limit ) / ratio),-input))) * (limit * 2) - limit;
 }
 double sigmoidal_clipper_tanh(double input,double limit,double ratio,double* autoratio){
 
-  
 
-  
+
+
   double result= tanh(input/(limit * (ratio + *autoratio))) * limit;
   //distortion threshold:
 
@@ -118,11 +129,15 @@ double mimic_tanh(double input,double ratio, double limit,double limit_scale){
 
   return (input/(limit_scale * ratio)) * limit;
 }
+double saturator(double input, double limit,double ratio,double wetness){
+    return tanh_func(input,ratio,limit) * wetness + input*(1-wetness);
+}
+
 
 double calculate_interpolation(double* l3list){//basically a low pass filter at 16khz
-  double side1 = l3list[0]; 
-  double center = l3list[1]; 
-  double side2 = l3list[2]; 
+  double side1 = l3list[0];
+  double center = l3list[1];
+  double side2 = l3list[2];
 
   double weight_side=1;
   double weight_center=3;
@@ -136,10 +151,10 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
 int is_within(double d1,double d2,double pogreshnost){
     if(d1 < 0 && d2 > 0)
       return -1;
-    
+
     if(d2 < 0 && d1 > 0)
       return -1;
-  
+
     d1 = fabs(d1);
     d2 = fabs(d2);
 
@@ -165,9 +180,9 @@ double minimal_difference(double i1, double i2){
 }
 //attempts to remove square waves
 void harmonic_reduction(SLim limiter,double* l3list, double limit){
-  double side1 = l3list[0]; 
-  double center = l3list[1]; 
-  double side2 = l3list[2]; 
+  double side1 = l3list[0];
+  double center = l3list[1];
+  double side2 = l3list[2];
 
   double max = fmax(fabs(side1),fabs(side2));
   max = fmax(fabs(center),fabs(max));
@@ -216,11 +231,13 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double retmono = *(ring_buffer + limiter->size - 1);
   double retst = *(ring_buffer2 + limiter->size - 1);
 
+  double limit = limiter->limit;
+  double limit2x = limit + limit;
 
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
-  *ring_buffer = *input1;
-  *ring_buffer2 = *input2;
+  *ring_buffer = saturator(*input1,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio)*limiter->post_sat_gain;
+  *ring_buffer2 = saturator(*input2,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio)*limiter->post_sat_gain;
 
 
 
@@ -246,8 +263,6 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   }
 
-  double limit = limiter->limit;
-  double limit2x = limit + limit;
   double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
@@ -308,7 +323,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       limiter->dynamic_ratio_m = 0;
     if(limiter->dynamic_ratio_s<0)
       limiter->dynamic_ratio_s = 0;
-  
+
 
   }*/
 
@@ -340,8 +355,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
   *interp_stereo = st_c;
 
-  
-  
+
+
   harmonic_reduction(limiter,interp_stereo, stereo_cap);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);

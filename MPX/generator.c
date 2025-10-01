@@ -34,14 +34,14 @@ double mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop
 //192khz sample rate card
-double offset=0;
+double offset19=0;
 //float offseth=0.0716755875220826;
 //the sound card has a low pass filter which skews the phase
 //you need to increase the phase here to compensate for it
 /*
  *your sound card will not perfectly synthesize these signals,
  you will have to tune this offset value so that the distortion is not audible on receivers.
-  You can try different sound cards, but design the transmitter input so that it is a high impedance load of a few kilo ohms, that way any filters on the sound card if they are present will have less of an effect. 
+  You can try different sound cards, but design the transmitter input so that it is a high impedance load of a few kilo ohms, that way any filters on the sound card if they are present will have less of an effect.
  sometimes you will have to disable one channel if you have a crappy thin cable
  * */
 //float offseth=0.067633;
@@ -51,10 +51,10 @@ double offset=0;
 //it is likely your sound just has distortion at 38 khz so you might have to find some value that can cancel it out
 //this part of the tunning process is really hard, good luck
 //float offseth=0.078375;//phase offset in samples, 33.86khz RC filter(most sound cards)
-		     //you would need a phase meter or an oscilliscope 
+		     //you would need a phase meter or an oscilliscope
 		     //at the output of your sound card to accurately determine this value
 		     //this is likely a positive value because most filters, parasetic or intentional. shift the phase in the negative direction
-double offseth=0.00793875;
+double offset38=0.00793875;
 //float offseth=0;
 //7516;
 
@@ -80,7 +80,7 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
       intialize_timings=ratekhz;
 
-     
+
 
       synth_19=malloc(sizeof(double)*buffer_size);
       synth_38=malloc(sizeof(double)*buffer_size);
@@ -92,9 +92,9 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
       for(double* s19=synth_19;counter<buffer_size;s19++){
           long double v19=0;
           long double v38=0;
-          for(int i=0;i<over_sampling;i++){ 
-            v19=v19+sinl(shifter_19*(counter_secondary+offset));  
-            v38=v38+sinl(shifter_38*(counter_secondary+offseth));  
+          for(int i=0;i<over_sampling;i++){
+            v19=v19+sinl(shifter_19*(counter_secondary+offset19));
+            v38=v38+sinl(shifter_38*(counter_secondary+offset38));
             counter_secondary=counter_secondary+1;
           }
           counter=counter+1;
@@ -113,7 +113,7 @@ void init_mpx(int ratekhz,double percent_pilot,double max){
       _pilot=percent_pilot*max;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
       st_bias_offset=percent_pilot*P2nd_DAC_HARMONIC;
-      init_mpx_cache(ratekhz,over_sample_co); 
+      init_mpx_cache(ratekhz,over_sample_co);
 
 }
 
@@ -121,14 +121,14 @@ void init_mpx(int ratekhz,double percent_pilot,double max){
 double get_mpx_next_value(double mono,double stereo){
 
 
-  
-   
 
-   
+
+
+
    //100percent: 32760
   //double mono = ((left+right)/2.0)*percent_mono;
   //double stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
- 
+
 
   //virtualy no need in adding this limiter
   /*
@@ -141,8 +141,8 @@ double get_mpx_next_value(double mono,double stereo){
 
   */
 
-  //perform oversampling to try and get rid of aliasing 
-  
+  //perform oversampling to try and get rid of aliasing
+
   double k19=0;
   double k38=0;
 
@@ -151,7 +151,7 @@ double get_mpx_next_value(double mono,double stereo){
   //sometimes it is better to just cut off this signal if there is not enough range to produce a more or less accurate waveform
   //having it at some baseline reduces distortion
   //apparently in order for stereo MPX signal to be generated propperly, sound cards need some kind of bias
-  
+
   /*if(fabs(stereo)<ANALOG_BIAS){
     if(stereo<0)
       stereo=-ANALOG_BIAS;
@@ -186,7 +186,7 @@ double get_mpx_next_value(double mono,double stereo){
 }
 
 void resample_up_stereo_mpx(double* input,int* output,double* input_end,int ratio,double percent_mono,double percent_stereo){
-  
+
   for(double* loop=input;loop<input_end;loop=loop+2){
     double stereo = (*(loop + 1))*percent_mono;
     double mono  = (*loop)*(percent_stereo);
