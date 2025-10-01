@@ -12,8 +12,8 @@ int   lookaheads[]={20 ,  20 , 20, 20 ,20, 20}; // will affect phase
 float def_attack[]={ 140   ,15  ,  15  ,6  , 10  ,1};//multiband compression attack
 float def_release[]={ 600 , 250  ,130 ,50 ,25   ,3}; //multiband compression release
 float def_target[]={20000,13000,13000,15000,20000,23000}; //multiband compression target volume 
-float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1}; //make up gain
-float pre_amp[]={3,1,1,1,1,120}; //multiband compressor pre compression gain
+float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.1}; //make up gain
+float pre_amp[]={3,1,1,1,1,180}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1}; // band compression post amplification
@@ -80,10 +80,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.00024 //response coefficient
+#define AGC_SPEED 0.001 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.00024 //response coefficient
+#define AGC_RELEASE 0.001 //response coefficient
 #define AGC_GATE 1
 
 // set to 1 to show the levels in real time, 0 to keep silent
