@@ -48,7 +48,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1.6
+#define SIGMOIDAL_CO 1.7
 #define SIGMOIDAL_ATTACK  4
 #define SIGMOIDAL_RELEASE 4
 #define SIGMOIDAL_BUFFER 400
