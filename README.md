@@ -131,7 +131,7 @@ int types[]={COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK}; // Compressor typ
 
 The processor is highly optimized:
 - ~10-16% CPU usage on one thread of an Intel i5 12th gen
-- ~30-38% CPU usage on one thread of an Intel i5 6200U
+- ~30-40% CPU usage on one thread of an Intel i5 6200U
 - ~50-65% CPU usage on one thread of an Intel i5 520M and slightly faster on Intel i5 2nd gen
 - 100% CPU usage on one thread of an old Intel Atom notebook processor.
 - Processes audio at 192kHz sample rate
