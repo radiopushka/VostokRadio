@@ -70,6 +70,7 @@ int main(){
   int buffer_size=50000;
 
   #ifdef MPX_ENABLE
+    printf("generating MPX cache...\n");
     init_mpx(rate2,PERCENT_PILOT,2147483647);
   #endif 
 
@@ -82,6 +83,7 @@ int main(){
 
     #ifdef MPX_ENABLE
     
+        printf("generating MPX cache again due to rate compatibility setting incorrect...\n");
         init_mpx(rate2,PERCENT_PILOT,2147483647);
     #endif 
   }
