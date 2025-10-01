@@ -127,6 +127,9 @@ int types[]={COMP_RMS,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK}; // Compressor typ
    - `COMP_PEAK`: Peak-based compression (more aggressive)
 5. The Program already comes pre tuned for Pop music
 
+## Pre-Tune
+   - Tested and tuned on the Vostok Telecom hikari FM transmitter for pop music.
+
 ## Performance
 
 The processor is highly optimized:
