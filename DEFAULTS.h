@@ -47,7 +47,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define PRE_CLIP_SATURATION_LIMIT 0.9
 #define POST_SAT_GAIN 1.6
 
-#define FINAL_AMP 0.7 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -69,8 +69,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 
 //alsa configuration
-#define RECORDING_IFACE "hw:1,1,0"
-#define PLAYBACK_IFACE "hw:0,0"
+//#define RECORDING_IFACE "hw:1,1,0"
+#define RECORDING_IFACE "default"
+//#define PLAYBACK_IFACE "hw:0,0"
+#define PLAYBACK_IFACE "default"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 
