@@ -7,7 +7,7 @@
 double get_mpx_next_value(double left,double right);
 void free_mpx_cache();
 
-void init_mpx(int rate,float percent_pilot,float max);
+void init_mpx(int rate,double percent_pilot,double max);
 
 //sample rate resampling
 //void resample_up_stereo(int* input,int* output,int* input_end,int ratio);

@@ -7,7 +7,7 @@
 //Evan Nikitin 2025
 
 int intialize_timings=0;
-float clip_value=0;
+double clip_value=0;
 double _pilot=0;
 
 double TPI=M_PI*2;
@@ -34,7 +34,7 @@ double mult_pr=1-mult_new;
 
 //determined experimentally on an old ASUS laptop
 //192khz sample rate card
-float offset=0;
+double offset=0;
 //float offseth=0.0716755875220826;
 //the sound card has a low pass filter which skews the phase
 //you need to increase the phase here to compensate for it
@@ -54,14 +54,14 @@ float offset=0;
 		     //you would need a phase meter or an oscilliscope 
 		     //at the output of your sound card to accurately determine this value
 		     //this is likely a positive value because most filters, parasetic or intentional. shift the phase in the negative direction
-float offseth=0.00793875;
+double offseth=0.00793875;
 //float offseth=0;
 //7516;
 
 int itterator=0;
 
-float* synth_19=NULL;
-float* synth_38=NULL;
+double* synth_19=NULL;
+double* synth_38=NULL;
 
 
 void free_mpx_cache(){
@@ -82,14 +82,14 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
      
 
-      synth_19=malloc(sizeof(float)*buffer_size);
-      synth_38=malloc(sizeof(float)*buffer_size);
+      synth_19=malloc(sizeof(double)*buffer_size);
+      synth_38=malloc(sizeof(double)*buffer_size);
 
 
       long double counter=0;
       long double counter_secondary=0;
-      float* s38=synth_38;
-      for(float* s19=synth_19;counter<buffer_size;s19++){
+      double* s38=synth_38;
+      for(double* s19=synth_19;counter<buffer_size;s19++){
           long double v19=0;
           long double v38=0;
           for(int i=0;i<over_sampling;i++){ 
@@ -108,7 +108,7 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 }
 
 
-void init_mpx(int ratekhz,float percent_pilot,float max){
+void init_mpx(int ratekhz,double percent_pilot,double max){
       clip_value=(1.0-percent_pilot)*max;
       _pilot=percent_pilot*max;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
