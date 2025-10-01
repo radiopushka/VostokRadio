@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 #define PRE_CLIP_SATURATION 0.85
-#define PRE_CLIP_SATURATION_LIMIT 0.8
+#define PRE_CLIP_SATURATION_LIMIT 0.7
 #define POST_SAT_GAIN 1.6
 
 #define FINAL_AMP 1 // can change the global gain after the multiband compressor
