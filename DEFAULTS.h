@@ -55,7 +55,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define SIGMOIDAL_ATTACK  8
 #define SIGMOIDAL_RELEASE 8
 #define SIGMOIDAL_BUFFER 100
-#define SIGMOIDAL_KNEE 25
+#define SIGMOIDAL_KNEE 13
 #define SIGMOIDAL_DRANGE -20000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
@@ -69,10 +69,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 
 
 //alsa configuration
-//#define RECORDING_IFACE "hw:1,1,0"
-#define RECORDING_IFACE "default"
-//#define PLAYBACK_IFACE "hw:0,0"
-#define PLAYBACK_IFACE "default"
+#define RECORDING_IFACE "hw:1,1,0"
+#define PLAYBACK_IFACE "hw:0,0"
 #define RATE 192000 //output rate, for MPX
 //the program always records with a sample rate of 48khz
 
