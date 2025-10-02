@@ -47,11 +47,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define PRE_CLIP_SATURATION_LIMIT 0.6
 #define POST_SAT_GAIN 1.4
 
-#define TAPE_SAT_THRESH 22767
-#define TAPE_SAT_WETNESS 0.5
-#define TAPE_SAT_OFFSET 1.12
-#define TAPE_SAT_DRIVE 1.8
-#define TAPE_SAT_BYPASS
+#define TAPE_SAT_THRESH 30767
+#define TAPE_SAT_WETNESS 0.4
+#define TAPE_SAT_OFFSET 1.1
+#define TAPE_SAT_DRIVE 1.00
+//#define TAPE_SAT_BYPASS
 
 
 #define FINAL_AMP 1 // can change the global gain after the multiband compressor
