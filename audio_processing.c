@@ -391,7 +391,11 @@ int main(){
           buffer=(*start);
 
         #endif /* ifdef BYPASS */
-        buffer = buffer;
+        //tape saturation
+        #ifndef TAPE_SAT_BYPASS
+        
+           buffer = asymetric_tanh(buffer * TAPE_SAT_DRIVE, 1 , TAPE_SAT_THRESH , TAPE_SAT_OFFSET,TAPE_SAT_WETNESS);
+        #endif /* ifndef TAPE_SAT_BYPASS */
         *helper_dr=buffer;
         //*helper_dr=buffer*65200.0;
         helper_dr++;

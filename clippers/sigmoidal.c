@@ -129,6 +129,15 @@ double mimic_tanh(double input,double ratio, double limit,double limit_scale){
 
   return (input/(limit_scale * ratio)) * limit;
 }
+double asymetric_tanh(double input, double ratio, double limit,double assymetry, double wetness){
+  double retval=0;
+  if(input > 0)
+    retval= tanh_func(input,ratio,limit);
+  else
+    retval=tanh_func(input,ratio,limit)*assymetry;
+
+  return retval * wetness + input*(1-wetness);
+}
 double saturator(double input, double limit,double ratio,double wetness,double* true_value){
     double tanhv =  tanh_func(input,ratio,limit);
     *true_value=tanhv;
@@ -239,9 +248,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
   double tval;
-  *ring_buffer = saturator(*input1,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio,&tval)*limiter->post_sat_gain;
+  *ring_buffer = saturator(*input1 * limiter->post_sat_gain,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio,&tval);
   double composite = limit2x*limiter->lim_saturate - fabs(tval);
-  *ring_buffer2 = saturator(*input2,composite,limiter->ratio,limiter->pre_saturation_ratio,&tval)*limiter->post_sat_gain;
+  *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,composite,limiter->ratio,limiter->pre_saturation_ratio,&tval);
 
 
 
