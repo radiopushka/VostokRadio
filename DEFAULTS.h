@@ -3,21 +3,21 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,5000,19000}; //multiband compression filters
+int fdef[]={60,250,350,1000,5000,17000}; //multiband compression filters
 int fdef_size=6;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={5 ,  5 , 5, 5 ,5, 5}; // will affect phase
-float def_attack[]={ 140   ,15  ,  15  ,9  , 5  ,1};//multiband compression attack
-float def_release[]={ 600 , 30  ,100 ,150 ,150   ,150}; //multiband compression release
-float def_target[]={20000,20000,20000,20000,20000,20000}; //multiband compression target volume
+float def_attack[]={ 140   ,15  ,  10  ,7  , 5  ,1};//multiband compression attack
+float def_release[]={ 600 , 170  ,160 ,150 ,150   ,30}; //multiband compression release
+float def_target[]={20000,20000,20000,18000,18000,19000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
 float pre_amp[]={2,1,1,1,1,60}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,0.7,0.6,0.7,1}; // band compression post amplification
-float effect[]={8,6,2.0,2.0,4.0,8.0};//ratio
+float effect[]={8,6,4.0,8.0,9.0,8.0};//ratio
 float knee[]={500,70,50,10,4,2};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
@@ -43,11 +43,11 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.6
-#define PRE_CLIP_SATURATION_LIMIT 0.6
-#define POST_SAT_GAIN 1.4
+#define PRE_CLIP_SATURATION 0.7
+#define PRE_CLIP_SATURATION_LIMIT 0.75
+#define POST_SAT_GAIN 1
 
-#define TAPE_SAT_THRESH 30767
+#define TAPE_SAT_THRESH 33767
 #define TAPE_SAT_WETNESS 0.4
 #define TAPE_SAT_OFFSET 1.1
 #define TAPE_SAT_DRIVE 1.00
@@ -58,12 +58,12 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1.7
-#define SIGMOIDAL_ATTACK  20
-#define SIGMOIDAL_RELEASE 20
-#define SIGMOIDAL_BUFFER 10
-#define SIGMOIDAL_KNEE 12
-#define SIGMOIDAL_DRANGE -20000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_CO 1.3
+#define SIGMOIDAL_ATTACK  1
+#define SIGMOIDAL_RELEASE 1
+#define SIGMOIDAL_BUFFER 3
+#define SIGMOIDAL_KNEE 20
+#define SIGMOIDAL_DRANGE -31767 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -86,14 +86,14 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams)
 
-#define POST_AGC_GAIN 0.8
+#define POST_AGC_GAIN 1
 
 #define AGC_TARG 15000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.001 //response coefficient
+#define AGC_SPEED 0.01 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.001 //response coefficient
+#define AGC_RELEASE 0.01 //response coefficient
 #define AGC_GATE 1
 
 // set to 1 to show the levels in real time, 0 to keep silent
