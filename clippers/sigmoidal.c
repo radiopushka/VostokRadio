@@ -27,6 +27,11 @@ struct sigmoidal_lookahead{
   double lim_saturate;
   double post_sat_gain;
 
+  int prev_op;
+  int prev_op2;
+  double prev_val;
+  double prev_val2;
+
   //anti-aliasing
   double intrp_mono[3];
   double intrp_st[3];
@@ -56,6 +61,11 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->attack=attack * ratio;
   limiter->release=release * ratio;
   limiter->bsize_pre=sizeof(double)*buffersize;
+
+  limiter->prev_op=0;
+  limiter->prev_op2=0;
+  limiter->prev_val=0;
+  limiter->prev_val2=0;
 
   limiter->pre_saturation_ratio=sat_ratio;
   limiter->lim_saturate=lim_prc_sat;
@@ -128,6 +138,9 @@ double atan_func(double input, double ratio,double limit){
 double mimic_tanh(double input,double ratio, double limit,double limit_scale){
 
   return (input/(limit_scale * ratio)) * limit;
+}
+double inverse_ratio(double input,double limit,double limit_scale,double target){
+    return 1/(((target/limit)*limit_scale)/input);
 }
 double asymetric_tanh(double input, double ratio, double limit,double assymetry, double wetness){
   double retval=0;
@@ -296,6 +309,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
    if(limiter->dynamic_ratio_m>10){
       limiter->dynamic_ratio_m = 10;
     }
+   limiter->prev_op = 1;
+   limiter->prev_val = rstartm;
 
   }else if(rstartm < limiter->limit - limiter->range){
     double diff=((rstartm/(limiter->limit - limiter->range))*limiter->knee);
@@ -305,6 +320,13 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     if(limiter->dynamic_ratio_m<0.00001){
       limiter->dynamic_ratio_m = 0.00001;
     }
+    //prevent oscillation
+    if(limiter->prev_op == 1 && limiter->prev_val <= rstartm){
+        double in_ratio = inverse_ratio(rstartm, limiter->limit, limit2x, (limiter->limit - limiter->range));
+        limiter->dynamic_ratio_m = in_ratio - limiter->ratio;
+    }
+    limiter->prev_op = 2;
+    limiter->prev_val = rstartm;
   }
 
   if(rstarts > limiter->limit - limiter->range){
@@ -315,7 +337,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
    if(limiter->dynamic_ratio_s>10){
       limiter->dynamic_ratio_s = 10;
     }
-
+   limiter->prev_op2 = 1;
+   limiter->prev_val2 = rstarts;
   }else if(rstarts < limiter->limit - limiter->range){
     double diff=((rstarts/(limiter->limit - limiter->range))*limiter->knee);
     if(diff < 1)
@@ -324,6 +347,14 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     if(limiter->dynamic_ratio_s<0.00001){
       limiter->dynamic_ratio_s = 0.00001;
     }
+   //prevent oscillation
+    if(limiter->prev_op2 == 1 && limiter->prev_val2 <= rstarts){
+        double in_ratio = inverse_ratio(rstarts, limiter->limit, composite, (limiter->limit - limiter->range));
+        limiter->dynamic_ratio_s = in_ratio - limiter->ratio;
+    }
+
+   limiter->prev_op2 = 2;
+   limiter->prev_val2 = rstarts;
   }
 
   /*if(limiter->clip_count_internal>0){
