@@ -301,8 +301,12 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   }
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
 
-  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
-  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
+  double rstartm = 0;
+  if(p_m > 0)
+    rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
+  double rstarts = 0;
+  if(p_st > 0)
+    rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
 
   if(rstartm > limiter->limit - limiter->range){
     double diff=(((limiter->limit - limiter->range)/rstartm)*limiter->knee);
@@ -388,7 +392,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   }
 
   double st_c = 0;
-  double mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
+  double mono_c = 0;
+  if(pr_m > 0)
+    mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
   if(pr_st>0)
     st_c = tanh_func(retst , ratios , limit2x * pr_st);
 
