@@ -292,13 +292,17 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
+  double tmod = ma1 + ma2;
+  double p_st = ma2 / tmod;
+  double p_m = ma1 / tmod;
+  if(tmod ==  0){
+      p_st = 1;
+      p_m=1;
+  }
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
 
-  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x);
-  composite = limit2x - rstartm;
-  if(composite<1)
-      composite=1;
-  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,composite);
+  double rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
+  double rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
 
   if(rstartm > limiter->limit - limiter->range){
     double diff=(((limiter->limit - limiter->range)/rstartm)*limiter->knee);
@@ -375,11 +379,18 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
+  double total_mod = fabs(retmono) + fabs(retst);
+  double pr_st = fabs(retst) / total_mod;
+  double pr_m = fabs(retmono) / total_mod;
+  if(total_mod == 0){
+      pr_st = 1;
+      pr_m = 1;
+  }
+
   double st_c = 0;
-  double mono_c = tanh_func(retmono , ratiom , limit2x);
-  double stereo_cap = limit2x - fabs(mono_c);
-  if(stereo_cap>0)
-    st_c = tanh_func(retst , ratios , stereo_cap);
+  double mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
+  if(pr_st>0)
+    st_c = tanh_func(retst , ratios , limit2x * pr_st);
 
   if(is_within(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
     limiter->clip_count++;
@@ -392,7 +403,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
-  harmonic_reduction(limiter,interp_mono , limit2x);
+  harmonic_reduction(limiter,interp_mono , limit2x * pr_m);
 
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
@@ -400,7 +411,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
 
-  harmonic_reduction(limiter,interp_stereo, stereo_cap);
+  harmonic_reduction(limiter,interp_stereo, limit2x * pr_st);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;
