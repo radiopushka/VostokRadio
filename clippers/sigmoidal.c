@@ -260,10 +260,24 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
+  double total_sum = fabs(*input1) + fabs(*input2);
+  double p_st = fabs(*input2) / total_sum;
+  double p_m = fabs(*input1) / total_sum;
+  if(total_sum == 0){
+    p_st = 1;
+    p_m = 1;
+  }
+  
+  *ring_buffer = 0;
+  *ring_buffer2 = 0;
+  
   double tval;
-  *ring_buffer = saturator(*input1 * limiter->post_sat_gain,limit2x*limiter->lim_saturate,limiter->ratio,limiter->pre_saturation_ratio,&tval);
-  double composite = limit2x*limiter->lim_saturate - fabs(tval);
-  *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,composite,limiter->ratio,limiter->pre_saturation_ratio,&tval);
+
+  if(p_m > 0)
+    *ring_buffer = saturator(*input1 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_m,limiter->ratio,limiter->pre_saturation_ratio,&tval);
+
+  if(p_st > 0)
+    *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_st,limiter->ratio,limiter->pre_saturation_ratio,&tval);
 
 
 
@@ -293,8 +307,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
   double tmod = ma1 + ma2;
-  double p_st = ma2 / tmod;
-  double p_m = ma1 / tmod;
+  p_st = ma2 / tmod;
+  p_m = ma1 / tmod;
   if(tmod ==  0){
       p_st = 1;
       p_m=1;
@@ -330,7 +344,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     }
     //prevent oscillation
     if(limiter->prev_op == 1 && limiter->prev_val <= rstartm){
-        double in_ratio = inverse_ratio(rstartm, limiter->limit, limit2x, (limiter->limit - limiter->range));
+        double in_ratio = inverse_ratio(rstartm, limiter->limit, limit2x * p_m, (limiter->limit - limiter->range));
         limiter->dynamic_ratio_m = in_ratio - limiter->ratio;
     }
     limiter->prev_op = 2;
@@ -357,7 +371,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     }
    //prevent oscillation
     if(limiter->prev_op2 == 1 && limiter->prev_val2 <= rstarts){
-        double in_ratio = inverse_ratio(rstarts, limiter->limit, composite, (limiter->limit - limiter->range));
+        double in_ratio = inverse_ratio(rstarts, limiter->limit, limit2x * p_st, (limiter->limit - limiter->range));
         limiter->dynamic_ratio_s = in_ratio - limiter->ratio;
     }
 
