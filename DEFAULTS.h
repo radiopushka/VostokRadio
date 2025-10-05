@@ -44,7 +44,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define GATE_THRESHOLD 2000
 */
 #define PRE_CLIP_SATURATION 0.2
-#define PRE_CLIP_SATURATION_LIMIT 0.75
+#define PRE_CLIP_SATURATION_LIMIT 1.3
 #define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 33767
@@ -61,7 +61,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define SIGMOIDAL_CO 1.6
 #define SIGMOIDAL_ATTACK  4
 #define SIGMOIDAL_RELEASE 4
-#define SIGMOIDAL_BUFFER 8
+#define SIGMOIDAL_BUFFER 10
 #define SIGMOIDAL_KNEE 400
 #define SIGMOIDAL_DRANGE -31767 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
