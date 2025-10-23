@@ -86,9 +86,9 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams)
 
-#define POST_AGC_GAIN 1.5
+#define POST_AGC_GAIN 1
 
-#define AGC_TARG 2000 //input AGC baseline target
+#define AGC_TARG 3000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
 #define AGC_SPEED 0.01 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
