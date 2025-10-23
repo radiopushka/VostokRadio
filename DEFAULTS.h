@@ -9,16 +9,16 @@ int fdef_size=6;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
 int   lookaheads[]={5 ,  5 , 5, 5 ,5, 5}; // will affect phase
-float def_attack[]={ 140   ,15  ,  10  ,7  , 5  ,1};//multiband compression attack
+float def_attack[]={ 140   ,15  ,  5  , 3 , 1  ,0.5};//multiband compression attack
 float def_release[]={ 600 , 170  ,160 ,150 ,150   ,30}; //multiband compression release
-float def_target[]={20000,20000,20000,18000,18000,19000}; //multiband compression target volume
+float def_target[]={20000,20000,20000,15000,15000,19000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
 float pre_amp[]={2,1,1,1,1,60}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,0.7,0.6,0.7,1}; // band compression post amplification
+float post_amp[]={1,1,1,1,1,1.2}; // band compression post amplification
 float effect[]={8,6,4.0,8.0,9.0,8.0};//ratio
-float knee[]={500,70,50,10,4,2};//knee
+float knee[]={200,70,50,2,2,2};//knee
 int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -59,10 +59,10 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.6
-#define SIGMOIDAL_ATTACK  4
-#define SIGMOIDAL_RELEASE 4
+#define SIGMOIDAL_ATTACK  16
+#define SIGMOIDAL_RELEASE 16
 #define SIGMOIDAL_BUFFER 20
-#define SIGMOIDAL_KNEE 800
+#define SIGMOIDAL_KNEE 4000
 #define SIGMOIDAL_DRANGE -31767 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
@@ -86,7 +86,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define STEREO_GAIN 1.5
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams)
 
-#define POST_AGC_GAIN 0.9
+#define POST_AGC_GAIN 1.5
 
 #define AGC_TARG 2000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
