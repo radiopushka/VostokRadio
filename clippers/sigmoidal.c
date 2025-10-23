@@ -412,7 +412,21 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   if(pr_st>0)
     st_c = tanh_func(retst , ratios , limit2x * pr_st);
 
+  //if is clipped just start removing stereo
   if(is_within(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
+    double severity = fabs(mono_c) - (limit2x - (limit2x * 0.25));
+    double percent_st_reduction = severity / (limit2x * 0.5);
+    if(percent_st_reduction > 1)
+      percent_st_reduction = 1;
+    pr_st = pr_st* (1 - percent_st_reduction);
+    pr_m = 1 - pr_st;
+
+    //recalculate MPX composite signal
+    if(pr_m > 0)
+      mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
+    if(pr_st>0)
+      st_c = tanh_func(retst , ratios , limit2x * pr_st);
+
     limiter->clip_count++;
     limiter->clip_count_internal++;
   }
