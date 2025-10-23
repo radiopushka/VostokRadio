@@ -422,10 +422,15 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     pr_m = 1 - pr_st;
 
     //recalculate MPX composite signal
+    double mono_c2=0;double st_c2=0;
     if(pr_m > 0)
-      mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
+      mono_c2 = tanh_func(retmono , ratiom , limit2x * pr_m);
     if(pr_st>0)
-      st_c = tanh_func(retst *(1 - percent_st_reduction) , ratios , limit2x * pr_st);
+      st_c2 = tanh_func(retst *(1 - percent_st_reduction) , ratios , limit2x * pr_st);
+
+    //now apply the wetness function
+    st_c = 0.25 * st_c + 0.75 * st_c2;
+    mono_c = 0.25 * mono_c + 0.75 * mono_c2;
 
     limiter->clip_count++;
     limiter->clip_count_internal++;
