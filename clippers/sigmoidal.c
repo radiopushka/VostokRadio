@@ -425,7 +425,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     if(pr_m > 0)
       mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
     if(pr_st>0)
-      st_c = tanh_func(retst , ratios , limit2x * pr_st);
+      st_c = tanh_func(retst *(1 - percent_st_reduction) , ratios , limit2x * pr_st);
 
     limiter->clip_count++;
     limiter->clip_count_internal++;
