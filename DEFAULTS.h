@@ -59,8 +59,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.6
-#define SIGMOIDAL_ATTACK  32
-#define SIGMOIDAL_RELEASE 32
+#define SIGMOIDAL_ATTACK  8
+#define SIGMOIDAL_RELEASE 8
 #define SIGMOIDAL_BUFFER 20
 #define SIGMOIDAL_KNEE 8000
 #define SIGMOIDAL_DRANGE -52767 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
