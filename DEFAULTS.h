@@ -31,8 +31,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.5
-#define EXPANDER_ATTACK 0.0001
+#define EXPANDER_RATIO 0.7
+#define EXPANDER_ATTACK 0.0002
 #define EXPANDER_RELEASE 0.005
 #define EXPANDER_GAIN 0.000001
 #define EXPANDER_THRESHOLD 6000
