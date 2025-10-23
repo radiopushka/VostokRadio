@@ -62,7 +62,7 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 #define SIGMOIDAL_ATTACK  4
 #define SIGMOIDAL_RELEASE 4
 #define SIGMOIDAL_BUFFER 20
-#define SIGMOIDAL_KNEE 400
+#define SIGMOIDAL_KNEE 800
 #define SIGMOIDAL_DRANGE -31767 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
@@ -71,8 +71,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 40 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.005
+#define HIGH_PASS_CUTOFF 20 //comment the line above to disable
+#define DC_REMOVAL_COEFF 0.002
 
 
 //alsa configuration
