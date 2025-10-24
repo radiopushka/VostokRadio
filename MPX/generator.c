@@ -60,7 +60,8 @@ double offset38=0.00793875;
 //7516;
 
 int itterator=0;
-
+double tlim = 2081818578;
+double mpx_clip_t;
 double* synth_19=NULL;
 double* synth_38=NULL;
 
@@ -112,6 +113,8 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 void init_mpx(int ratekhz,double percent_pilot,double max){
       clip_value=(1.0-percent_pilot)*max;
       _pilot=percent_pilot*max;
+      mpx_clip_t=(1-percent_pilot)*max;
+      tlim=max;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
       st_bias_offset=percent_pilot*P2nd_DAC_HARMONIC;
       init_mpx_cache(ratekhz,over_sample_co);
@@ -136,13 +139,29 @@ double mpx_peak_38khz_modulation(){
 
     return max;
 }
-double tlim = 2081818578;
 double tanh_func_mpx(double input, double ratio,double limit){
   return tanh(input/(limit * ratio)) * limit;
   //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
 }
 
+double mpx_list[3];
+double calculate_interpolation_mpx(double input){//basically a low pass filter at 16khz
+  mpx_list[2]=mpx_list[1];
+  mpx_list[1]=mpx_list[0];
+  mpx_list[0]=input;
 
+  double side1 = mpx_list[0];
+  double center = mpx_list[1];
+  double side2 = mpx_list[2];
+
+  double weight_side=1;
+  double weight_center=3;
+
+  double average = side1*weight_side + center*weight_center + side2*weight_side;
+
+  return average/(weight_side+weight_side+weight_center);
+
+}
 //double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
@@ -163,7 +182,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
  //mono = mono*ratiom;
  //stereo = stereo*ratios;
 
-   
+
  mono = tanh_func_mpx(mono,1,tlim*ratiom);
  stereo = tanh_func_mpx(stereo,1,tlim*ratios);*/
 
@@ -227,11 +246,11 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   if(fabs(composite)<0.00001)
     composite=0.00001;
 
-  composite=tanh_func_mpx(composite,1,tlim*fmax(percent_mono,percent_stereo));
+  composite=tanh_func_mpx(composite,1,(mpx_clip_t));
 
 
 
-  return k19+composite;
+  return k19+calculate_interpolation_mpx(composite);
 
 
 
