@@ -237,8 +237,8 @@ void harmonic_reduction(double* l3list, double limit){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
 
- stereo=stereo*1.5;
- mono=mono*1.5;
+ stereo=stereo*2;
+ mono=mono*2;
 
  double o38=synth_38[itterator];
  /*double pre_c=stereo*o38;
