@@ -151,7 +151,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
  mono=mono*1.5;
 
  double o38=synth_38[itterator];
- double pre_c=stereo*o38;
+ /*double pre_c=stereo*o38;
  if(fabs(pre_c)<0.00001)
     pre_c=0.00001;
  if(fabs(mono)<0.00001)
@@ -165,7 +165,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
 
    
  mono = tanh_func_mpx(mono,1,tlim*ratiom);
- stereo = tanh_func_mpx(stereo,1,tlim*ratios);
+ stereo = tanh_func_mpx(stereo,1,tlim*ratios);*/
 
  mono = mono*(percent_mono);
  stereo = stereo*(percent_stereo);
@@ -223,9 +223,15 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   //generate the sampled signal
 
 
+  double composite=k38+mono;
+  if(fabs(composite)<0.00001)
+    composite=0.00001;
+
+  composite=tanh_func_mpx(composite,1,tlim*fmax(percent_mono,percent_stereo));
 
 
-  return k19+(k38+mono);
+
+  return k19+composite;
 
 
 
