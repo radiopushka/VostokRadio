@@ -24,6 +24,7 @@ double HF_BIAS=0;
 double P2nd_DAC_HARMONIC=0.00006;
 
 double st_bias_offset=0;
+double pr_pilot=0;
 
 //so that the stereo is not modulated too much
 double st_lowpass=0;
@@ -115,6 +116,7 @@ void init_mpx(int ratekhz,double percent_pilot,double max){
       _pilot=percent_pilot*max;
       mpx_clip_t=(1-percent_pilot)*max;
       tlim=max;
+      pr_pilot = percent_pilot;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
       st_bias_offset=percent_pilot*P2nd_DAC_HARMONIC;
       init_mpx_cache(ratekhz,over_sample_co);
@@ -237,8 +239,8 @@ void harmonic_reduction(double* l3list, double limit){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
 
- stereo=stereo*2;
- mono=mono*2;
+ //stereo=stereo*1.5;
+ //mono=mono*1.5;
 
  double o38=synth_38[itterator];
  /*double pre_c=stereo*o38;
@@ -313,11 +315,12 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   //generate the sampled signal
 
 
+  double mpx_clip_local = tlim - o19;
   double composite=k38+mono;
   if(fabs(composite)<0.00001)
     composite=0.00001;
 
-  composite=tanh_func_mpx(composite,1,(mpx_clip_t));
+  composite=tanh_func_mpx(composite,1,mpx_clip_local);
 
 
   mpx_list[2]=mpx_list[1];
@@ -325,7 +328,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   mpx_list[0]=composite;
 
 
-  harmonic_reduction(mpx_list,mpx_clip_t);
+  harmonic_reduction(mpx_list,mpx_clip_local);
   return k19+calculate_interpolation_mpx(composite);
 
 
