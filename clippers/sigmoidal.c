@@ -265,6 +265,11 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double p_m = 1;
 
 
+  if(fabs(*input1)<0.00001)
+    *input1=0.00001;
+
+  if(fabs(*input2)<0.00001)
+    *input2=0.00001;
 
   *ring_buffer = 0;
   *ring_buffer2 = 0;

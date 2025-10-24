@@ -393,6 +393,8 @@ int main(){
         #endif /* ifdef BYPASS */
         //tape saturation
         #ifndef TAPE_SAT_BYPASS
+           if(fabs(buffer)<0.00001)
+            buffer=0.00001;
 
            buffer = asymetric_tanh(buffer * TAPE_SAT_DRIVE, 1 , TAPE_SAT_THRESH , TAPE_SAT_OFFSET,TAPE_SAT_WETNESS);
         #endif /* ifndef TAPE_SAT_BYPASS */
