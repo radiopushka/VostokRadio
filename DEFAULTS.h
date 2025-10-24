@@ -88,7 +88,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 8000 //input AGC baseline target
+#define AGC_TARG 3000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
 #define AGC_SPEED 0.01 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
