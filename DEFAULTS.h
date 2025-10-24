@@ -59,8 +59,8 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 1.3
-#define SIGMOIDAL_ATTACK  8
-#define SIGMOIDAL_RELEASE 8
+#define SIGMOIDAL_ATTACK  16
+#define SIGMOIDAL_RELEASE 16
 #define SIGMOIDAL_BUFFER 3
 #define SIGMOIDAL_KNEE 8000
 #define SIGMOIDAL_DRANGE 8000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
@@ -106,7 +106,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
 #define PERCENT_MONO 0.85 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 0.70// percent of the signal devoted to mono audio
+#define PERCENT_STEREO 0.85// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
