@@ -143,12 +143,38 @@ double tanh_func_mpx(double input, double ratio,double limit){
   return tanh(input/(limit * ratio)) * limit;
   //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
 }
+int is_within(double d1,double d2,double pogreshnost){
+    if(d1 < 0 && d2 > 0)
+      return -1;
 
+    if(d2 < 0 && d1 > 0)
+      return -1;
+
+    d1 = fabs(d1);
+    d2 = fabs(d2);
+
+    /*if(d1 < pogreshnost || d2 < pogreshnost)
+      return -1;*/
+
+    if(d1 == d2)
+      return 1;
+
+    if( fabs(d1 - d2) < pogreshnost)
+      return 1;
+
+
+    return -1;
+}
+double minimal_difference(double i1, double i2){
+  i1 = fabs(i1);
+  i2 = fabs(i2);
+  if(i2 > i1)
+    return i2 - i1;
+  return i1 - i2;
+}
 double mpx_list[3];
 double calculate_interpolation_mpx(double input){//basically a low pass filter at 16khz
-  mpx_list[2]=mpx_list[1];
-  mpx_list[1]=mpx_list[0];
-  mpx_list[0]=input;
+
 
   double side1 = mpx_list[0];
   double center = mpx_list[1];
@@ -162,6 +188,51 @@ double calculate_interpolation_mpx(double input){//basically a low pass filter a
   return average/(weight_side+weight_side+weight_center);
 
 }
+void harmonic_reduction(double* l3list, double limit){
+  double side1 = l3list[0];
+  double center = l3list[1];
+  double side2 = l3list[2];
+
+  double max = fmax(fabs(side1),fabs(side2));
+  max = fmax(fabs(center),fabs(max));
+
+  double level = 400;
+  if(max<level){
+    level = max;
+  }
+
+
+  if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference(center,side1);
+      if(side1<0)
+        l3list[0] = side1 + (level - difference1);
+      else
+        l3list[0] = side1 - (level - difference1);
+
+      double difference2 = minimal_difference(center,side2);;
+      if(side2<0)
+        l3list[2] = side2 + (level - difference2);
+      else
+        l3list[2] = side2 - (level - difference2);
+  }else if (is_within(side1,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference(center,side1);
+      if(side1<0)
+        l3list[0] = side1 + (level - difference1);
+      else
+        l3list[0] = side1 - (level - difference1);
+
+  }else if (is_within(side2,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference2 = minimal_difference(center,side2);;
+      if(side2<0)
+        l3list[2] = side2 + (level - difference2);
+      else
+        l3list[2] = side2 - (level - difference2);
+
+  }
+
+}
+
+
 //double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
@@ -249,7 +320,12 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   composite=tanh_func_mpx(composite,1,(mpx_clip_t));
 
 
+  mpx_list[2]=mpx_list[1];
+  mpx_list[1]=mpx_list[0];
+  mpx_list[0]=composite;
 
+
+  harmonic_reduction(mpx_list,mpx_clip_t);
   return k19+calculate_interpolation_mpx(composite);
 
 

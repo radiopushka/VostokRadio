@@ -164,7 +164,7 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
   double side2 = l3list[2];
 
   double weight_side=1;
-  double weight_center=3;
+  double weight_center=6;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -172,7 +172,7 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
 
 }
 
-int is_within(double d1,double d2,double pogreshnost){
+int is_within_l(double d1,double d2,double pogreshnost){
     if(d1 < 0 && d2 > 0)
       return -1;
 
@@ -195,7 +195,7 @@ int is_within(double d1,double d2,double pogreshnost){
     return -1;
 }
 
-double minimal_difference(double i1, double i2){
+/*double minimal_difference(double i1, double i2){
   i1 = fabs(i1);
   i2 = fabs(i2);
   if(i2 > i1)
@@ -245,7 +245,7 @@ void harmonic_reduction(SLim limiter,double* l3list, double limit){
 
   }
 
-}
+}*/
 
 void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
@@ -412,7 +412,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     st_c = tanh_func(retst , ratios , limit2x * pr_st);
 
   //if is clipped just start removing stereo
-  if(is_within(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
+  if(is_within_l(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
     //depreicated, use more advanced time slicing approach
     /*double severity = fabs(mono_c) - (limit2x - (limit2x * 0.5));
     double percent_st_reduction = severity / (limit2x );
@@ -442,7 +442,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
-  harmonic_reduction(limiter,interp_mono , limit2x * pr_m);
+ // harmonic_reduction(limiter,interp_mono , limit2x * pr_m);
 
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
@@ -450,7 +450,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
 
-  harmonic_reduction(limiter,interp_stereo, limit2x * pr_st);
+  //harmonic_reduction(limiter,interp_stereo, limit2x * pr_st);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;
