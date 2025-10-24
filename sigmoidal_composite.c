@@ -1,4 +1,5 @@
 #include "./clippers/sigmoidal.c"
+#include "./MPX/generator.h"
 
 
 void to_mpx(double* array, double* endptr){
@@ -9,7 +10,7 @@ void to_mpx(double* array, double* endptr){
 
     double mono = (*left+*right);
     double stereo = (*left - *right);
-    
+
     *left=mono;
     *right=stereo;
   }
@@ -23,12 +24,12 @@ void mpx_clip(SLim clipper, double* array,double* endptr,double limit){
     double* stereo = array;
 
 
-    
-    
+
+
     apply_sigmoidal(clipper,mono,stereo);
 
   }
-  
+
 }
 
 

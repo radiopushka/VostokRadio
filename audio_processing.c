@@ -393,7 +393,7 @@ int main(){
         #endif /* ifdef BYPASS */
         //tape saturation
         #ifndef TAPE_SAT_BYPASS
-        
+
            buffer = asymetric_tanh(buffer * TAPE_SAT_DRIVE, 1 , TAPE_SAT_THRESH , TAPE_SAT_OFFSET,TAPE_SAT_WETNESS);
         #endif /* ifndef TAPE_SAT_BYPASS */
         *helper_dr=buffer;
@@ -409,14 +409,14 @@ int main(){
           mpx_clip(sigmoidal,helper_buffer,helper_buffer_end,31767 );
         #endif /* ifdef FINAL_CLIP */
         gain_array(helper_buffer,helper_buffer_end,32769);
-        resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop,PERCENT_STEREO,PERCENT_MONO);
+        resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);
         if(rate2 == 96000||rate2 == 192000){
 	        int* right;
           for(int* loop=buffer_o;loop<o_buffer_end;loop=loop+2){
             right=loop+1;
 
 
-            double mpx=get_mpx_next_value(*loop,*right);
+            double mpx=get_mpx_next_value(*loop,*right,PERCENT_STEREO,PERCENT_MONO);
 
 		        #ifdef RIGHT_MPX
             		*right=mpx;
@@ -426,7 +426,7 @@ int main(){
 		        #ifdef LEFT_MPX
             		*loop=mpx;
 		        #else
-	    		      *loop=*loop;
+	    		      *loop=mpx;
 		        #endif
           }
         }

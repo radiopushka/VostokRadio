@@ -260,17 +260,15 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
-  double total_sum = fabs(*input1) + fabs(*input2);
-  double p_st = fabs(*input2) / total_sum;
-  double p_m = fabs(*input1) / total_sum;
-  if(total_sum == 0){
-    p_st = 1;
-    p_m = 1;
-  }
-  
+  //not applicable anymore due to time slicing clipping
+  double p_st = 1;
+  double p_m = 1;
+
+
+
   *ring_buffer = 0;
   *ring_buffer2 = 0;
-  
+
   double tval;
 
   if(p_m > 0)
@@ -306,13 +304,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   double ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
-  double tmod = ma1 + ma2;
-  p_st = ma2 / tmod;
-  p_m = ma1 / tmod;
-  if(tmod ==  0){
-      p_st = 1;
-      p_m=1;
-  }
+
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
 
   double rstartm = 0;
@@ -394,19 +386,21 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   }*/
 
+  if(fabs(retmono)<0.00001)
+    retmono=0.00001;
+  if(fabs(retst)<0.00001)
+    retst=0.00001;
+
   ratiom = limiter->ratio + limiter->dynamic_ratio_m;
   ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
-  double total_mod = fabs(retmono) + fabs(retst);
-  double pr_st = fabs(retst) / total_mod;
-  double pr_m = fabs(retmono) / total_mod;
-  if(total_mod == 0){
-      pr_st = 1;
-      pr_m = 1;
-  }
+  //time slicing method
+  double pr_st = 1;
+  double pr_m = 1;
 
-  double st_c = 0;
-  double mono_c = 0;
+  double st_c = retst;
+  double mono_c = retmono;
+  
   if(pr_m > 0)
     mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
   if(pr_st>0)
@@ -414,11 +408,12 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   //if is clipped just start removing stereo
   if(is_within(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
-    double severity = fabs(mono_c) - (limit2x - (limit2x * 0.25));
-    double percent_st_reduction = severity / (limit2x * 0.5);
-    if(percent_st_reduction > 1)
-      percent_st_reduction = 1;
-    pr_st = pr_st* (1 - percent_st_reduction);
+    //depreicated, use more advanced time slicing approach
+    /*double severity = fabs(mono_c) - (limit2x - (limit2x * 0.5));
+    double percent_st_reduction = severity / (limit2x );
+    if(percent_st_reduction > pr_st)
+      percent_st_reduction = pr_st;
+    pr_st =(pr_st - percent_st_reduction);
     pr_m = 1 - pr_st;
 
     //recalculate MPX composite signal
@@ -429,8 +424,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       st_c2 = tanh_func(retst *(1 - percent_st_reduction) , ratios , limit2x * pr_st);
 
     //now apply the wetness function
-    st_c = 0.25 * st_c + 0.75 * st_c2;
-    mono_c = 0.25 * mono_c + 0.75 * mono_c2;
+    st_c = 0.5 * st_c + 0.5 * st_c2;
+    mono_c = 0.5 * mono_c + 0.5 * mono_c2;*/
 
     limiter->clip_count++;
     limiter->clip_count_internal++;

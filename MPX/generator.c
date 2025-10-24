@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include<stdio.h>
 #include "../multiband_compressor/mbc.h"
 //Evan Nikitin 2025
 
@@ -117,12 +118,57 @@ void init_mpx(int ratekhz,double percent_pilot,double max){
 
 }
 
+double mpx_peak_38khz_modulation(){
+    //192 khz
+    double max = 0;
+    int mittr = itterator;
+    for(int i=0;i<4;i++){
+            double mval = fabs(synth_38[mittr]);
+            if(mval>max){
+                max = mval;
+            }
+            mittr++;
+            if(mittr>=buffer_size){
+                mittr = 0;
+            }
+
+        }
+
+    return max;
+}
+double tlim = 2081818578;
+double tanh_func_mpx(double input, double ratio,double limit){
+  return tanh(input/(limit * ratio)) * limit;
+  //return (atan(input/(limit * ratio))/(M_PI/2)) * limit;
+}
+
+
 //double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
-double get_mpx_next_value(double mono,double stereo){
+double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
 
+ stereo=stereo*1.5;
+ mono=mono*1.5;
 
+ double o38=synth_38[itterator];
+ double pre_c=stereo*o38;
+ if(fabs(pre_c)<0.00001)
+    pre_c=0.00001;
+ if(fabs(mono)<0.00001)
+    mono=0.00001;
+ double ratios = fabs(pre_c/(pre_c+mono));
+ //ratios = ratios*fabs(o38);
+ double ratiom = fabs(mono/(pre_c+mono));
 
+ //mono = mono*ratiom;
+ //stereo = stereo*ratios;
+
+   
+ mono = tanh_func_mpx(mono,1,tlim*ratiom);
+ stereo = tanh_func_mpx(stereo,1,tlim*ratios);
+
+ mono = mono*(percent_mono);
+ stereo = stereo*(percent_stereo);
 
 
    //100percent: 32760
@@ -162,7 +208,6 @@ double get_mpx_next_value(double mono,double stereo){
 
 
 
-	double o38=synth_38[itterator];
   double o19=synth_19[itterator];
   itterator++;
   if(itterator>=buffer_size){
@@ -179,19 +224,24 @@ double get_mpx_next_value(double mono,double stereo){
 
 
 
+
   return k19+(k38+mono);
 
 
 
 }
 
-void resample_up_stereo_mpx(double* input,int* output,double* input_end,int ratio,double percent_mono,double percent_stereo){
+void resample_up_stereo_mpx(double* input,int* output,double* input_end,int ratio){
 
   for(double* loop=input;loop<input_end;loop=loop+2){
-    double stereo = (*(loop + 1))*percent_mono;
-    double mono  = (*loop)*(percent_stereo);
+
+    double stereo = (*(loop + 1));
+    double mono  = (*loop);
+
+
     for(int i=0;i<ratio;i++){
       //*output=*loop;
+
       *output=mono;
       output++;
       //*output=*right;
