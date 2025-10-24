@@ -71,8 +71,8 @@ int types[]={COMP_PEAK,COMP_RMS,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band 
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 20 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.002
+#define HIGH_PASS_CUTOFF 32 //comment the line above to disable
+#define DC_REMOVAL_COEFF 0.003
 
 
 //alsa configuration
