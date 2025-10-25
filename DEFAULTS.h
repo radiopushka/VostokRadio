@@ -11,9 +11,9 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0    
 int   lookaheads[]={3 ,  3 , 3, 3 ,3, 3}; // will affect phase
 float def_attack[]={ 70   ,15  ,  8  , 7 , 3  ,0.1};//multiband compression attack
 float def_release[]={ 600 , 300  ,160 ,150 ,150   ,50}; //multiband compression release
-float def_target[]={15000,15000,17000,15000,15000,18000}; //multiband compression target volume
+float def_target[]={15000,15000,17000,15000,15000,20000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
-float pre_amp[]={2,1,1,1,1,70}; //multiband compressor pre compression gain
+float pre_amp[]={2,1,1,1,1,80}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,0.7,0.7,2}; // band compression post amplification
@@ -105,8 +105,8 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 1.5 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 1.5// percent of the signal devoted to mono audio
+#define PERCENT_MONO 1.3 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 1.3// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
