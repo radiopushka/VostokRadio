@@ -8,7 +8,7 @@ int fdef_size=6;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0     };
-int   lookaheads[]={5 ,  5 , 5, 5 ,5, 5}; // will affect phase
+int   lookaheads[]={3 ,  3 , 3, 3 ,3, 3}; // will affect phase
 float def_attack[]={ 70   ,15  ,  8  , 7 , 3  ,2};//multiband compression attack
 float def_release[]={ 300 , 150  ,80 ,75 ,75   ,16}; //multiband compression release
 float def_target[]={15000,15000,17000,15000,15000,20000}; //multiband compression target volume
@@ -18,7 +18,7 @@ float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,0.7,2}; // band compression post amplification
 float effect[]={28,26,20.0,22.0,22.0,28.0};//ratio
-float knee[]={400,100,100,60,60,5};//knee
+float knee[]={2000,100,100,1000,1000,300};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -58,7 +58,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1.7
+#define SIGMOIDAL_CO 1.6
 #define SIGMOIDAL_ATTACK  200
 #define SIGMOIDAL_RELEASE 200
 #define SIGMOIDAL_BUFFER 5
@@ -88,7 +88,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 7500 //input AGC baseline target
+#define AGC_TARG 4000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
 #define AGC_SPEED 0.01 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
