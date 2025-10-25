@@ -164,7 +164,7 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
   double side2 = l3list[2];
 
   double weight_side=1;
-  double weight_center=6;
+  double weight_center=20;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -260,9 +260,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
   memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
-  //not applicable anymore due to time slicing clipping
-  double p_st = 1;
-  double p_m = 1;
+
 
 
   if(fabs(*input1)<0.00001)
@@ -270,17 +268,19 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   if(fabs(*input2)<0.00001)
     *input2=0.00001;
-
+  //not applicable anymore due to time slicing clipping
+  double p_mpx = fabs(*input1/(*input1 + *input2));
+  double p_stpx = fabs(*input2/(*input2 + *input2));
   *ring_buffer = 0;
   *ring_buffer2 = 0;
 
   double tval;
 
-  if(p_m > 0)
-    *ring_buffer = saturator(*input1 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_m,limiter->ratio,limiter->pre_saturation_ratio,&tval);
+  if(p_mpx > 0)
+    *ring_buffer = saturator(*input1 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_mpx,limiter->ratio,limiter->pre_saturation_ratio,&tval);
 
-  if(p_st > 0)
-    *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_st,limiter->ratio,limiter->pre_saturation_ratio,&tval);
+  if(p_stpx > 0)
+    *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_stpx,limiter->ratio,limiter->pre_saturation_ratio,&tval);
 
 
 
@@ -311,7 +311,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
-
+  double p_m = fabs(ma1/(ma1 + ma2));
+  double p_st = fabs(ma2/(ma1 + ma2));
   double rstartm = 0;
   if(p_m > 0)
     rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
@@ -400,8 +401,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratios = limiter->ratio + limiter->dynamic_ratio_s;
 
   //time slicing method
-  double pr_st = 1;
-  double pr_m = 1;
+  double pr_st = fabs(retst/(retst+retmono));
+  double pr_m = fabs(retmono/(retst+retmono));
 
   double st_c = retst;
   double mono_c = retmono;
