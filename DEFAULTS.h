@@ -43,13 +43,13 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.7
+#define PRE_CLIP_SATURATION 0.8
 #define PRE_CLIP_SATURATION_LIMIT 1.3
 #define POST_SAT_GAIN 1
 
-#define TAPE_SAT_THRESH 32767
-#define TAPE_SAT_WETNESS 0.4
-#define TAPE_SAT_OFFSET 1.12
+#define TAPE_SAT_THRESH 42767
+#define TAPE_SAT_WETNESS 0.5
+#define TAPE_SAT_OFFSET 1.22
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
@@ -61,9 +61,9 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define SIGMOIDAL_CO 1.3
 #define SIGMOIDAL_ATTACK  200
 #define SIGMOIDAL_RELEASE 200
-#define SIGMOIDAL_BUFFER 20
-#define SIGMOIDAL_KNEE 200
-#define SIGMOIDAL_DRANGE 5000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_BUFFER 30
+#define SIGMOIDAL_KNEE 1000
+#define SIGMOIDAL_DRANGE 7000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -105,8 +105,8 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 1.3 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 1.3// percent of the signal devoted to mono audio
+#define PERCENT_MONO 1.7 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 1.7// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
