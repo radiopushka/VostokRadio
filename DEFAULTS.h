@@ -3,7 +3,7 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,7000,17000}; //multiband compression filters
+int fdef[]={60,250,350,1000,8000,17000}; //multiband compression filters
 int fdef_size=6;
 
 
@@ -13,7 +13,7 @@ float def_attack[]={ 70   ,15  ,  8  , 7 , 3  ,0.1};//multiband compression atta
 float def_release[]={ 300 , 150  ,80 ,75 ,75   ,25}; //multiband compression release
 float def_target[]={15000,15000,17000,15000,15000,20000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
-float pre_amp[]={2,1,1,1,1,170}; //multiband compressor pre compression gain
+float pre_amp[]={2,1,1,1,1,200}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,0.7,0.7,2}; // band compression post amplification
