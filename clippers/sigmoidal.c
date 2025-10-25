@@ -287,22 +287,25 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
   //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
-  double ma1 = fabs(retmono);
+  double ma1 = retmono;
 
-  double ma2 = fabs(retst);
+  double ma2 = retst;
+
+  double compositemx = fabs(retst + retmono);
 
 
   ring_buffer=limiter->ring;
   for(double* bwalk=ring_buffer; bwalk < ring_buffer + limiter->size; bwalk++){
-    double absval = fabs(*bwalk);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
-    double absval2 = fabs(*ring_buffer2);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
 
+    double composite = fabs(*bwalk + *ring_buffer2);
 
     ring_buffer2++;
-    if(absval > ma1){
+    if(composite>compositemx){
+      double absval = fabs(*bwalk);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
+      double absval2 = fabs(*ring_buffer2);//fabs(tanh_func(*bwalk , limiter->ratio + limiter->dynamic_ratio , limiter->limit));
+
+
       ma1 = absval;
-    }
-    if(absval2 > ma2){
       ma2 = absval2;
     }
 
@@ -317,10 +320,10 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double p_st = fabs(ma2/(ma1 + ma2));
   double rstartm = 0;
   if(p_m > 0)
-    rstartm = mimic_tanh(ma1 , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
+    rstartm = mimic_tanh(fabs(ma1) , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
   double rstarts = 0;
   if(p_st > 0)
-    rstarts = mimic_tanh(ma2 , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
+    rstarts = mimic_tanh(fabs(ma2) , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
 
   if(rstartm > limiter->limit - limiter->range){
     double diff=(((limiter->limit - limiter->range)/rstartm)*limiter->knee);
