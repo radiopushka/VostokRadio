@@ -271,6 +271,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   //not applicable anymore due to time slicing clipping
   double p_mpx = fabs(*input1/(*input1 + *input2));
   double p_stpx = fabs(*input2/(*input2 + *input2));
+
+  
   *ring_buffer = 0;
   *ring_buffer2 = 0;
 

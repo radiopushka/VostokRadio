@@ -68,7 +68,7 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   agc->avg_audio=agc->avg_audio/2+absv/2;
   if(absv<thresh){
 
-      target = agc->avg_audio;      
+      target = thresh;      
 
   }
   /*if(agc->gain>agc->gain_avg){
@@ -129,8 +129,8 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   if(agc->gain>agc->gain_max){
     agc->gain=agc->gain_max;
   }
-  if(agc->gain<0.000001){
-    agc->gain=0.000001;
+  if(agc->gain<0.00001){
+    agc->gain=0.00001;
   }
 
   agc->gain_avg = (agc->gain_avg + agc->gain)/2;
