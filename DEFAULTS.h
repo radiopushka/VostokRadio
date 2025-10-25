@@ -3,7 +3,7 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,2000,8000,17000}; //multiband compression filters
+int fdef[]={60,250,350,1000,5000,17000}; //multiband compression filters
 int fdef_size=6;
 
 
@@ -13,10 +13,10 @@ float def_attack[]={ 70   ,15  ,  8  , 7 , 3  ,6};//multiband compression attack
 float def_release[]={ 300 , 150  ,80 ,75 ,75   ,16}; //multiband compression release
 float def_target[]={15000,15000,17000,15000,15000,20000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
-float pre_amp[]={2,1,1,1,1,70}; //multiband compressor pre compression gain
+float pre_amp[]={2,1,1,1,1,50}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,1,1,0.7,1.7}; // band compression post amplification
+float post_amp[]={1,1,1,1,1,1.7}; // band compression post amplification
 float effect[]={28,26,20.0,22.0,22.0,28.0};//ratio
 float knee[]={4000,4000,100,2000,2000,600};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
