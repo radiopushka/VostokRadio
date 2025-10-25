@@ -35,7 +35,7 @@ const double mult_new=1;
 double mult_pr=1-mult_new;
 
 //how much ultrasonic distortion the clipper produces
-#define PERCENT_COMP_DIST 0.01
+#define PERCENT_COMP_DIST 0.02
 double harmonic_red_val = 2081818578 * PERCENT_COMP_DIST;
 
 //determined experimentally on an old ASUS laptop
