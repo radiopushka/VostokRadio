@@ -65,13 +65,14 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   }
   float absv=fabs(trace_val)*agc->gain;
 
-  agc->avg_audio=agc->avg_audio/2+absv/2;
   if(absv<thresh){
 
-      target = thresh;      
+      absv=target;      
 
   }
-  /*if(agc->gain>agc->gain_avg){
+
+  agc->avg_audio=agc->avg_audio/2+absv/2;
+    /*if(agc->gain>agc->gain_avg){
     release=release/(agc->gain - agc->gain_avg + 1);
   }*/
 
