@@ -195,7 +195,7 @@ int is_within_l(double d1,double d2,double pogreshnost){
     return -1;
 }
 
-/*double minimal_difference(double i1, double i2){
+double minimal_difference_lim(double i1, double i2){
   i1 = fabs(i1);
   i2 = fabs(i2);
   if(i2 > i1)
@@ -203,7 +203,7 @@ int is_within_l(double d1,double d2,double pogreshnost){
   return i1 - i2;
 }
 //attempts to remove square waves
-void harmonic_reduction(SLim limiter,double* l3list, double limit){
+void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
   double side1 = l3list[0];
   double center = l3list[1];
   double side2 = l3list[2];
@@ -217,27 +217,27 @@ void harmonic_reduction(SLim limiter,double* l3list, double limit){
   }
 
 
-  if(is_within(side1,center,level) == 1 && is_within(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
-      double difference1 = minimal_difference(center,side1);
+  if(is_within_l(side1,center,level) == 1 && is_within_l(center,side2,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference_lim(center,side1);
       if(side1<0)
         l3list[0] = side1 + (level - difference1);
       else
         l3list[0] = side1 - (level - difference1);
 
-      double difference2 = minimal_difference(center,side2);;
+      double difference2 = minimal_difference_lim(center,side2);;
       if(side2<0)
         l3list[2] = side2 + (level - difference2);
       else
         l3list[2] = side2 - (level - difference2);
-  }else if (is_within(side1,center,level) == 1){// && is_within(center,limit,level) == 1){
-      double difference1 = minimal_difference(center,side1);
+  }else if (is_within_l(side1,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference1 = minimal_difference_lim(center,side1);
       if(side1<0)
         l3list[0] = side1 + (level - difference1);
       else
         l3list[0] = side1 - (level - difference1);
 
-  }else if (is_within(side2,center,level) == 1){// && is_within(center,limit,level) == 1){
-      double difference2 = minimal_difference(center,side2);;
+  }else if (is_within_l(side2,center,level) == 1){// && is_within(center,limit,level) == 1){
+      double difference2 = minimal_difference_lim(center,side2);;
       if(side2<0)
         l3list[2] = side2 + (level - difference2);
       else
@@ -245,7 +245,7 @@ void harmonic_reduction(SLim limiter,double* l3list, double limit){
 
   }
 
-}*/
+}
 
 void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
@@ -445,7 +445,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
- // harmonic_reduction(limiter,interp_mono , limit2x * pr_m);
+  harmonic_reduction_lim(limiter,interp_mono , limit2x * pr_m);
 
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
@@ -453,7 +453,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
 
-  //harmonic_reduction(limiter,interp_stereo, limit2x * pr_st);
+  harmonic_reduction_lim(limiter,interp_stereo, limit2x * pr_st);
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;

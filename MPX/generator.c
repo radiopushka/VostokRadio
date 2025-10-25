@@ -34,6 +34,10 @@ double m_lowpass2=0;
 const double mult_new=1;
 double mult_pr=1-mult_new;
 
+//how much ultrasonic distortion the clipper produces
+#define PERCENT_COMP_DIST 0.06
+double harmonic_red_val = 2081818578 * PERCENT_COMP_DIST;
+
 //determined experimentally on an old ASUS laptop
 //192khz sample rate card
 double offset19=0;
@@ -198,7 +202,8 @@ void harmonic_reduction(double* l3list, double limit){
   double max = fmax(fabs(side1),fabs(side2));
   max = fmax(fabs(center),fabs(max));
 
-  double level = 500000;
+  //this value controls how much ultrasonic harmonics the composite clipper will produce
+  double level = harmonic_red_val;
   if(max<level){
     level = max;
   }
