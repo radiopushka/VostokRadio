@@ -58,7 +58,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 1.5
+#define SIGMOIDAL_CO 1.7
 #define SIGMOIDAL_ATTACK  200
 #define SIGMOIDAL_RELEASE 200
 #define SIGMOIDAL_BUFFER 5
@@ -105,8 +105,8 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 1.6 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 1.6// percent of the signal devoted to mono audio
+#define PERCENT_MONO 1.8 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 1.8// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
