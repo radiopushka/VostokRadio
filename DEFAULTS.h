@@ -13,7 +13,7 @@ float def_attack[]={ 70   ,15  ,  8  , 7 , 3  ,0.5};//multiband compression atta
 float def_release[]={ 150 , 75  ,40 ,37 ,37   ,7.5}; //multiband compression release
 float def_target[]={15000,15000,17000,15000,15000,20000}; //multiband compression target volume
 float def_m_gain[]={1.05,1.01,1.01,1.05,1.05,1.05}; //make up gain
-float pre_amp[]={2,1,1,1,1,50}; //multiband compressor pre compression gain
+float pre_amp[]={2,1,1,1,1,60}; //multiband compressor pre compression gain
 float def_gate[]={5000,3000,5000,3000,5000,3000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,0.7,1.9}; // band compression post amplification
@@ -61,7 +61,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define SIGMOIDAL_CO 2.3
 #define SIGMOIDAL_ATTACK  1
 #define SIGMOIDAL_RELEASE 5
-#define SIGMOIDAL_BUFFER 5
+#define SIGMOIDAL_BUFFER 3
 #define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE 7000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
@@ -90,10 +90,10 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 
 #define AGC_TARG 2000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.001 //response coefficient
+#define AGC_SPEED 0.1 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.001 //response coefficient
+#define AGC_RELEASE 0.1 //response coefficient
 #define AGC_GATE 3000
 
 // set to 1 to show the levels in real time, 0 to keep silent
