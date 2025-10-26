@@ -61,7 +61,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define SIGMOIDAL_CO 2.3
 #define SIGMOIDAL_ATTACK  2
 #define SIGMOIDAL_RELEASE 2
-#define SIGMOIDAL_BUFFER 5
+#define SIGMOIDAL_BUFFER 10
 #define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE 7000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
