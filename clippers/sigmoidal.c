@@ -53,8 +53,8 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->limit_b2= limit * 1.5;
   limiter->ratio=ratio;
   limiter->limit=limit;
-  limiter->dynamic_ratio_s=0;
-  limiter->dynamic_ratio_m=0;
+  limiter->dynamic_ratio_s=ratio;
+  limiter->dynamic_ratio_m=ratio;
   limiter->range=range;
   limiter->size=buffersize;
   limiter->limiter_half = limit * 1.5;
@@ -311,8 +311,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   }
 
-  double ratiom = limiter->ratio + limiter->dynamic_ratio_m;
-  double ratios = limiter->ratio + limiter->dynamic_ratio_s;
+  double ratiom = limiter->dynamic_ratio_m;
+  double ratios = limiter->dynamic_ratio_s;
 
 
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
@@ -320,30 +320,36 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   double p_st = fabs(ma2/(ma1 + ma2));
   double rstartm = 0;
   if(p_m > 0)
-    rstartm = mimic_tanh(fabs(ma1) , limiter->ratio + limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
+    rstartm = mimic_tanh(fabs(ma1) , limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
   double rstarts = 0;
   if(p_st > 0)
-    rstarts = mimic_tanh(fabs(ma2) , limiter->ratio + limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
+    rstarts = mimic_tanh(fabs(ma2) , limiter->dynamic_ratio_s , limiter->limit,limit2x * p_st);
 
   if(rstartm > limiter->limit - limiter->range){
-    double diff=(((limiter->limit - limiter->range)/rstartm)*limiter->knee);
+    double diff=(rstartm/((limiter->limit - limiter->range))/limiter->knee);
     if(diff< 1)
       diff = 1;
 
-    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1+(limiter->attack / diff));
-   if(limiter->dynamic_ratio_m>10){
-      limiter->dynamic_ratio_m = 10;
+    double mcoeff=limiter->attack/diff;
+    if(mcoeff>1)
+      mcoeff=1;
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1+(1 - mcoeff));
+   if(limiter->dynamic_ratio_m>1000){
+      limiter->dynamic_ratio_m = 1000;
     }
    limiter->prev_op = 1;
    limiter->prev_val = rstartm;
 
   }else if(rstartm < limiter->limit - limiter->range){
-    double diff=((rstartm/(limiter->limit - limiter->range))*limiter->knee);
+    double diff=(((limiter->limit - limiter->range)/rstartm)/limiter->knee);
     if(diff < 1)
       diff = 1;
-    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1 - limiter->release / diff);
-    if(limiter->dynamic_ratio_m<0.00001){
-      limiter->dynamic_ratio_m = 0.00001;
+    double mcoeff=limiter->release/diff;
+    if(mcoeff>1)
+      mcoeff=1;
+    limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(mcoeff);
+    if(limiter->dynamic_ratio_m<limiter->ratio){
+      limiter->dynamic_ratio_m = limiter->ratio;
     }
     //prevent oscillation
     if(limiter->prev_op == 1 && limiter->prev_val <= rstartm){
@@ -358,24 +364,31 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     double diff=(((limiter->limit - limiter->range)/rstarts)*limiter->knee);
     if(diff < 1)
       diff = 1;
-    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1 + limiter->attack / diff);
-   if(limiter->dynamic_ratio_s>10){
-      limiter->dynamic_ratio_s = 10;
+    double mcoeff=limiter->attack/diff;
+    if(mcoeff>1)
+      mcoeff=1;
+
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1+(1 - mcoeff));
+   if(limiter->dynamic_ratio_s>1000){
+      limiter->dynamic_ratio_s = 1000;
     }
    limiter->prev_op2 = 1;
    limiter->prev_val2 = rstarts;
   }else if(rstarts < limiter->limit - limiter->range){
-    double diff=((rstarts/(limiter->limit - limiter->range))*limiter->knee);
+    double diff=(((limiter->limit - limiter->range)/rstarts)/limiter->knee);
     if(diff < 1)
       diff = 1;
-    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1 - limiter->release / diff);
-    if(limiter->dynamic_ratio_s<0.00001){
-      limiter->dynamic_ratio_s = 0.00001;
+    double mcoeff=limiter->release/diff;
+    if(mcoeff>1)
+      mcoeff=1;
+    limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(mcoeff);
+    if(limiter->dynamic_ratio_s<limiter->ratio){
+      limiter->dynamic_ratio_s = limiter->ratio;
     }
    //prevent oscillation
     if(limiter->prev_op2 == 1 && limiter->prev_val2 <= rstarts){
         double in_ratio = inverse_ratio(rstarts, limiter->limit, limit2x * p_st, (limiter->limit - limiter->range));
-        limiter->dynamic_ratio_s = in_ratio - limiter->ratio;
+        limiter->dynamic_ratio_s = in_ratio;
     }
 
    limiter->prev_op2 = 2;
@@ -402,8 +415,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   if(fabs(retst)<0.00001)
     retst=0.00001;
 
-  ratiom = limiter->ratio + limiter->dynamic_ratio_m;
-  ratios = limiter->ratio + limiter->dynamic_ratio_s;
+  ratiom = limiter->dynamic_ratio_m;
+  ratios = limiter->dynamic_ratio_s;
 
   //time slicing method
   double pr_st = fabs(retst/(retst+retmono));

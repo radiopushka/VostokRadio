@@ -65,9 +65,9 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   }
   float absv=fabs(trace_val)*agc->gain;
 
-  if(absv<thresh){
+  if(fabs(trace_val)<thresh){
 
-      absv=target;      
+      absv=target * agc->gain;      
 
   }
 
@@ -130,8 +130,8 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   if(agc->gain>agc->gain_max){
     agc->gain=agc->gain_max;
   }
-  if(agc->gain<0.00001){
-    agc->gain=0.00001;
+  if(agc->gain<0.001){
+    agc->gain=0.001;
   }
 
   agc->gain_avg = (agc->gain_avg + agc->gain)/2;

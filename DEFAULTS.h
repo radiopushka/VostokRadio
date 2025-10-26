@@ -31,10 +31,10 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.7
+#define EXPANDER_RATIO 0.5
 #define EXPANDER_ATTACK 0.0002
 #define EXPANDER_RELEASE 0.005
-#define EXPANDER_GAIN 0.000001
+#define EXPANDER_GAIN 0.001
 #define EXPANDER_THRESHOLD 6000
 
 /* Not yet implemented
@@ -43,12 +43,12 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.8
+#define PRE_CLIP_SATURATION 0.3
 #define PRE_CLIP_SATURATION_LIMIT 1.3
 #define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 32767
-#define TAPE_SAT_WETNESS 0.5
+#define TAPE_SAT_WETNESS 0.2
 #define TAPE_SAT_OFFSET 1.22
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
@@ -58,11 +58,11 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  200
-#define SIGMOIDAL_RELEASE 200
-#define SIGMOIDAL_BUFFER 3
-#define SIGMOIDAL_KNEE 1000
+#define SIGMOIDAL_CO 2.3
+#define SIGMOIDAL_ATTACK  2
+#define SIGMOIDAL_RELEASE 2
+#define SIGMOIDAL_BUFFER 5
+#define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE 7000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
@@ -83,17 +83,17 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band
 
 // 0 is false 1 is true
 #define STEREO 1
-#define STEREO_GAIN 1.5
+#define STEREO_GAIN 2
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams)
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 3000 //input AGC baseline target
+#define AGC_TARG 2000 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.01 //response coefficient
+#define AGC_SPEED 0.001 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.01 //response coefficient
+#define AGC_RELEASE 0.001 //response coefficient
 #define AGC_GATE 3000
 
 // set to 1 to show the levels in real time, 0 to keep silent
