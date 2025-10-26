@@ -17,7 +17,7 @@ float pre_amp[]={2,1,1,1,1,2,100}; //multiband compressor pre compression gain
 float def_gate[]={5000,3000,5000,5000,5000,10000,10000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
-float effect[]={6,6,7,8,4,4,6};//ratio
+float effect[]={8,7,7,8,4,4,6};//ratio
 float knee[]={4000,4000,1000,2000,2000,1000,1000};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
