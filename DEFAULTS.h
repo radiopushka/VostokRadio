@@ -59,7 +59,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2.5
-#define SIGMOIDAL_ATTACK  0.5
+#define SIGMOIDAL_ATTACK  0.3
 #define SIGMOIDAL_RELEASE 5
 #define SIGMOIDAL_BUFFER 3
 #define SIGMOIDAL_KNEE 1
