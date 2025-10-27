@@ -31,7 +31,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.5
+#define EXPANDER_RATIO 0.2
 #define EXPANDER_ATTACK 0.000048
 #define EXPANDER_RELEASE 0.000048
 #define EXPANDER_GAIN 0.00001
@@ -94,7 +94,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00048 //response coefficient
-#define AGC_GATE 700
+#define AGC_GATE 128
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment

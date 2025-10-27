@@ -59,6 +59,9 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   double output = *(ring_buffer + agc->buffer_size - 1);
   memmove(ring_buffer + 1,ring_buffer,agc->copy_size);
   *ring_buffer = input;
+  if(fabs(*ring_buffer)<0.00001){
+    *ring_buffer = 0.00001;
+  }
   if(sens == 0){
 
     return sin(input/20860)*32760;

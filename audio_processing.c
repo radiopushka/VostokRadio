@@ -201,7 +201,15 @@ int main(){
        //convert to float
       double* ittr=buffer_tf;
       for(int* pl=buffer_t;pl<buffer_end;pl++){
-        *ittr=(((double)*pl) / 65538.0 );
+        
+        double pcm = *pl;
+        if(fabs(pcm)<=2){
+          if(pcm<0)
+            pcm = -2;
+          else
+            pcm = 2;
+        }
+        *ittr=(pcm / 65538.0 );
         ittr++;
       }
 
