@@ -179,15 +179,23 @@ double minimal_difference(double i1, double i2){
   return i1 - i2;
 }
 double mpx_list[3];
-double calculate_interpolation_mpx(double input){//basically a low pass filter at 16khz
+double rsamp_list1[3];
+double rsamp_list2[3];
+void put_list(double list[],double value){
+
+  list[2]=list[1];
+  list[1]=list[0];
+  list[0]=value;
+}
+double calculate_interpolation_mpx(double list[],double cw){//basically a low pass filter at 16khz
 
 
-  double side1 = mpx_list[0];
-  double center = mpx_list[1];
-  double side2 = mpx_list[2];
+  double side1 = list[0];
+  double center = list[1];
+  double side2 = list[2];
 
   double weight_side=1;
-  double weight_center=3;
+  double weight_center=cw;//3
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -328,13 +336,11 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   composite=tanh_func_mpx(composite,1,mpx_clip_local);
 
 
-  mpx_list[2]=mpx_list[1];
-  mpx_list[1]=mpx_list[0];
-  mpx_list[0]=composite;
+  put_list(mpx_list,composite);
 
 
   harmonic_reduction(mpx_list,mpx_clip_local);
-  return k19+calculate_interpolation_mpx(composite);
+  return k19+calculate_interpolation_mpx(mpx_list,3);
 
 
 
@@ -351,10 +357,12 @@ void resample_up_stereo_mpx(double* input,int* output,double* input_end,int rati
     for(int i=0;i<ratio;i++){
       //*output=*loop;
 
-      *output=mono;
+      put_list(rsamp_list1,mono);
+      *output=calculate_interpolation_mpx(rsamp_list1,2);
       output++;
       //*output=*right;
-      *output=stereo;
+      put_list(rsamp_list2,stereo);
+      *output=calculate_interpolation_mpx(rsamp_list2,2);
       output++;
     }
 
