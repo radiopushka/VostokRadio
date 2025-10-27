@@ -72,6 +72,7 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   }
 
   agc->avg_audio=agc->avg_audio/2+absv/2;
+  
     /*if(agc->gain>agc->gain_avg){
     release=release/(agc->gain - agc->gain_avg + 1);
   }*/

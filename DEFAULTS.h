@@ -11,13 +11,13 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,
 int   lookaheads[]={1 ,  1 , 1, 1 ,1,1, 1}; // will affect phase
 float def_attack[]={ 70   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
 float def_release[]={ 150 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
-float def_target[]={15000,15000,17000,15000,15000,19000,30000}; //multiband compression target volume
+float def_target[]={16000,16000,17000,15000,15000,19000,30000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={2,1,1,1,1,2,100}; //multiband compressor pre compression gain
-float def_gate[]={5000,3000,5000,5000,5000,10000,10000}; //multi band compressor gate
+float pre_amp[]={2,1,1,1,1,2,70}; //multiband compressor pre compression gain
+float def_gate[]={5000,5000,5000,5000,5000,10000,10000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
-float effect[]={8,7,7,8,4,4,6};//ratio
+float effect[]={12,12,7,8,4,4,6};//ratio
 float knee[]={4000,4000,1000,2000,2000,1000,1000};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
@@ -31,10 +31,10 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.3
-#define EXPANDER_ATTACK 0.00048
-#define EXPANDER_RELEASE 0.00048
-#define EXPANDER_GAIN 0.0001
+#define EXPANDER_RATIO 0.5
+#define EXPANDER_ATTACK 0.000048
+#define EXPANDER_RELEASE 0.000048
+#define EXPANDER_GAIN 0.00001
 #define EXPANDER_THRESHOLD 3000
 
 /* Not yet implemented
@@ -94,7 +94,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00048 //response coefficient
-#define AGC_GATE 1700
+#define AGC_GATE 700
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
