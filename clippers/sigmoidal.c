@@ -211,7 +211,7 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
   double max = fmax(fabs(side1),fabs(side2));
   max = fmax(fabs(center),fabs(max));
 
-  double level = 400;
+  double level = 800;
   if(max<level){
     level = max;
   }
