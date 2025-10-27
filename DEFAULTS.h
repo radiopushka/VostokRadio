@@ -43,7 +43,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.6
+#define PRE_CLIP_SATURATION 0.7
 #define PRE_CLIP_SATURATION_LIMIT 2
 #define POST_SAT_GAIN 1
 
@@ -90,10 +90,10 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 
 #define AGC_TARG 2700 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.1 //response coefficient
+#define AGC_SPEED 0.00048 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.1 //response coefficient
+#define AGC_RELEASE 0.00048 //response coefficient
 #define AGC_GATE 1700
 
 // set to 1 to show the levels in real time, 0 to keep silent
