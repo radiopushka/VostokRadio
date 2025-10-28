@@ -18,7 +18,7 @@ float def_gate[]={5000,5000,5000,5000,5000,10000,10000}; //multi band compressor
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
 float effect[]={12,12,7,8,4,4,6};//ratio
-float knee[]={20,20,50,100,100,50,50};//knee
+float knee[]={20,20,50,10,10,50,10};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -32,10 +32,10 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 
 
 #define EXPANDER_RATIO 0.6
-#define EXPANDER_ATTACK 0.0048
-#define EXPANDER_RELEASE 0.0048
-#define EXPANDER_GAIN 0.00001
-#define EXPANDER_THRESHOLD 1
+#define EXPANDER_ATTACK 0.00048
+#define EXPANDER_RELEASE 0.000048
+#define EXPANDER_GAIN 0.0000001
+#define EXPANDER_THRESHOLD 2
 
 /* Not yet implemented
 #define GATE
@@ -88,7 +88,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 2700 //input AGC baseline target
+#define AGC_TARG 3300 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
 #define AGC_SPEED 0.0048 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
