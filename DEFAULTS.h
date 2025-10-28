@@ -11,7 +11,7 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,
 int   lookaheads[]={1 ,  1 , 1, 1 ,1,1, 1}; // will affect phase
 float def_attack[]={ 70   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
 float def_release[]={ 150 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
-float def_target[]={16000,16000,17000,15000,15000,19000,30000}; //multiband compression target volume
+float def_target[]={16000,16000,17000,17000,17000,19000,30000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1.25,1,1,1,1,2,70}; //multiband compressor pre compression gain
 float def_gate[]={5000,5000,5000,5000,5000,10000,10000}; //multi band compressor gate
@@ -59,7 +59,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2.2
-#define SIGMOIDAL_ATTACK  0.5
+#define SIGMOIDAL_ATTACK  0.25
 #define SIGMOIDAL_RELEASE 5
 #define SIGMOIDAL_BUFFER 3
 #define SIGMOIDAL_KNEE 1
