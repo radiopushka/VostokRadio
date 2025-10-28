@@ -18,7 +18,7 @@ float def_gate[]={5000,5000,5000,5000,5000,10000,10000}; //multi band compressor
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
 float effect[]={12,12,7,8,4,4,6};//ratio
-float knee[]={4000,4000,1000,2000,2000,1000,1000};//knee
+float knee[]={20,20,50,100,100,50,50};//knee
 int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -31,7 +31,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.5
+#define EXPANDER_RATIO 0.2
 #define EXPANDER_ATTACK 0.0048
 #define EXPANDER_RELEASE 0.0048
 #define EXPANDER_GAIN 0.00001
@@ -54,7 +54,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 0.7 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples

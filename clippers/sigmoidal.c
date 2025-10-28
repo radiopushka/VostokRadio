@@ -248,6 +248,10 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
 }
 
 void calculate_percents(double input1,double input2,double* p_1,double* p_2){
+  //38 khz phase into account (input2 is stereo)
+  input2 =   input2*0.6465 + fabs(input2)*0.3535;
+  input1 =   input1*0.6465 + fabs(input1)*0.3535;
+
     double sum = input1 + input2;
 
     if(fabs(sum)<fabs(input1)){

@@ -66,11 +66,17 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
 
     return sin(input/20860)*32760;
   }
-  float absv=fabs(trace_val)*agc->gain;
+  float absv=fabs(trace_val);
 
   if(fabs(trace_val)<thresh){
 
-      absv=target * agc->gain;      
+      if(agc->avg_audio > target){
+        absv = (agc->avg_audio - target)/2 + target;
+      }else if(target > agc->avg_audio){
+        absv = (target - agc->avg_audio)/2 + agc->avg_audio;
+      }else{
+        absv = target;
+      }
 
   }
 
@@ -80,7 +86,7 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
     release=release/(agc->gain - agc->gain_avg + 1);
   }*/
 
-    double cur_val=agc->avg_audio;
+    double cur_val=agc->avg_audio * agc->gain;
     double error2=target-cur_val;
     if(agc->dtime==0){
       agc->avg_error=error2;
