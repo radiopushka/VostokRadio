@@ -31,11 +31,11 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.2
+#define EXPANDER_RATIO 0.6
 #define EXPANDER_ATTACK 0.0048
 #define EXPANDER_RELEASE 0.0048
 #define EXPANDER_GAIN 0.00001
-#define EXPANDER_THRESHOLD 300
+#define EXPANDER_THRESHOLD 1
 
 /* Not yet implemented
 #define GATE

@@ -116,7 +116,8 @@ double run_comp(Compressor comp,double release, double attack, double target, do
         double diff=((input/target)/comp->knee);
         if(diff < 1)
           diff = 1;
-        double nrelease=(release/(diff));
+        double nrelease=(release/(diff))*(1 - comp->gain/max_gain);
+
         if(nrelease>release)
           nrelease=release;
         comp->gain=comp->gain*(1+(nrelease));
@@ -132,7 +133,7 @@ double run_comp(Compressor comp,double release, double attack, double target, do
         double diff=((comp->avg/target)/comp->knee);
         if(diff < 1)
           diff = 1;
-        double nrelease=(release/diff);
+        double nrelease=(release/diff)*(1 - comp->gain/max_gain);
         if(nrelease>release)
           nrelease=release;
 
