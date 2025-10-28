@@ -13,7 +13,7 @@ float def_attack[]={ 70   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression at
 float def_release[]={ 150 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
 float def_target[]={16000,16000,17000,17000,17000,19000,30000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1.25,1,1,1,1,2,80}; //multiband compressor pre compression gain
+float pre_amp[]={1,1,1,1,1,2,80}; //multiband compressor pre compression gain
 float def_gate[]={5000,5000,5000,5000,5000,10000,10000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
@@ -43,12 +43,12 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.7
+#define PRE_CLIP_SATURATION 0.9
 #define PRE_CLIP_SATURATION_LIMIT 2
 #define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 62767
-#define TAPE_SAT_WETNESS 0.4
+#define TAPE_SAT_WETNESS 0.5
 #define TAPE_SAT_OFFSET 1.22
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
