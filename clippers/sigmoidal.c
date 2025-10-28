@@ -247,6 +247,22 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
 
 }
 
+void calculate_percents(double input1,double input2,double* p_1,double* p_2){
+    double sum = input1 + input2;
+
+    if(fabs(sum)<fabs(input1)){
+        *p_1 = 1;
+    }else{
+        *p_1 = fabs(input1/sum);
+    }
+    if(fabs(sum)<fabs(input2)){
+        *p_2 = 1;
+    }else{
+        *p_2 = fabs(input2/sum);
+    }
+
+}
+
 void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   double* ring_buffer=limiter->ring;
@@ -269,10 +285,14 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   if(fabs(*input2)<0.00001)
     *input2=0.00001;
   //not applicable anymore due to time slicing clipping
-  double p_mpx = fabs(*input1/(*input1 + *input2));
-  double p_stpx = fabs(*input2/(*input2 + *input2));
 
-  
+
+  double p_mpx;
+  double p_stpx;
+
+  calculate_percents(*input1,*input2,&p_mpx,&p_stpx);
+
+
   *ring_buffer = 0;
   *ring_buffer2 = 0;
 
@@ -316,8 +336,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
   //double mono_c = tanh_func(ma1 , ratiom , limit2x);
-  double p_m = fabs(ma1/(ma1 + ma2));
-  double p_st = fabs(ma2/(ma1 + ma2));
+  double p_m;
+  double p_st;
+  calculate_percents(ma1,ma2,&p_m,&p_st);
   double rstartm = 0;
   if(p_m > 0)
     rstartm = mimic_tanh(fabs(ma1) , limiter->dynamic_ratio_m , limiter->limit,limit2x * p_m);
@@ -419,12 +440,13 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratios = limiter->dynamic_ratio_s;
 
   //time slicing method
-  double pr_st = fabs(retst/(retst+retmono));
-  double pr_m = fabs(retmono/(retst+retmono));
+  double pr_st;
+  double pr_m;
 
+  calculate_percents(retmono,retst,&pr_m,&pr_st);
   double st_c = retst;
   double mono_c = retmono;
-  
+
   if(pr_m > 0)
     mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
   if(pr_st>0)
