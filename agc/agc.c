@@ -71,9 +71,9 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
   if(fabs(trace_val)<thresh){
 
       if(agc->avg_audio > target){
-        absv = (agc->avg_audio - target)/2 + target;
+        absv = (agc->avg_audio - target)*(1-release) + target*(release);
       }else if(target > agc->avg_audio){
-        absv = (target - agc->avg_audio)/2 + agc->avg_audio;
+        absv = (target - agc->avg_audio)*(release) + agc->avg_audio*(1-release);
       }else{
         absv = target;
       }
