@@ -35,7 +35,7 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 #define EXPANDER_ATTACK 0.00048
 #define EXPANDER_RELEASE 0.000048
 #define EXPANDER_GAIN 0.0000001
-#define EXPANDER_THRESHOLD 0.5
+#define EXPANDER_THRESHOLD 0.005
 
 /* Not yet implemented
 #define GATE
@@ -90,11 +90,11 @@ int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PE
 
 #define AGC_TARG 3300 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.0048 //response coefficient
+#define AGC_SPEED 0.000048 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.0048 //response coefficient
-#define AGC_GATE 0.007
+#define AGC_RELEASE 0.000048 //response coefficient
+#define AGC_GATE 0.001
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
