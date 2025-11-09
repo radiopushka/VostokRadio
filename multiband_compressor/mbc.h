@@ -42,6 +42,7 @@ void set_bypass(Multiband mbt,int index,int bypass);
 void set_type(Multiband mbt,int index,int type);
 void set_ratio(Multiband mbt,int index,float ratio);
 void set_knee(Multiband mbt,int index,float knee);
+void set_dknee(Multiband mbt,int index,float knee);
 
 
 //get the amplitude for visual rendering:

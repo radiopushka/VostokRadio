@@ -14,7 +14,8 @@ Compressor create_compressor(int method,int lookahead){
   comp->prevprev_val=0;
   comp->gain=1;
   comp->ratio=1;
-  comp->knee=0.3;
+  comp->knee=1;
+  comp->drop_knee = 1;
   comp->ring_size=lookahead;
   comp->ring=malloc(sizeof(double)*lookahead);
   comp->method=method;
@@ -81,7 +82,7 @@ double run_comp(Compressor comp,double release, double attack, double target, do
 
   input = max;
 
-  if(input<gate){
+  /*if(input<gate){
     if(comp->gain < 1 + release && comp->gain > 1 - release)
       comp->gain = 1;
     else if(comp->gain < 1)
@@ -93,7 +94,7 @@ double run_comp(Compressor comp,double release, double attack, double target, do
 
     
     return (((comp->gain)*(comp->ratio))+(1-comp->ratio)) * excluded;
-  }
+  }*/
   int method=comp->method;
     
   float slope2=input*comp->gain;
@@ -101,19 +102,30 @@ double run_comp(Compressor comp,double release, double attack, double target, do
 
   if(method==COMP_PEAK){
     
+      double bgain = input;
       input = input * comp->gain;
-      if(input>target){
-        double diff=((target/input)/comp->knee);
+      if(bgain< gate){
+        // when audio below gate, curve out of release value
+        double diff=((gate/bgain)/comp->drop_knee);
+        if(diff < 1)
+          diff = 1;
+        double nrelease=(release/(diff))*(1 - comp->gain/max_gain);
+
+        if(nrelease>release)
+          nrelease=release;
+        comp->gain=comp->gain*(1+(nrelease));
+
+      }else if(input>target){
+        //when audio above threshold curve into the attack value
+        double diff=((target/input)*comp->knee);
         if(diff < 1)
           diff = 1;
         double nattack=(attack/diff);
-        if(nattack>attack)
-          nattack=attack;
         comp->gain=comp->gain*(1-(nattack));
         //comp->gain=comp->gain-attack;
       }else if (input < target){
-
-        double diff=((input/target)/comp->knee);
+        //when audio below threshold, curve into release value
+        double diff=((input/target)*comp->knee);
         if(diff < 1)
           diff = 1;
         double nrelease=(release/(diff))*(1 - comp->gain/max_gain);
@@ -125,7 +137,11 @@ double run_comp(Compressor comp,double release, double attack, double target, do
       }
     
   }else{
-    input = input * comp->gain;
+    if(input<gate){
+      input = target;
+    }else{
+      input = input * comp->gain;
+    }
     comp->avg = (comp->avg + input)/2;
     if(comp->avg<target){
     

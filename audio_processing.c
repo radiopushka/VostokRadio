@@ -28,6 +28,7 @@ void set_compressor_defaults(Multiband mbt){
       set_type(mbt,i,types[i]);
       set_ratio(mbt,i,1.0-(1.0/effect[i]));
       set_knee(mbt,i,knee[i]);
+      set_dknee(mbt,i,knee_release[i]);
 
     }
 }

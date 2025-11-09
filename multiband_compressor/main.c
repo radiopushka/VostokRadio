@@ -87,8 +87,12 @@ void set_ratio(Multiband mbt,int index,float ratio){
   mbt->compressors[index]->ratio=ratio;
 } 
 void set_knee(Multiband mbt,int index,float knee){
-  mbt->compressors[index]->knee=1/knee;
+  mbt->compressors[index]->knee=knee;
 } 
+void set_dknee(Multiband mbt, int index,float knee){
+
+  mbt->compressors[index]->drop_knee=knee;
+}
 
 
 

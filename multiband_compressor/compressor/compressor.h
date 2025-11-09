@@ -10,6 +10,7 @@ struct Compressor{
   double gain;
   double knee;
   double ratio;
+  double drop_knee;
   int ring_size;
   double* ring;
   int method;
