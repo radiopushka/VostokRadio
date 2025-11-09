@@ -20,7 +20,7 @@ float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
 float effect[]={12,12,7,8,4,4,6};//ratio
 float knee[]={5,3,5,2,2,5,2};//knee
 float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
-int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
+//int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
 //#define MONO_COMPRESSION //turns the compressor from stereo to mono

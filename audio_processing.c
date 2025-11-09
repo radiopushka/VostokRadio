@@ -25,7 +25,7 @@ void set_compressor_defaults(Multiband mbt){
       set_max_gain(mbt,i,def_m_gain[i]);
       set_post_amp(mbt,i,post_amp[i]);
       set_bypass(mbt,i,bypass[i]);
-      set_type(mbt,i,types[i]);
+      //set_type(mbt,i,types[i]);
       set_ratio(mbt,i,1.0-(1.0/effect[i]));
       set_knee(mbt,i,knee[i]);
       set_dknee(mbt,i,knee_release[i]);
@@ -202,7 +202,7 @@ int main(){
        //convert to float
       double* ittr=buffer_tf;
       for(int* pl=buffer_t;pl<buffer_end;pl++){
-        
+
         double pcm = *pl;
         if(fabs(pcm)<=2){
           if(pcm<0)

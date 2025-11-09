@@ -39,7 +39,7 @@ void set_gate(Multiband mbt,int index,float gate);
 void set_max_gain(Multiband mbt,int index,float gain);
 void set_post_amp(Multiband mbt,int index, float gain);
 void set_bypass(Multiband mbt,int index,int bypass);
-void set_type(Multiband mbt,int index,int type);
+//void set_type(Multiband mbt,int index,int type);
 void set_ratio(Multiband mbt,int index,float ratio);
 void set_knee(Multiband mbt,int index,float knee);
 void set_dknee(Multiband mbt,int index,float knee);

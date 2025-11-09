@@ -44,7 +44,7 @@ Multiband create_mbt(fmux freq_mux,int* compressor_lookahead){
 
 
   for(Compressor* cit=cmp;cit<cmpend;cit++){
-    *cit=create_compressor(COMP_RMS,*compressor_lookahead);//peak detection buffer
+    *cit=create_compressor(*compressor_lookahead);//peak detection buffer
     compressor_lookahead++;
   }
 
@@ -80,15 +80,12 @@ void set_bypass(Multiband mbt,int index,int bypass){
 
   mbt->bypass[index]=bypass;
 }
-void set_type(Multiband mbt,int index,int type){
-  mbt->compressors[index]->method=type;
-} 
 void set_ratio(Multiband mbt,int index,float ratio){
   mbt->compressors[index]->ratio=ratio;
-} 
+}
 void set_knee(Multiband mbt,int index,float knee){
   mbt->compressors[index]->knee=knee;
-} 
+}
 void set_dknee(Multiband mbt, int index,float knee){
 
   mbt->compressors[index]->drop_knee=knee;
@@ -122,7 +119,7 @@ void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,doubl
 
     int locs=0;
     for(Compressor* citr=ptrstart;citr<ptrend;citr++){
-      
+
           double amplitude=power_at(mux,locs);
           double val=amplitude;
           double cmpd;
@@ -131,7 +128,7 @@ void run_compressors_advanced(Multiband mbt,double (*on_gain_value)(double,doubl
             cmpd=run_comp(*citr,*release,*attacks,*targs,amplitude,*gate,*mgn, *bypass);
             //val=amplitude*cmpd;
             val=(*on_gain_value)(amplitude,cmpd*(*post_gain),locs);
-          
+
           set_power_at(mux,locs, val);
 
           locs++;
