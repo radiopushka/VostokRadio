@@ -18,7 +18,7 @@ float def_gate[]={3000,3000,3000,3000,3000,5000,5000}; //multi band compressor g
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
 float effect[]={12,12,7,8,4,4,6};//ratio
-float knee[]={5,3,5,2,2,5,2};//knee
+float knee[]={2,1,3,2,2,5,2};//knee
 float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
@@ -60,7 +60,7 @@ float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.25
+#define SIGMOIDAL_ATTACK  1
 #define SIGMOIDAL_RELEASE 5
 #define SIGMOIDAL_BUFFER 16
 #define SIGMOIDAL_KNEE 1
