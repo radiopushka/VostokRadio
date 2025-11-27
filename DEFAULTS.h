@@ -9,17 +9,17 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
-float def_attack[]={ 70   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
-float def_release[]={ 150 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
-float def_target[]={16000,16000,17000,17000,17000,19000,30000}; //multiband compression target volume
+float def_attack[]={ 15   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
+float def_release[]={ 100 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
+float def_target[]={16000,15000,17000,17000,17000,19000,30000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1,1,1,1,1,2,80}; //multiband compressor pre compression gain
+float pre_amp[]={1.2,1,1,1,1,2,80}; //multiband compressor pre compression gain
 float def_gate[]={3000,3000,3000,3000,3000,5000,5000}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={1,1,1,1,1,1.2,1}; // band compression post amplification
+float post_amp[]={0.4,1,1,1,1,1.2,1}; // band compression post amplification
 float effect[]={12,12,7,8,4,4,6};//ratio
-float knee[]={2,1,1,2,2,5,2};//knee
-float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
+float knee[]={1,1,1,2,2,5,2};//knee
+float knee_release[]={0.5,0.5,1.2,0.8,0.8,1.2,0.8};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -72,8 +72,8 @@ float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 32 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.003
+#define HIGH_PASS_CUTOFF 10 //comment the line above to disable
+#define DC_REMOVAL_COEFF 0.00003
 
 
 //alsa configuration
@@ -91,10 +91,10 @@ float knee_release[]={2,1.2,2,0.8,0.8,2,0.8};//knee
 
 #define AGC_TARG 3300 //input AGC baseline target
 #define AGC_LOOKAHEAD 1000
-#define AGC_SPEED 0.000048 //response coefficient
+#define AGC_SPEED 0.00048 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
-#define AGC_RELEASE 0.000048 //response coefficient
+#define AGC_RELEASE 0.00048 //response coefficient
 #define AGC_GATE 0.001
 
 // set to 1 to show the levels in real time, 0 to keep silent
