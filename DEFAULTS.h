@@ -32,7 +32,7 @@ float knee_release[]={0.5,0.5,0.5,0.8,0.8,1.2,0.8};//knee
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.1
+#define EXPANDER_RATIO 0
 #define EXPANDER_ATTACK 0.00048
 #define EXPANDER_RELEASE 0.000048
 #define EXPANDER_GAIN 0.0000001
