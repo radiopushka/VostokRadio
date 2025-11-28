@@ -60,8 +60,8 @@ float knee_release[]={0.3,0.3,0.5,0.8,0.8,1.2,0.8};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  1
-#define SIGMOIDAL_RELEASE 5
+#define SIGMOIDAL_ATTACK  0.125
+#define SIGMOIDAL_RELEASE 0.6
 #define SIGMOIDAL_BUFFER 16
 #define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE -27000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
@@ -95,7 +95,7 @@ float knee_release[]={0.3,0.3,0.5,0.8,0.8,1.2,0.8};//knee
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00048 //response coefficient
-#define AGC_GATE 0.001
+#define AGC_GATE 0.0001
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
