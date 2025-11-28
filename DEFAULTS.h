@@ -95,7 +95,7 @@ float knee_release[]={0.3,0.3,0.5,0.8,0.8,1.2,0.8};//knee
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00048 //response coefficient
-#define AGC_GATE 0.0001
+#define AGC_GATE 0.00001
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
