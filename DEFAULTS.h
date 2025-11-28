@@ -8,18 +8,18 @@ int fdef_size=7;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
-int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
-float def_attack[]={ 15   ,15  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
-float def_release[]={ 100 , 75  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
+int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
+float def_attack[]={ 7.5   ,7.5  ,  8  , 7 , 3 ,1 ,0.5};//multiband compression attack
+float def_release[]={ 25 , 25  ,40 ,37 ,37 ,4.5  ,1}; //multiband compression release
 float def_target[]={16000,15000,17000,17000,17000,19000,30000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1.2,1,1,1,1,2,80}; //multiband compressor pre compression gain
-float def_gate[]={3000,3000,3000,3000,3000,5000,5000}; //multi band compressor gate
+float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.4,1,1,1,1,1.2,1}; // band compression post amplification
-float effect[]={12,12,7,8,4,4,6};//ratio
-float knee[]={1,1,1,2,2,5,2};//knee
-float knee_release[]={0.5,0.5,1.2,0.8,0.8,1.2,0.8};//knee
+float post_amp[]={0.6,1,1,1,1,1,1}; // band compression post amplification
+float effect[]={12,12,12,8,4,4,6};//ratio
+float knee[]={1,1,1,1.5,1.1,1.2,2};//knee
+float knee_release[]={0.5,0.5,0.5,0.8,0.8,1.2,0.8};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -32,11 +32,11 @@ float knee_release[]={0.5,0.5,1.2,0.8,0.8,1.2,0.8};//knee
 //#define BYPASS //uncomment this to bypass compressor chain
 
 
-#define EXPANDER_RATIO 0.3
+#define EXPANDER_RATIO 0.1
 #define EXPANDER_ATTACK 0.00048
 #define EXPANDER_RELEASE 0.000048
 #define EXPANDER_GAIN 0.0000001
-#define EXPANDER_THRESHOLD 0.002
+#define EXPANDER_THRESHOLD 0.01
 
 /* Not yet implemented
 #define GATE
@@ -72,8 +72,8 @@ float knee_release[]={0.5,0.5,1.2,0.8,0.8,1.2,0.8};//knee
 //The PLL VCO removes this noise due to its' feedback loop mechanism but this then re generates that noise waveform at the varactor diode and your audio signal will be out of phase with it.
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
-#define HIGH_PASS_CUTOFF 10 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.00003
+#define HIGH_PASS_CUTOFF 5 //comment the line above to disable
+#define DC_REMOVAL_COEFF 0.00001
 
 
 //alsa configuration
@@ -105,7 +105,7 @@ float knee_release[]={0.5,0.5,1.2,0.8,0.8,1.2,0.8};//knee
 //#define COMPOSITE_CLIPPER // recommended but likely unnesecary if using the final lookahead clipper
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
-#define PERCENT_PILOT 0.15 //percent of the signal devoted to the 19khz pilot tone
+#define PERCENT_PILOT 0.10 //percent of the signal devoted to the 19khz pilot tone
 #define PERCENT_MONO 1.9 // percent of the signal devoted to mono audio
 #define PERCENT_STEREO 1.9// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
