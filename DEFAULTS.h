@@ -50,7 +50,7 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 
 #define TAPE_SAT_THRESH 62767
 #define TAPE_SAT_WETNESS 0.4
-#define TAPE_SAT_OFFSET 1.05
+#define TAPE_SAT_OFFSET 1.025
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
