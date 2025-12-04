@@ -9,17 +9,17 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
-float def_attack[]={1.875   ,7.5  ,  8  , 1 , 1 ,1 ,1.5};//multiband compression attack
-float def_release[]={ 6.25 , 25  ,40 ,37 ,27 ,15  ,10}; //multiband compression release
-float def_target[]={12000,15000,17000,17000,17000,17000,25000}; //multiband compression target volume
+float def_attack[]={0.5   ,1  ,  1  , 1 , 1 ,1 ,1.5};//multiband compression attack
+float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,10}; //multiband compression release
+float def_target[]={12000,12000,17000,17000,17000,17000,25000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1.2,1,1,1,1,1.5,87}; //multiband compressor pre compression gain
+float pre_amp[]={1,1,1,1,1,1.5,87}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.5,1,1,1,1,1,1}; // band compression post amplification
 float effect[]={12,12,12,8,8,8,8};//ratio
 float knee[]={1,1,1,1,1.1,1.1,1.1};//knee
-float knee_release[]={0.3,0.1,0.5,0.5,0.3,0.1,0.1};//knee
+float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -55,7 +55,7 @@ float knee_release[]={0.3,0.1,0.5,0.5,0.3,0.1,0.1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1.4 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1.6 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
