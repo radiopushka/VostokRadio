@@ -10,14 +10,14 @@ int fdef_size=7;
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
 float def_attack[]={0.5   ,1  ,  1  , 1 , 1 ,1 ,1.5};//multiband compression attack
-float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,10}; //multiband compression release
+float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,7}; //multiband compression release
 float def_target[]={12000,12000,17000,17000,17000,17000,25000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1,1,1,1,1,1.5,87}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.5,1,1,1,1,1,1}; // band compression post amplification
-float effect[]={12,12,12,8,8,8,8};//ratio
+float effect[]={12,12,12,8,8,12,12};//ratio
 float knee[]={1,1,1,1,1.1,1.1,1.1};//knee
 float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
@@ -50,12 +50,12 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 
 #define TAPE_SAT_THRESH 62767
 #define TAPE_SAT_WETNESS 0.4
-#define TAPE_SAT_OFFSET 1.22
+#define TAPE_SAT_OFFSET 1.05
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1.6 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1.8 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
