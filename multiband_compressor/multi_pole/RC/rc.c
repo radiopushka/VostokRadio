@@ -45,9 +45,9 @@ double do_rc_filter(struct rc_filter_info* rcf,double in){
           val = val + 1e7;
     }else if(fabs(val) < 1e-8){
         if(val > 0)
-         val= val + 1e-7;
+         val= val + 0.1;
         else
-          val = val - 1e-7;
+          val = val - 0.1;
     }
 
   rcf->prev_raw=in;
