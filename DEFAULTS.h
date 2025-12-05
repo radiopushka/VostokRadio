@@ -73,7 +73,7 @@ float knee_release[]={0.1,0.1,0.3,0.3,0.1,0.1,0.1};//knee
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 5 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.0001
+#define DC_REMOVAL_COEFF 0.0005
 
 
 //alsa configuration
@@ -84,7 +84,7 @@ float knee_release[]={0.1,0.1,0.3,0.3,0.1,0.1,0.1};//knee
 
 // 0 is false 1 is true
 #define STEREO 1
-#define STEREO_GAIN 4
+#define STEREO_GAIN 3
 //#define STEREO_GAIN 3 //the stereo amplification coefficient(good setting for streams)
 
 #define POST_AGC_GAIN 1
