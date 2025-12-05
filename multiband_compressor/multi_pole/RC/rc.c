@@ -1,5 +1,6 @@
 #include "rc.h"
 #include <stdlib.h>
+#include <math.h>
 
 #define PI 3.141592653589793
 
@@ -37,6 +38,18 @@ double do_rc_filter(struct rc_filter_info* rcf,double in){
     val=rcf->alpha * ( rcf->prev + in - rcf->prev_raw);
 
   }
+    if(fabs(val) > 1e8){
+        if(val > 0)
+          val = val - 1e7;
+        else 
+          val = val + 1e7;
+    }else if(fabs(val) < 1e-8){
+        if(val > 0)
+         val= val + 1e-7;
+        else
+          val = val - 1e-7;
+    }
+
   rcf->prev_raw=in;
   rcf->prev=val;
   return val;
