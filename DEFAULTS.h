@@ -9,8 +9,8 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
-float def_attack[]={0.5   ,1  ,  1  , 1 , 1.5 ,0.5 ,0.1667};//multiband compression attack
-float def_release[]={ 6.25 , 12  ,40 ,37 ,22 , 7.5  ,2.5}; //multiband compression release
+float def_attack[]={0.1667   ,0.5  ,  1  , 1 , 1.5 ,0.5 ,0.1667};//multiband compression attack
+float def_release[]={ 3 , 12  ,40 ,37 ,22 , 7.5  ,2.5}; //multiband compression release
 float def_target[]={12000,12000,13500,15000,17000,16000,24000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1,1,1,1,1,3,87}; //multiband compressor pre compression gain
@@ -60,8 +60,8 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.125
-#define SIGMOIDAL_RELEASE 0.6
+#define SIGMOIDAL_ATTACK  0.08335
+#define SIGMOIDAL_RELEASE 0.4001
 #define SIGMOIDAL_BUFFER 16
 #define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE -27000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
