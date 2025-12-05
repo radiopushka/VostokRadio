@@ -9,9 +9,9 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
-float def_attack[]={0.5   ,1  ,  1  , 1 , 1 ,1 ,1.5};//multiband compression attack
-float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,7}; //multiband compression release
-float def_target[]={12000,12000,17000,17000,17000,17000,25000}; //multiband compression target volume
+float def_attack[]={0.5   ,1  ,  1  , 1 , 1 ,1 ,1};//multiband compression attack
+float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,3}; //multiband compression release
+float def_target[]={12000,12000,17000,17000,17000,16000,25000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1,1,1,1,1,1.5,87}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
@@ -44,18 +44,18 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.7
+#define PRE_CLIP_SATURATION 0.5
 #define PRE_CLIP_SATURATION_LIMIT 2
 #define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 62767
-#define TAPE_SAT_WETNESS 0.4
+#define TAPE_SAT_WETNESS 0.3
 #define TAPE_SAT_OFFSET 1.00
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1.8 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -73,7 +73,7 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 5 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.0005
+#define DC_REMOVAL_COEFF 0.002
 
 
 //alsa configuration
