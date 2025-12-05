@@ -38,16 +38,16 @@ double do_rc_filter(struct rc_filter_info* rcf,double in){
     val=rcf->alpha * ( rcf->prev + in - rcf->prev_raw);
 
   }
-    if(fabs(val) > 1e8){
+    if(fabs(val) > 1e16){
         if(val > 0)
-          val = val - 1e7;
+          val = 1e16;
         else 
-          val = val + 1e7;
-    }else if(fabs(val) < 1e-8){
+          val = -1e16;
+    }else if(fabs(val) < 1e-16){
         if(val > 0)
-         val= val + 0.1;
+         val= 1e-16;
         else
-          val = val - 0.1;
+          val = -1e-16;
     }
 
   rcf->prev_raw=in;

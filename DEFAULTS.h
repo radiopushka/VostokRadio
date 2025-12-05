@@ -3,17 +3,17 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,3000,9000,17000}; //multiband compression filters
+int fdef[]={60,250,350,1000,3000,9000,18000}; //multiband compression filters
 int fdef_size=7;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={3 ,  3 , 3, 3 ,3,3, 3}; // will affect phase
 float def_attack[]={0.5   ,1  ,  1  , 1 , 1 ,1 ,1};//multiband compression attack
-float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,3}; //multiband compression release
-float def_target[]={12000,12000,17000,17000,17000,16000,25000}; //multiband compression target volume
+float def_release[]={ 6.25 , 12  ,40 ,37 ,27 ,15  ,6}; //multiband compression release
+float def_target[]={12000,12000,17000,17000,17000,16000,24000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1,1,1,1,1,1.5,87}; //multiband compressor pre compression gain
+float pre_amp[]={1,1,1,1,1,3,87}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.5,1,1,1,1,1,1}; // band compression post amplification
@@ -73,7 +73,7 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 5 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.002
+#define DC_REMOVAL_COEFF 0.0001
 
 
 //alsa configuration
@@ -95,7 +95,7 @@ float knee_release[]={0.1,0.1,0.3,0.5,0.3,0.1,0.1};//knee
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.00048 //response coefficient
-#define AGC_GATE 0.0000001
+#define AGC_GATE 0.005
 
 // set to 1 to show the levels in real time, 0 to keep silent
 #define GUI 0 // just have this as zero, the gui doesnt work at this moment
