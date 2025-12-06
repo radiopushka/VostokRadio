@@ -263,7 +263,8 @@ void harmonic_reduction(double* l3list, double limit){
 }
 
 
-const double alpha=0.041667;//this is half of 19khz under the 192khz sample rate. 8000/192000
+const double alpha=0.031250;//this needs to filter out everything under most receiver filters with the 192khz sample rate. 6000/192000 -> 13000hz to 25khz
+//about 2khz of pogreshnost'
 const double nalpha = 1-alpha;
 double i_r=0;
 double i_i=0;
