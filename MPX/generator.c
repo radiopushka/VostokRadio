@@ -68,11 +68,13 @@ int itterator=0;
 double tlim = 2081818578;
 double mpx_clip_t;
 double* synth_19=NULL;
+double* synth_19_fft=NULL;
 double* synth_38=NULL;
 
 
 void free_mpx_cache(){
 
+  free(synth_19_fft);
   free(synth_19);
   free(synth_38);
 
@@ -90,24 +92,29 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
 
       synth_19=malloc(sizeof(double)*buffer_size);
+      synth_19_fft=malloc(sizeof(double)*buffer_size);
       synth_38=malloc(sizeof(double)*buffer_size);
 
 
       long double counter=0;
       long double counter_secondary=0;
       double* s38=synth_38;
+      double* s19_fft = synth_19_fft;
       for(double* s19=synth_19;counter<buffer_size;s19++){
           long double v19=0;
           long double v38=0;
           for(int i=0;i<over_sampling;i++){
             v19=v19+sinl(shifter_19*(counter_secondary+offset19));
             v38=v38+sinl(shifter_38*(counter_secondary+offset38));
+            
             counter_secondary=counter_secondary+1;
           }
           counter=counter+1;
           *s19=(v19/over_sampling)*_pilot;
+          *s19_fft=-(v19/over_sampling);
           *s38=(v38/over_sampling);
           s38++;
+          s19_fft++;
       }
 
 
@@ -116,9 +123,9 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
 
 void init_mpx(int ratekhz,double percent_pilot,double max){
-      clip_value=(1.0-percent_pilot)*max;
+      clip_value=max;
       _pilot=percent_pilot*max;
-      mpx_clip_t=(1-percent_pilot)*max;
+      mpx_clip_t=max;
       tlim=max;
       pr_pilot = percent_pilot;
       HF_BIAS=_pilot*P2nd_DAC_HARMONIC;
@@ -252,95 +259,66 @@ void harmonic_reduction(double* l3list, double limit){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
 
- //stereo=stereo*1.5;
- //mono=mono*1.5;
 
  double o38=synth_38[itterator];
- /*double pre_c=stereo*o38;
- if(fabs(pre_c)<0.00001)
-    pre_c=0.00001;
- if(fabs(mono)<0.00001)
-    mono=0.00001;
- double ratios = fabs(pre_c/(pre_c+mono));
- //ratios = ratios*fabs(o38);
- double ratiom = fabs(mono/(pre_c+mono));
+ double fft_19 = synth_19_fft[itterator];
 
- //mono = mono*ratiom;
- //stereo = stereo*ratios;
-
-
- mono = tanh_func_mpx(mono,1,tlim*ratiom);
- stereo = tanh_func_mpx(stereo,1,tlim*ratios);*/
 
  mono = mono*(percent_mono);
  stereo = stereo*(percent_stereo);
 
 
-   //100percent: 32760
-  //double mono = ((left+right)/2.0)*percent_mono;
-  //double stereo = (((left - right)/2.0)*(percent_stereo-st_bias_offset));
 
-
-  //virtualy no need in adding this limiter
-  /*
-  float pre_mpx=mono+stereo;
-
-  float limiter_out=pre_mpx;
-
-  if(composite_clip!=NULL)
-    limiter_out=run_limiter(composite_clip,pre_mpx,clip_value,release);
-
-  */
-
-  //perform oversampling to try and get rid of aliasing
-
-  double k19=0;
-  double k38=0;
-
-
-
-  //sometimes it is better to just cut off this signal if there is not enough range to produce a more or less accurate waveform
-  //having it at some baseline reduces distortion
-  //apparently in order for stereo MPX signal to be generated propperly, sound cards need some kind of bias
-
-  /*if(fabs(stereo)<ANALOG_BIAS){
-    if(stereo<0)
-      stereo=-ANALOG_BIAS;
-    else
-      stereo=ANALOG_BIAS;
-  }*/
   stereo=stereo-HF_BIAS;
 
 
 
-  double o19=synth_19[itterator];
+  double k19=synth_19[itterator];
   itterator++;
   if(itterator>=buffer_size){
           itterator=0;
   }
 
-	double val_pilot = o19;
-	double val_audio = (stereo)*o38;
+	double k38 = (stereo)*o38;
 
-		k19=val_pilot;
-		k38=val_audio;
 
   //generate the sampled signal
 
 
-  double mpx_clip_local = tlim - o19;
   double composite=k38+mono;
   if(fabs(composite)<0.00001)
     composite=0.00001;
 
-  composite=tanh_func_mpx(composite,1,mpx_clip_local);
+  composite=tanh_func_mpx(composite,1,tlim);
 
 
   put_list(mpx_list,composite);
 
 
-  harmonic_reduction(mpx_list,mpx_clip_local);
-  return k19+calculate_interpolation_mpx(mpx_list,3);
+  harmonic_reduction(mpx_list,tlim);
+  double composite_out=calculate_interpolation_mpx(mpx_list,3);
+
+  //remove any 19khz component that is 180 degrees out of phase with the pilot
+  //do this while respecting limits
+  double fft = composite_out*fft_19;
+  double fftr = composite_out*(-fft_19);
+  double prev = composite_out;
+  composite_out = composite_out-(fft+fftr);
+  if(fabs(composite_out) > tlim)
+    composite_out = prev;
+
+
+  //make room for the pilot on demand
+  if(composite_out+k19 > tlim){
+    composite_out = composite_out - ((composite_out+k19)-tlim);
+  }
+
+  if(composite_out+k19 < -tlim){
+
+    composite_out = composite_out - ((composite_out+k19)+tlim);
+  }
+
+  return k19+composite_out;
 
 
 
