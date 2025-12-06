@@ -3,14 +3,14 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,3000,11000,18000}; //multiband compression filters
+int fdef[]={60,250,350,1000,3000,11000,19000}; //multiband compression filters
 int fdef_size=7;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={4 ,  4 , 4, 4 ,4,4, 4}; // will affect phase
 float def_attack[]={0.1667   ,0.5  ,  0.5  , 0.25 , 0.15 ,0.05 ,0.04335};//multiband compression attack
-float def_release[]={ 6 , 12  ,20 ,18.5 ,13 , 4  ,0.1501}; //multiband compression release
+float def_release[]={ 12 , 12  ,20 ,18.5 ,13 , 12  ,0.1501}; //multiband compression release
 float def_target[]={10000,12000,13500,15000,16000,16000,26000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1,1,1,1,1,1,100}; //multiband compressor pre compression gain
@@ -44,7 +44,7 @@ float knee_release[]={0.1,0.1,0.3,0.3,0.1,0.1,0.1};//knee
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.65
+#define PRE_CLIP_SATURATION 0.3
 #define PRE_CLIP_SATURATION_LIMIT 2
 #define POST_SAT_GAIN 1
 
