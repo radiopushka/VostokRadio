@@ -69,12 +69,14 @@ double tlim = 2081818578;
 double mpx_clip_t;
 double* synth_19=NULL;
 double* synth_19_fft=NULL;
+double* synth_19_fft_c=NULL;
 double* synth_38=NULL;
 
 
 void free_mpx_cache(){
 
   free(synth_19_fft);
+  free(synth_19_fft_c);
   free(synth_19);
   free(synth_38);
 
@@ -93,6 +95,7 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
 
       synth_19=malloc(sizeof(double)*buffer_size);
       synth_19_fft=malloc(sizeof(double)*buffer_size);
+      synth_19_fft_c=malloc(sizeof(double)*buffer_size);
       synth_38=malloc(sizeof(double)*buffer_size);
 
 
@@ -100,21 +103,26 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
       long double counter_secondary=0;
       double* s38=synth_38;
       double* s19_fft = synth_19_fft;
+      double* s19_fft_c = synth_19_fft_c;
       for(double* s19=synth_19;counter<buffer_size;s19++){
           long double v19=0;
           long double v38=0;
+          long double cos=0;
           for(int i=0;i<over_sampling;i++){
             v19=v19+sinl(shifter_19*(counter_secondary+offset19));
+            cos=cos+sinl(shifter_19*(counter_secondary+offset19));
             v38=v38+sinl(shifter_38*(counter_secondary+offset38));
             
             counter_secondary=counter_secondary+1;
           }
           counter=counter+1;
-          *s19=(v19/over_sampling)*_pilot;
+          *s19=(v19/over_sampling);
           *s19_fft=-(v19/over_sampling);
+          *s19_fft_c=-(cos/over_sampling);
           *s38=(v38/over_sampling);
           s38++;
           s19_fft++;
+          s19_fft_c++;
       }
 
 
@@ -255,6 +263,10 @@ void harmonic_reduction(double* l3list, double limit){
 }
 
 
+const double alpha=0.041667;//this is half of 19khz under the 192khz sample rate. 8000/192000
+const double nalpha = 1-alpha;
+double i_r=0;
+double i_i=0;
 //double get_mpx_next_value(double left,double right,double percent_stereo,double percent_mono){
 double get_mpx_next_value(double mono,double stereo,double percent_mono,double percent_stereo){
 
@@ -262,6 +274,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
 
  double o38=synth_38[itterator];
  double fft_19 = synth_19_fft[itterator];
+ double fft_19_c = synth_19_fft_c[itterator];
 
 
  mono = mono*(percent_mono);
@@ -301,12 +314,17 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   //remove any 19khz component that is 180 degrees out of phase with the pilot
   //do this while respecting limits
   double fft = composite_out*fft_19;
-  double fftr = composite_out*(-fft_19);
-  double prev = composite_out;
-  composite_out = composite_out-(fft+fftr);
-  if(fabs(composite_out) > tlim)
-    composite_out = prev;
+  double fftr = composite_out*(fft_19_c);
+  i_i= alpha*fft + nalpha*i_i;
+  i_r= alpha*fftr + nalpha*i_r;
+  double amp = sqrt(i_i*i_i + i_r*i_r);
 
+  //the pilot will be loader than any anti-phase signal at 19khz. It will cancel it out with given amplitude.
+  //this is to ensure locking
+  k19 = k19*(_pilot + amp);
+  
+  //composite_out = composite_out-(amp*fft_19);
+ 
 
   //make room for the pilot on demand
   if(composite_out+k19 > tlim){
