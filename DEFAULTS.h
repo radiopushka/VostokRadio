@@ -74,7 +74,7 @@ float knee_release[]={0.1,0.1,0.3,0.3,0.1,0.1,0.1};//knee
 
 #define HIGH_PASS // for FM transmitters that have trouble with low frequency bass
 #define HIGH_PASS_CUTOFF 5 //comment the line above to disable
-#define DC_REMOVAL_COEFF 0.0005
+#define DC_REMOVAL_COEFF 0.0000001
 
 
 //alsa configuration
