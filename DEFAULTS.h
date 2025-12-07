@@ -11,7 +11,7 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,
 int   lookaheads[]={4 ,  4 , 4, 4 ,4,4, 4}; // will affect phase
 float def_attack[]={0.04667   ,0.25  ,  0.5  , 0.15 , 0.07 ,0.05 ,0.02};//multiband compression attack
 
-float def_release[]={ 12 , 12  ,20 ,18.5 ,18.5 , 15  ,7}; //multiband compression release
+float def_release[]={ 6 , 12  ,15 ,30 ,30 , 15  ,7}; //multiband compression release
 float def_target[]={5000,4000,13500,13000,12000,12000,35000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
 float pre_amp[]={1.6,1,1,1,1,1,100}; //multiband compressor pre compression gain
