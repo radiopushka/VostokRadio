@@ -21,7 +21,7 @@ int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.4,1,1,1,1,1,1}; // band compression post amplification
 float effect[]={8,12,12,12,12,12,7};//ratio
 float knee[]={1.2,1.001,1.001,1.001,1,1,1};//knee
-float knee_release[]={1.005,1.005,1,1,0.8,0.8,1.01};//knee
+float knee_release[]={1.005,1.005,1,1,1.6,1.6,1.01};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
