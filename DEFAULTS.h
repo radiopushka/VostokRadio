@@ -57,7 +57,7 @@ float knee_release[]={1.005,1.005,1,1,1,1.2,1.01};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 2.9 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.7 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
