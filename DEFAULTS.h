@@ -3,7 +3,7 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,3000,9000,18800}; //multiband compression filters
+int fdef[]={60,250,350,1000,3000,13000,18800}; //multiband compression filters
 int fdef_size=7;
 
 
