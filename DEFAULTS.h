@@ -15,7 +15,7 @@ float def_release[]={ 50 , 40  ,30 ,30 ,60 , 30  ,15}; //multiband compression r
 float def_target[]={3000,4000,13500,13000,10000,10000,30000}; //multiband compression target volume
 
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1.3,1,1,1,1,1.2,70}; //multiband compressor pre compression gain
+float pre_amp[]={1.3,1,1,1,1,1.2,100}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.2,1,1,1,1,1,1}; // band compression post amplification
