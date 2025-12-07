@@ -28,6 +28,9 @@ struct agc_info{
 
 #define PIHALF 1.570796327
 
+
+double ratio=0.7;
+
 typedef struct agc_info* AGC;
 AGC create_agc(double gain_max,double gain_start,double gain_cut, int lookahead){
  
@@ -75,7 +78,7 @@ double apply_agc(AGC agc,double input,float target,float sens,int thresh,float t
 
   }
 
-  agc->avg_audio=agc->avg_audio/2+absv/2;
+  agc->avg_audio=agc->avg_audio*(1-ratio)+absv*ratio;
   
     /*if(agc->gain>agc->gain_avg){
     release=release/(agc->gain - agc->gain_avg + 1);
