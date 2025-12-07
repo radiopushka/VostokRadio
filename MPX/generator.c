@@ -35,7 +35,7 @@ const double mult_new=1;
 double mult_pr=1-mult_new;
 
 //how much ultrasonic distortion the clipper produces
-#define PERCENT_COMP_DIST 0.02
+#define PERCENT_COMP_DIST 0.00000001
 double harmonic_red_val = 2081818578 * PERCENT_COMP_DIST;
 
 //determined experimentally on an old ASUS laptop
@@ -310,7 +310,7 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
 
 
   harmonic_reduction(mpx_list,tlim);
-  double composite_out=calculate_interpolation_mpx(mpx_list,3);
+  double composite_out=calculate_interpolation_mpx(mpx_list,10);
 
   //remove any 19khz component that is 180 degrees out of phase with the pilot
   //do this while respecting limits
