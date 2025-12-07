@@ -328,13 +328,16 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
  
 
   //make room for the pilot on demand
-  if(composite_out+k19 > tlim){
-    composite_out = composite_out - ((composite_out+k19)-tlim);
+  if(composite_out > tlim - k19){
+    double lim = tlim - k19;
+    double div = lim/(composite_out);
+    composite_out = composite_out*div;
   }
 
-  if(composite_out+k19 < -tlim){
-
-    composite_out = composite_out - ((composite_out+k19)+tlim);
+  if(composite_out < -(tlim + k19)){
+    double lim = -(tlim + k19);
+    double div = lim/(composite_out);
+    composite_out = composite_out/div;
   }
 
   return k19+composite_out;
