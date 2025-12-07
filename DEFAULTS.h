@@ -9,15 +9,15 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={4 ,  4 , 4, 4 ,4,4, 4}; // will affect phase
-float def_attack[]={0.04667   ,0.25  ,  0.5  , 0.55 , 0.33 ,0.3 ,0.15};//multiband compression attack
+float def_attack[]={0.04667   ,0.25  ,  0.5  , 0.55 , 0.33 ,0.3 ,0.02};//multiband compression attack
 
-float def_release[]={ 12 , 12  ,20 ,18.5 ,18.5 , 12  ,7}; //multiband compression release
-float def_target[]={5000,4000,13500,14000,14000,14000,26000}; //multiband compression target volume
+float def_release[]={ 12 , 12  ,20 ,18.5 ,18.5 , 15  ,7}; //multiband compression release
+float def_target[]={5000,4000,13500,14000,12000,12000,35000}; //multiband compression target volume
 float def_m_gain[]={1.00,1.00,1.00,1.00,1.00,1.00,1.00}; //make up gain
-float pre_amp[]={1,1,1,1,1,1,100}; //multiband compressor pre compression gain
+float pre_amp[]={1.6,1,1,1,1,1,100}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.25,1,1,1,1,1,1.2}; // band compression post amplification
+float post_amp[]={0.25,1,1,1,1,1,1}; // band compression post amplification
 float effect[]={12,12,12,12,12,12,12};//ratio
 float knee[]={1,1,1,1,1,1,1};//knee
 float knee_release[]={0.1,0.1,0.3,0.3,0.1,0.1,0.1};//knee
