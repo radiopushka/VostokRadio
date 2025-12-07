@@ -91,7 +91,7 @@ float knee_release[]={1.005,1.005,1,1,1,1.02,1.01};//knee
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 2000 //input AGC baseline target
+#define AGC_TARG 1000 //input AGC baseline target
 #define AGC_LOOKAHEAD 6
 #define AGC_SPEED 0.78 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
