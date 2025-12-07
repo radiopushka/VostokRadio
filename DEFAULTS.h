@@ -21,7 +21,7 @@ int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.4,1,1,1,1,1,1}; // band compression post amplification
 float effect[]={8,12,12,12,9,8,7};//ratio
 float knee[]={1.2,1.001,1.001,1.001,1.05,1.05,1};//knee
-float knee_release[]={1.005,1.005,1,1,1,1.2,1.01};//knee
+float knee_release[]={1.005,1.005,1,1,1,1.1,1.01};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
 //this maximizes loudness, you can comment this out if you are using mono
@@ -92,7 +92,7 @@ float knee_release[]={1.005,1.005,1,1,1,1.2,1.01};//knee
 #define POST_AGC_GAIN 1
 
 #define AGC_TARG 4000 //input AGC baseline target
-#define AGC_LOOKAHEAD 100
+#define AGC_LOOKAHEAD 3
 #define AGC_SPEED 0.00058 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
