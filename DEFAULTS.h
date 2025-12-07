@@ -12,7 +12,7 @@ int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
 float def_attack[]={200   ,60  ,  40  , 25 , 10 ,5 ,3};//multiband compression attack
 
 float def_release[]={ 700 , 400  ,300 ,250 ,160 , 80  ,10}; //multiband compression release
-float def_target[]={6000,4000,9000,9000,8000,6000,22000}; //multiband compression target volume
+float def_target[]={6000,4000,9000,9000,8000,4000,22000}; //multiband compression target volume
 
 float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,4.00}; //make up gain
 float pre_amp[]={0.5,0.5,0.8,0.6,0.7,0.6,50}; //multiband compressor pre compression gain
