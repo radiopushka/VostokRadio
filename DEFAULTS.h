@@ -62,8 +62,8 @@ float knee_release[]={1.005,1.005,1,1,1,1.2,1.01};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  1
-#define SIGMOIDAL_RELEASE 16
+#define SIGMOIDAL_ATTACK  2
+#define SIGMOIDAL_RELEASE 32
 #define SIGMOIDAL_BUFFER 30
 #define SIGMOIDAL_KNEE 1.1
 #define SIGMOIDAL_DRANGE -55000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
