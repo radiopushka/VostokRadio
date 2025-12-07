@@ -46,18 +46,18 @@ float knee_release[]={1.005,1.005,1,1,1,1.2,1.01};//knee
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.005
+#define PRE_CLIP_SATURATION 0.001
 #define PRE_CLIP_SATURATION_LIMIT 2
 #define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 102767
-#define TAPE_SAT_WETNESS 0.005
+#define TAPE_SAT_WETNESS 0.001
 #define TAPE_SAT_OFFSET 1.00
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 2.7 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.5 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
