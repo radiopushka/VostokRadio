@@ -11,16 +11,16 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
 float def_attack[]={20   ,30  ,  10  , 1 , 1 ,2 ,0.2};//multiband compression attack
 
-float def_release[]={ 700 , 400  ,300 ,250 ,160 , 80  ,2}; //multiband compression release
-float def_target[]={6000,5000,10000,10000,10000,8000,26000}; //multiband compression target volume
+float def_release[]={ 700 , 400  ,300 ,250 ,250 , 80  ,2}; //multiband compression release
+float def_target[]={6000,5000,10000,10000,8000,8000,26000}; //multiband compression target volume
 
 float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
-float pre_amp[]={0.5,0.5,1,1,0.7,0.4,50}; //multiband compressor pre compression gain
+float pre_amp[]={0.5,0.5,1,1,0.7,0.7,50}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.4,1,1,1,1,0.5,1}; // band compression post amplification
 float effect[]={15,15,15,25,25,25,100};//ratio
-float knee[]={4,2,1.5,1.2,1.1,1.1,1};//knee
+float knee[]={4,2,1.5,1.2,1,1.1,1};//knee
 float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
