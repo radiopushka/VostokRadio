@@ -57,14 +57,14 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 2.45 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.5 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
 #define SIGMOIDAL_ATTACK  1.3334
-#define SIGMOIDAL_RELEASE 6.6665
-#define SIGMOIDAL_BUFFER 6
+#define SIGMOIDAL_RELEASE 4.6665
+#define SIGMOIDAL_BUFFER 7
 #define SIGMOIDAL_KNEE 1
 #define SIGMOIDAL_DRANGE -16000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
