@@ -46,9 +46,9 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.001
-#define PRE_CLIP_SATURATION_LIMIT 2
-#define POST_SAT_GAIN 1
+#define PRE_CLIP_SATURATION 0.02
+#define PRE_CLIP_SATURATION_LIMIT 3
+#define POST_SAT_GAIN 1.1
 
 #define TAPE_SAT_THRESH 102767
 #define TAPE_SAT_WETNESS 0.001
@@ -66,7 +66,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define SIGMOIDAL_RELEASE 6.6665
 #define SIGMOIDAL_BUFFER 6
 #define SIGMOIDAL_KNEE 1
-#define SIGMOIDAL_DRANGE -18000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE -16000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -91,7 +91,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 2000 //input AGC baseline target
+#define AGC_TARG 3000 //input AGC baseline target
 #define AGC_LOOKAHEAD 6
 #define AGC_SPEED 0.78 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
