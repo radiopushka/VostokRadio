@@ -3,24 +3,24 @@
 
 //Evan Nikitin 2025
 
-int fdef[]={60,250,350,1000,4000,13000,18800}; //multiband compression filters
+int fdef[]={60,250,350,1000,4000,15000,18800}; //multiband compression filters
 int fdef_size=7;
 
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
-float def_attack[]={200   ,60  ,  40  , 25 , 10 ,5 ,3};//multiband compression attack
+float def_attack[]={20   ,30  ,  10  , 1 , 1 ,2 ,0.2};//multiband compression attack
 
-float def_release[]={ 700 , 400  ,300 ,250 ,160 , 80  ,10}; //multiband compression release
-float def_target[]={6000,4000,9000,9000,8000,4000,22000}; //multiband compression target volume
+float def_release[]={ 700 , 400  ,300 ,250 ,160 , 80  ,2}; //multiband compression release
+float def_target[]={6000,5000,10000,10000,10000,8000,26000}; //multiband compression target volume
 
-float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,4.00}; //make up gain
-float pre_amp[]={0.5,0.5,0.8,0.6,0.7,0.6,50}; //multiband compressor pre compression gain
+float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
+float pre_amp[]={0.5,0.5,0.8,0.8,0.7,0.4,50}; //multiband compressor pre compression gain
 float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.4,1,1,1,1,0.8,1}; // band compression post amplification
-float effect[]={15,15,15,16,16,16,18};//ratio
-float knee[]={1.2,1.001,1.001,1,1,1,1};//knee
+float post_amp[]={0.4,1,1,1,1,0.5,1}; // band compression post amplification
+float effect[]={15,15,15,25,25,25,100};//ratio
+float knee[]={4,2,1.5,1.2,1.1,1.1,1};//knee
 float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
@@ -57,16 +57,16 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 2.35 // can change the global gain after the multiband compressor
+#define FINAL_AMP 2.45 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  2
-#define SIGMOIDAL_RELEASE 32
-#define SIGMOIDAL_BUFFER 30
-#define SIGMOIDAL_KNEE 1.1
-#define SIGMOIDAL_DRANGE -55000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_ATTACK  1.3334
+#define SIGMOIDAL_RELEASE 6.6665
+#define SIGMOIDAL_BUFFER 6
+#define SIGMOIDAL_KNEE 1
+#define SIGMOIDAL_DRANGE -22000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -91,7 +91,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 1000 //input AGC baseline target
+#define AGC_TARG 2000 //input AGC baseline target
 #define AGC_LOOKAHEAD 6
 #define AGC_SPEED 0.78 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
