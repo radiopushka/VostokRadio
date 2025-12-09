@@ -322,7 +322,10 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
 
   //the pilot will be loader than any anti-phase signal at 19khz. It will cancel it out with given amplitude.
   //this is to ensure locking
-  k19 = k19*(_pilot + amp);
+  double namp = _pilot + amp;
+  if(namp > tlim)
+    namp=tlim;
+  k19 = k19*namp;
   
   //composite_out = composite_out-(amp*fft_19);
  
@@ -337,7 +340,10 @@ double get_mpx_next_value(double mono,double stereo,double percent_mono,double p
   if(composite_out < -(tlim + k19)){
     double lim = -(tlim + k19);
     double div = lim/(composite_out);
-    composite_out = composite_out/div;
+    if(div == 0)
+      composite_out =0;
+    else
+      composite_out = composite_out/div;
   }
 
   return k19+composite_out;

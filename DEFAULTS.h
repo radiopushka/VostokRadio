@@ -9,10 +9,10 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
-float def_attack[]={20   ,30  ,  0.2  , 0.1 , 0.1 ,1 ,0.1};//multiband compression attack
+float def_attack[]={5   ,10  ,  0.2  , 0.1 , 0.1 ,1 ,0.1};//multiband compression attack
 
 float def_release[]={ 700 , 600  ,500 ,200 ,400 , 120  ,2}; //multiband compression release
-float def_target[]={6000,5000,8000,8000,7000,19000,26000}; //multiband compression target volume
+float def_target[]={8000,7000,11000,11000,11000,21000,26000}; //multiband compression target volume
 
 float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
 float pre_amp[]={0.5,0.5,0.5,0.7,0.7,2,50}; //multiband compressor pre compression gain
@@ -57,7 +57,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 2.8 // can change the global gain after the multiband compressor
+#define FINAL_AMP 3.1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -65,8 +65,8 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define SIGMOIDAL_ATTACK  0.6667
 #define SIGMOIDAL_RELEASE 1.6665
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_KNEE 600
-#define SIGMOIDAL_DRANGE -70000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_KNEE 16800
+#define SIGMOIDAL_DRANGE -210000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -91,7 +91,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 3000 //input AGC baseline target
+#define AGC_TARG 4000 //input AGC baseline target
 #define AGC_LOOKAHEAD 6
 #define AGC_SPEED 0.78 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
