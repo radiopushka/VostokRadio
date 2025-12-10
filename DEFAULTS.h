@@ -65,8 +65,8 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define SIGMOIDAL_ATTACK  0.6667
 #define SIGMOIDAL_RELEASE 1.6665
 #define SIGMOIDAL_BUFFER 200
-#define SIGMOIDAL_KNEE 16800
-#define SIGMOIDAL_DRANGE -210000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_KNEE 52800
+#define SIGMOIDAL_DRANGE -170000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
