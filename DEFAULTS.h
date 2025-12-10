@@ -46,12 +46,12 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define GATE_ATTACK 0.001
 #define GATE_THRESHOLD 2000
 */
-#define PRE_CLIP_SATURATION 0.001
+#define PRE_CLIP_SATURATION 0
 #define PRE_CLIP_SATURATION_LIMIT 3
 #define POST_SAT_GAIN 1.1
 
 #define TAPE_SAT_THRESH 102767
-#define TAPE_SAT_WETNESS 0.001
+#define TAPE_SAT_WETNESS 0
 #define TAPE_SAT_OFFSET 1.00
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
@@ -62,11 +62,11 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.6667
+#define SIGMOIDAL_ATTACK  0.4667
 #define SIGMOIDAL_RELEASE 1.6665
 #define SIGMOIDAL_BUFFER 200
 #define SIGMOIDAL_KNEE 52800
-#define SIGMOIDAL_DRANGE -170000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_DRANGE -110000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
