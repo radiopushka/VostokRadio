@@ -164,7 +164,7 @@ double calculate_interpolation(double* l3list){//basically a low pass filter at 
   double side2 = l3list[2];
 
   double weight_side=1;
-  double weight_center=20;
+  double weight_center=40;
 
   double average = side1*weight_side + center*weight_center + side2*weight_side;
 
@@ -211,7 +211,7 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
   double max = fmax(fabs(side1),fabs(side2));
   max = fmax(fabs(center),fabs(max));
 
-  double level = 400;
+  double level = 10;
   if(max<level){
     level = max;
   }
@@ -249,8 +249,8 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
 
 void calculate_percents(double input1,double input2,double* p_1,double* p_2){
   //38 khz phase into account (input2 is stereo)
-  input2 =   input2*0.6465 + fabs(input2)*0.3535;
-  input1 =   input1*0.6465 + fabs(input1)*0.3535;
+  input2 =   input2*0.707 + fabs(input2)*0.2930;
+  input1 =   input1*0.707 + fabs(input1)*0.2930;
 
     double sum = input1 + input2;
 
@@ -283,11 +283,11 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
 
-  if(fabs(*input1)<0.00001)
-    *input1=0.00001;
+  if(fabs(*input1)<0.0000001)
+    *input1=0.0000001;
 
-  if(fabs(*input2)<0.00001)
-    *input2=0.00001;
+  if(fabs(*input2)<0.0000001)
+    *input2=0.0000001;
   //not applicable anymore due to time slicing clipping
 
 
@@ -359,8 +359,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
     if(mcoeff>1)
       mcoeff=1;
     limiter->dynamic_ratio_m=limiter->dynamic_ratio_m*(1+(1 - mcoeff));
-   if(limiter->dynamic_ratio_m>1000){
-      limiter->dynamic_ratio_m = 1000;
+   if(limiter->dynamic_ratio_m>5000){
+      limiter->dynamic_ratio_m = 5000;
     }
    limiter->prev_op = 1;
    limiter->prev_val = rstartm;
@@ -394,8 +394,8 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
       mcoeff=1;
 
     limiter->dynamic_ratio_s=limiter->dynamic_ratio_s*(1+(1 - mcoeff));
-   if(limiter->dynamic_ratio_s>1000){
-      limiter->dynamic_ratio_s = 1000;
+   if(limiter->dynamic_ratio_s>5000){
+      limiter->dynamic_ratio_s = 5000;
     }
    limiter->prev_op2 = 1;
    limiter->prev_val2 = rstarts;
@@ -435,10 +435,10 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   }*/
 
-  if(fabs(retmono)<0.00001)
-    retmono=0.00001;
-  if(fabs(retst)<0.00001)
-    retst=0.00001;
+  if(fabs(retmono)<0.0000001)
+    retmono=0.0000001;
+  if(fabs(retst)<0.0000001)
+    retst=0.0000001;
 
   ratiom = limiter->dynamic_ratio_m;
   ratios = limiter->dynamic_ratio_s;
