@@ -11,7 +11,7 @@ float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
 float def_attack[]={5   ,10  ,  0.1  , 0.07 , 0.07 ,1 ,0.1};//multiband compression attack
 
-float def_release[]={ 700 , 600  ,500 ,600 ,400 , 520  ,2}; //multiband compression release
+float def_release[]={ 700 , 600  ,500 ,600 ,400 , 520  ,4}; //multiband compression release
 float def_target[]={8000,7000,11000,11000,11000,21000,26000}; //multiband compression target volume
 
 float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
@@ -62,10 +62,10 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
-#define SIGMOIDAL_ATTACK  0.2667
-#define SIGMOIDAL_RELEASE 0.6665
+#define SIGMOIDAL_ATTACK  1.667
+#define SIGMOIDAL_RELEASE 1.765
 #define SIGMOIDAL_BUFFER 600
-#define SIGMOIDAL_KNEE 4800
+#define SIGMOIDAL_KNEE 8800
 #define SIGMOIDAL_DRANGE -1100000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
