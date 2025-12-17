@@ -249,8 +249,8 @@ void harmonic_reduction_lim(SLim limiter,double* l3list, double limit){
 
 void calculate_percents(double input1,double input2,double* p_1,double* p_2){
   //38 khz phase into account (input2 is stereo)
-  input2 =   input2*1;
-  input1 =   input1*1;
+  input2 =   input2*0.8233 + fabs(input2)*0.1767;
+  input1 =   input1*0.8233 + fabs(input1)*0.1767;
 
     double sum = input1 + input2;
 
@@ -444,17 +444,15 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   ratios = limiter->dynamic_ratio_s;
 
   //time slicing method
-  double pr_st;
-  double pr_m;
+  //double pr_st;
+  //double pr_m;
 
-  calculate_percents(retmono,retst,&pr_m,&pr_st);
+  //calculate_percents(retmono,retst,&pr_m,&pr_st);
   double st_c = retst;
   double mono_c = retmono;
 
-  if(pr_m > 0)
-    mono_c = tanh_func(retmono , ratiom , limit2x * pr_m);
-  if(pr_st>0)
-    st_c = tanh_func(retst , ratios , limit2x * pr_st);
+    mono_c = tanh_func(retmono , ratiom , limit2x);
+    st_c = tanh_func(retst , ratios , limit2x);
 
   //if is clipped just start removing stereo
   if(is_within_l(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
@@ -487,7 +485,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   memmove(interp_mono+1,interp_mono,limiter->intrp_cp_size);
   *interp_mono=mono_c;
 
-  harmonic_reduction_lim(limiter,interp_mono , limit2x * pr_m);
+  harmonic_reduction_lim(limiter,interp_mono , limit2x );
 
   double* interp_stereo = limiter->intrp_st;
   memmove(interp_stereo+1,interp_stereo,limiter->intrp_cp_size);
@@ -495,7 +493,7 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
 
 
-  harmonic_reduction_lim(limiter,interp_stereo, limit2x * pr_st);
+  harmonic_reduction_lim(limiter,interp_stereo, limit2x );
   //*input1 = mono_c;
   *input1 = calculate_interpolation(interp_mono);
   //*input2 = st_c;
