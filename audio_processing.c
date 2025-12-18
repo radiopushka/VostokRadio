@@ -139,7 +139,7 @@ int main(){
   Multiband rmbt=create_mbt(rmux,lookaheads);
   Multiband mmbt=create_mbt(mmux,lookaheads);//mono
 
-  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767,SIGMOIDAL_DRANGE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE,SIGMOIDAL_KNEE,PRE_CLIP_SATURATION,PRE_CLIP_SATURATION_LIMIT,POST_SAT_GAIN);
+  SLim sigmoidal = create_sigmoidal_limiter(SIGMOIDAL_BUFFER,SIGMOIDAL_CO,31767+SIGMOIDAL_DRANGE,SIGMOIDAL_PRE,SIGMOIDAL_ATTACK,SIGMOIDAL_RELEASE,SIGMOIDAL_KNEE,PRE_CLIP_SATURATION,PRE_CLIP_SATURATION_LIMIT,POST_SAT_GAIN);
 
 
 
@@ -417,7 +417,7 @@ int main(){
         to_mpx(helper_buffer,helper_buffer_end);
 
         #ifdef FINAL_CLIP
-          mpx_clip(sigmoidal,helper_buffer,helper_buffer_end,31767 );
+          mpx_clip(sigmoidal,helper_buffer,helper_buffer_end,32767 );
         #endif /* ifdef FINAL_CLIP */
         gain_array(helper_buffer,helper_buffer_end,32769);
         resample_up_stereo_mpx(helper_buffer,buffer_o,helper_buffer_end,input_buffer_prop);

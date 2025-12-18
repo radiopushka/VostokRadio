@@ -9,10 +9,10 @@ int fdef_size=7;
 
 float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
-float def_attack[]={5   ,10  ,  0.1  , 0.07 , 0.07 ,1 ,0.1};//multiband compression attack
+float def_attack[]={5   ,1 ,  0.1  , 0.07 , 0.07 ,1 ,0.1};//multiband compression attack
 
 float def_release[]={ 700 , 600  ,500 ,600 ,400 , 520  ,4}; //multiband compression release
-float def_target[]={8000,7000,11000,11000,11000,21000,26000}; //multiband compression target volume
+float def_target[]={8000,7000,11000,11000,11000,17000,26000}; //multiband compression target volume
 
 float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
 float pre_amp[]={0.5,0.5,0.5,0.7,0.7,2,50}; //multiband compressor pre compression gain
@@ -20,7 +20,7 @@ float def_gate[]={0,0,0,0,0,0,0}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
 float post_amp[]={0.4,1,0.7,0.8,0.9,1,1}; // band compression post amplification
 float effect[]={15,15,15,25,25,25,100};//ratio
-float knee[]={4,2,1,1,1,1,1};//knee
+float knee[]={4,1,1,1,1,1,1};//knee
 float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //int types[]={COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK,COMP_PEAK};//band compression compressor types
 
@@ -57,16 +57,17 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 3.1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2
 #define SIGMOIDAL_ATTACK  1.667
-#define SIGMOIDAL_RELEASE 1.765
-#define SIGMOIDAL_BUFFER 600
-#define SIGMOIDAL_KNEE 8800
-#define SIGMOIDAL_DRANGE -1100000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
+#define SIGMOIDAL_RELEASE 2.765
+#define SIGMOIDAL_BUFFER 10
+#define SIGMOIDAL_KNEE 4
+#define SIGMOIDAL_PRE 1200
+#define SIGMOIDAL_DRANGE 1000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
 //some PLLVCO based FM transmitters might also require bass cut, our current model has trouble with bass.
@@ -108,8 +109,8 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 1.9 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 1.9// percent of the signal devoted to mono audio
+#define PERCENT_MONO 8 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 8// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
