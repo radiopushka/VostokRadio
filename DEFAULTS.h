@@ -64,7 +64,7 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define SIGMOIDAL_CO 2
 #define SIGMOIDAL_ATTACK  1.667
 #define SIGMOIDAL_RELEASE 3.765
-#define SIGMOIDAL_BUFFER 5
+#define SIGMOIDAL_BUFFER 20
 #define SIGMOIDAL_KNEE 4
 #define SIGMOIDAL_PRE 2200
 #define SIGMOIDAL_DRANGE 1000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
