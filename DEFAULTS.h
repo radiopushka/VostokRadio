@@ -57,16 +57,16 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1.5 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 3.5
-#define SIGMOIDAL_ATTACK  3.667
-#define SIGMOIDAL_RELEASE 6.765
+#define SIGMOIDAL_CO 2
+#define SIGMOIDAL_ATTACK  1.667
+#define SIGMOIDAL_RELEASE 3.765
 #define SIGMOIDAL_BUFFER 20
-#define SIGMOIDAL_KNEE 16
-#define SIGMOIDAL_PRE 5200
+#define SIGMOIDAL_KNEE 18
+#define SIGMOIDAL_PRE 9200
 #define SIGMOIDAL_DRANGE 1000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
 //most other AM transmitters require bass cut, so set this to like 70hz
@@ -109,8 +109,8 @@ float knee_release[]={1.005,1.005,1,1,1.6,1.6,1};//knee
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 15 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 15// percent of the signal devoted to mono audio
+#define PERCENT_MONO 5 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 5// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
