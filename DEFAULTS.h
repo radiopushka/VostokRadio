@@ -18,7 +18,7 @@ float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,7.00}; //make up gain
 float pre_amp[]={0.5,0.7,0.7,0.7,0.7,1,50}; //multiband compressor pre compression gain
 float def_gate[]={300,320,300,1000,1000,1000,300}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
-float post_amp[]={0.4,1,0.7,0.8,0.9,1,1}; // band compression post amplification
+float post_amp[]={0.4,1,0.7,0.8,0.8,0.9,1}; // band compression post amplification
 float effect[]={25,25,50,50,50,50,100};//ratio
 float knee[]={4,1,1,1,1,1,1};//knee
 float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
@@ -50,14 +50,14 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 #define PRE_CLIP_SATURATION_LIMIT 3
 #define POST_SAT_GAIN 1.1
 
-#define TAPE_SAT_THRESH 102767
-#define TAPE_SAT_WETNESS 0
-#define TAPE_SAT_OFFSET 1.00
+#define TAPE_SAT_THRESH 202767
+#define TAPE_SAT_WETNESS 0.3
+#define TAPE_SAT_OFFSET 1.02
 #define TAPE_SAT_DRIVE 1.00
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1.6 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
@@ -109,8 +109,8 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 6.5 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 6.5// percent of the signal devoted to mono audio
+#define PERCENT_MONO 11 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 11// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
