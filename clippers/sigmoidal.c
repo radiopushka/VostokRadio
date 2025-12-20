@@ -1,6 +1,9 @@
 #include<math.h>
 #include <string.h>
 #include<stdlib.h>
+#include "../MPX/generator.h"
+#include "../DEFAULTS.h"
+
 
 //double LIM_knee=3000;
 
@@ -9,28 +12,22 @@ struct sigmoidal_lookahead{
   double dynamic_ratio_m;
   double dynamic_ratio_s;
   double* ring;
-  double  limit_b;
-  double  limit_b2;
-  double* helper;
+  double* ring_l;
+  double* ring_r;
+  //double* helper;
   double limit;
   double ratio;
   double range;
   double attack;
-  double limiter_half;
   double release;
   int clip_count;
   int clip_count_internal;
   size_t bsize_pre;
   double knee;
 
-  double pre_saturation_ratio;
-  double lim_saturate;
-  double post_sat_gain;
 
   int prev_op;
-  int prev_op2;
   double prev_val;
-  double prev_val2;
 
   //anti-aliasing
   double intrp_mono[3];
@@ -48,28 +45,22 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
 
   SLim limiter = malloc(sizeof(struct sigmoidal_lookahead));
   limiter->ring = malloc(sizeof(double)*buffersize);
-  limiter->helper = malloc(sizeof(double)*buffersize);
-  limiter->limit_b = limit * 1.5;
-  limiter->limit_b2= limit * 1.5;
+  limiter->ring_l = malloc(sizeof(double)*buffersize);
+  limiter->ring_r = malloc(sizeof(double)*buffersize);
+ // limiter->helper = malloc(sizeof(double)*buffersize);
   limiter->ratio=ratio;
   limiter->limit=limit;
   limiter->dynamic_ratio_s=ratio;
   limiter->dynamic_ratio_m=ratio;
   limiter->range=range;
   limiter->size=buffersize;
-  limiter->limiter_half = limit * 1.5;
   limiter->attack=attack * ratio;
   limiter->release=release * ratio;
   limiter->bsize_pre=sizeof(double)*buffersize;
 
   limiter->prev_op=0;
-  limiter->prev_op2=0;
   limiter->prev_val=0;
-  limiter->prev_val2=0;
 
-  limiter->pre_saturation_ratio=sat_ratio;
-  limiter->lim_saturate=lim_prc_sat;
-  limiter->post_sat_gain=post_gain;
 
   limiter->knee = knee;
 
@@ -83,7 +74,6 @@ SLim create_sigmoidal_limiter(int buffersize, double ratio, double limit,double 
   limiter->intrp_cp_size = sizeof(double)*2;
 
   memset(limiter->ring,0,sizeof(double)*buffersize);
-  memset(limiter->helper,0,sizeof(double)*buffersize);
 
 
   return limiter;
@@ -270,17 +260,28 @@ void calculate_percents(double input1,double input2,double* p_1,double* p_2){
 void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   double* ring_buffer=limiter->ring;
-  double* ring_buffer2=limiter->helper;
+  double* ring_r=limiter->ring_r;
+  double* ring_l=limiter->ring_l;
+  //double* ring_buffer2=limiter->helper;
 
-  double retmono = *(ring_buffer + limiter->size - 1);
-  double retst = *(ring_buffer2 + limiter->size - 1);
+  double retcmp = *(ring_buffer + limiter->size - 1);
+  //double retst = *(ring_buffer2 + limiter->size - 1);
+  //
+
+  double a_m = *(ring_r + limiter->size -1);
+  double a_s = *(ring_l + limiter->size -1);
 
   double limit = limiter->limit;
   double limit2x = limit + limit;
 
-  memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
-  memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
 
+  memmove(ring_buffer + 1,ring_buffer,(limiter->bsize_pre - sizeof(double)));
+  //memmove(ring_buffer2 + 1,ring_buffer2,(limiter->bsize_pre - sizeof(double)));
+
+  memmove(ring_r + 1,ring_r,(limiter->bsize_pre - sizeof(double)));
+  memmove(ring_l + 1,ring_l,(limiter->bsize_pre - sizeof(double)));
+  *ring_r = *input1;
+  *ring_l = *input2;
 
 
   if(fabs(*input1)<0.0000001)
@@ -291,37 +292,29 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   //not applicable anymore due to time slicing clipping
 
 
-  double p_mpx;
-  double p_stpx;
 
-  calculate_percents(*input1,*input2,&p_mpx,&p_stpx);
-
-
-  *ring_buffer = 0;
-  *ring_buffer2 = 0;
-
-  double tval;
-
-  if(p_mpx > 0)
-    *ring_buffer = saturator(*input1 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_mpx,limiter->ratio,limiter->pre_saturation_ratio,&tval);
-
-  if(p_stpx > 0)
-    *ring_buffer2 = saturator(*input2 * limiter->post_sat_gain,(limit2x * limiter->lim_saturate) * p_stpx,limiter->ratio,limiter->pre_saturation_ratio,&tval);
+  double cmp = get_48_19k()*(limit*PERCENT_PILOT) + get_48_38k()*(*input2) + *input1;
+  itterate_48k_sample();
 
 
+  *ring_buffer = cmp;
+  //*ring_buffer2 = 0;
+
+
+ 
 
   //double mval = tanh_func(return_val , limiter->ratio + limiter->dynamic_ratio , limiter->limit);
+//because stereo 32khz is DSB modulated so RMS average will be as follows
 
-
-  double compositemx = fabs(retst + retmono);
+  double compositemx = fabs(retcmp);
 
 
   ring_buffer=limiter->ring;
   for(double* bwalk=ring_buffer; bwalk < ring_buffer + limiter->size; bwalk++){
 
-    double composite = fabs(*bwalk + *ring_buffer2);
+    double composite = fabs(*bwalk);
 
-    ring_buffer2++;
+    //ring_buffer2++;
     if(composite>compositemx){
       compositemx = composite;
     }
@@ -385,10 +378,10 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 
   }*/
 
-  if(fabs(retmono)<0.0000001)
-    retmono=0.0000001;
-  if(fabs(retst)<0.0000001)
-    retst=0.0000001;
+  if(fabs(a_m)<0.0000001)
+    a_m=0.0000001;
+  if(fabs(a_s)<0.0000001)
+    a_s=0.0000001;
 
   double ratiom = limiter->dynamic_ratio_m;
   double ratios = limiter->dynamic_ratio_m;
@@ -398,11 +391,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
   //double pr_m;
 
   //calculate_percents(retmono,retst,&pr_m,&pr_st);
-  double st_c = retst;
-  double mono_c = retmono;
 
-    mono_c = tanh_func(retmono , ratiom , limit2x);
-    st_c = tanh_func(retst , ratios , limit2x);
+    double mono_c = tanh_func(a_m , ratiom , limit2x);
+    double st_c = tanh_func(a_s , ratios , limit2x);
 
   //if is clipped just start removing stereo
   if(is_within_l(fabs(mono_c),limit2x,(limit2x * 0.25))==1){
@@ -455,6 +446,9 @@ void apply_sigmoidal(SLim limiter, double* input1, double* input2){
 void free_sigmoidal(SLim lim){
 
   free(lim->ring);
-  free(lim->helper);
+  free(lim->ring_l);
+  free(lim->ring_r);
+  //free(lim->helper);
   free(lim);
+  
 }

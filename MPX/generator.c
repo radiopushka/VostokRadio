@@ -65,12 +65,16 @@ double offset38=0.00793875;
 //7516;
 
 int itterator=0;
+int itterator2=0;
 double tlim = 2081818578;
 double mpx_clip_t;
 double* synth_19=NULL;
 double* synth_19_fft=NULL;
 double* synth_19_fft_c=NULL;
 double* synth_38=NULL;
+
+double* s48_38=NULL;
+double* s48_19=NULL;
 
 
 void free_mpx_cache(){
@@ -79,6 +83,23 @@ void free_mpx_cache(){
   free(synth_19_fft_c);
   free(synth_19);
   free(synth_38);
+
+  free(s48_38);
+  free(s48_19);
+
+}
+double get_48_19k(){
+  return s48_19[itterator];
+}
+double get_48_38k(){
+  return s48_38[itterator];
+}
+
+void itterate_48k_sample(){
+  itterator2++;
+  if(itterator2>=buffer_size){
+          itterator2=0;
+  }
 
 }
 
@@ -98,12 +119,22 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
       synth_19_fft_c=malloc(sizeof(double)*buffer_size);
       synth_38=malloc(sizeof(double)*buffer_size);
 
+      s48_38=malloc(sizeof(double)*(buffer_size/4));
+      s48_19=malloc(sizeof(double)*(buffer_size/4));
+
 
       long double counter=0;
+      long double counterp=0;
       long double counter_secondary=0;
       double* s38=synth_38;
       double* s19_fft = synth_19_fft;
       double* s19_fft_c = synth_19_fft_c;
+
+      double* s48_19i = s48_19;
+      double* s48_38i = s48_38;
+      double s48_38a = 0;
+      double s48_19a = 0;
+
       for(double* s19=synth_19;counter<buffer_size;s19++){
           long double v19=0;
           long double v38=0;
@@ -116,10 +147,24 @@ void init_mpx_cache(long double ratekhz,long double over_sampling){
             counter_secondary=counter_secondary+1;
           }
           counter=counter+1;
+          counterp++;
           *s19=(v19/over_sampling);
           *s19_fft=-(v19/over_sampling);
           *s19_fft_c=-(cos/over_sampling);
           *s38=(v38/over_sampling);
+
+          if(counterp >= 4){
+            *s48_38i = s48_38a/4.0;
+            *s48_19i = s48_19a/4.0;
+            s48_19a=0;
+            s48_38a=0;
+            counterp=0;
+            s48_38i++;
+            s48_19i++;
+          }
+          s48_38a = s48_38a + *s38;
+          s48_19a = s48_19a + *s19;
+
           s38++;
           s19_fft++;
           s19_fft_c++;

@@ -14,5 +14,8 @@ double mpx_peak_38khz_modulation();//get mpx modulation value for time sliced cl
 //void resample_up_stereo(int* input,int* output,int* input_end,int ratio);
 void resample_up_stereo_mpx(double* input,int* output,double* input_end,int ratio);
 
+double get_48_19k();
+double get_48_38k();
+void itterate_48k_sample();
 #endif // !DEBUG
 
