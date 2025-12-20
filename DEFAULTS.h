@@ -7,14 +7,14 @@ int fdef[]={60,250,350,1000,6000,15000,18800}; //multiband compression filters
 int fdef_size=7;
 
 
-float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
+float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,1   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
 float def_attack[]={1   ,0.5 ,  0.05  , 0.03 , 0.03 ,0.03 ,0.01};//multiband compression attack
 
-float def_release[]={ 900 , 900  ,800 ,800 ,800 , 520  ,1.5}; //multiband compression release
-float def_target[]={8000,7000,11000,11000,11000,7000,26000}; //multiband compression target volume
+float def_release[]={ 900 , 900  ,800 ,1200 ,1200 , 1120  ,1.5}; //multiband compression release
+float def_target[]={8000,7000,11000,11000,11000,7000,29000}; //multiband compression target volume
 
-float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,6.00}; //make up gain
+float def_m_gain[]={1.50,1.00,1.00,1.00,1.00,1.00,7.00}; //make up gain
 float pre_amp[]={0.5,0.7,0.7,0.7,0.7,1,50}; //multiband compressor pre compression gain
 float def_gate[]={300,320,300,1000,1000,1000,300}; //multi band compressor gate
 int bypass[]={0,0,0,0,0,0,0}; //band compression bypass
@@ -57,11 +57,11 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 //#define TAPE_SAT_BYPASS
 
 
-#define FINAL_AMP 1.5 // can change the global gain after the multiband compressor
+#define FINAL_AMP 1.6 // can change the global gain after the multiband compressor
 #define FINAL_CLIP//comment to disable and use a gain leveler instead(not recommended)
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
-#define SIGMOIDAL_CO 2
+#define SIGMOIDAL_CO 3
 #define SIGMOIDAL_ATTACK  1.667
 #define SIGMOIDAL_RELEASE 3.765
 #define SIGMOIDAL_BUFFER 40
@@ -92,9 +92,9 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 
 #define POST_AGC_GAIN 1
 
-#define AGC_TARG 4000 //input AGC baseline target
-#define AGC_LOOKAHEAD 6
-#define AGC_SPEED 0.78 //response coefficient
+#define AGC_TARG 7000 //input AGC baseline target
+#define AGC_LOOKAHEAD 1
+#define AGC_SPEED 0.58 //response coefficient
 //#define AGC_SPEED 0 //response coefficient
 //#define AGC_RELEASE 0.0000000001 //response coefficient
 #define AGC_RELEASE 0.48 //response coefficient
@@ -109,8 +109,8 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 6 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 6// percent of the signal devoted to mono audio
+#define PERCENT_MONO 6.5 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 6.5// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
