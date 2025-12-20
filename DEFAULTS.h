@@ -7,7 +7,7 @@ int fdef[]={60,250,350,1000,6000,15000,18800}; //multiband compression filters
 int fdef_size=7;
 
 
-float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,1   ,0  };
+float mix_stereo[]={0           ,0              ,0          ,0 ,0         ,0   ,0  };
 int   lookaheads[]={2 ,  2 , 2, 2 ,2,2, 2}; // will affect phase
 float def_attack[]={1   ,0.5 ,  0.05  , 0.03 , 0.03 ,0.03 ,0.01};//multiband compression attack
 
@@ -47,8 +47,8 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 #define GATE_THRESHOLD 2000
 */
 #define PRE_CLIP_SATURATION 0
-#define PRE_CLIP_SATURATION_LIMIT 3
-#define POST_SAT_GAIN 1.1
+#define PRE_CLIP_SATURATION_LIMIT 60000
+#define POST_SAT_GAIN 1
 
 #define TAPE_SAT_THRESH 202767
 #define TAPE_SAT_WETNESS 0.3
@@ -62,10 +62,10 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 3
-#define SIGMOIDAL_ATTACK  1.667
+#define SIGMOIDAL_ATTACK  2.667
 #define SIGMOIDAL_RELEASE 3.765
-#define SIGMOIDAL_BUFFER 40
-#define SIGMOIDAL_KNEE 10
+#define SIGMOIDAL_BUFFER 80
+#define SIGMOIDAL_KNEE 40
 #define SIGMOIDAL_PRE 9200
 #define SIGMOIDAL_DRANGE 1000 //this should be near the start of the convergance to 1 or -1 of the tanh function relative to the limit
 //Vostok RF AM transmitters can handle low bass pretty well, you could set this to 20hz
