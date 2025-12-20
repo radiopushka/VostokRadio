@@ -62,8 +62,8 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 //#define FINAL_CLIP_LOOKAHEAD 100 //samples
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2.5
-#define SIGMOIDAL_ATTACK  0.667
-#define SIGMOIDAL_RELEASE 7.765
+#define SIGMOIDAL_ATTACK  1.667
+#define SIGMOIDAL_RELEASE 14.765
 #define SIGMOIDAL_BUFFER 80
 #define SIGMOIDAL_KNEE 0
 #define SIGMOIDAL_PRE 9200
@@ -109,8 +109,8 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 #define COMPOSITE_CLIPPER_LOOKAHEAD 20
 #define COMPOSITE_CLIPPER_LOOKAHEAD_RELEASE 0.00006
 #define PERCENT_PILOT 0.12 //percent of the signal devoted to the 19khz pilot tone
-#define PERCENT_MONO 8 // percent of the signal devoted to mono audio
-#define PERCENT_STEREO 8// percent of the signal devoted to mono audio
+#define PERCENT_MONO 6.5 // percent of the signal devoted to mono audio
+#define PERCENT_STEREO 6.5// percent of the signal devoted to mono audio
 			   // sometimes if there is distortion, decreasing the percent stereo could help
 
 
