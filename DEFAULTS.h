@@ -63,7 +63,7 @@ float knee_release[]={1.002,1.001,1,1,1,1,1};//knee
 //#define FINAL_CLIP_LOOKAHEAD_RELEASE 0.004 //release coeficient, proportional to # samples
 #define SIGMOIDAL_CO 2.5
 #define SIGMOIDAL_ATTACK  0.667
-#define SIGMOIDAL_RELEASE 2.765
+#define SIGMOIDAL_RELEASE 7.765
 #define SIGMOIDAL_BUFFER 80
 #define SIGMOIDAL_KNEE 0
 #define SIGMOIDAL_PRE 9200
