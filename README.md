@@ -1,5 +1,23 @@
 # FM Audio Processor with MPX Encoder
 
+# New version here: https://github.com/radiopushka/VostokRadio2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 A high-performance, low-latency FM audio processor and MPX encoder written in C. This software is designed for professional radio broadcasting applications, providing multiband compression, AGC, and MPX generation with minimal CPU usage.
 
 ## Features
